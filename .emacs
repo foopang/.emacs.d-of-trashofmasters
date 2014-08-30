@@ -36,6 +36,9 @@
 
   (auto-save-mode -1)
   (tooltip-mode -1)
+  (tool-bar-mode -1)
+  ;;(tabbar-mode -1)
+  (menu-bar-mode -1)
   (blink-cursor-mode -1)
   ;;(display-battery-mode t)
   (show-paren-mode t)
@@ -46,18 +49,11 @@
 
   ;; create the autosave dir if necessary
   ;;(make-directory "~/.emacs.autosaves/" t)
-  )
 
-(defun* get-closest-pathname (&optional (file "Amkfile"))
-  "Determine the pathname of the closes Amkfile to be passed to Amaka when it's run from Emacs."
-  (let ((root (expand-file-name "/"))) ; the win32 builds should translate this correctly
-    (expand-file-name file
-		      (loop
-                       for d = default-directory then (expand-file-name ".." d)
-                       if (file-exists-p (expand-file-name file d))
-                       return d
-                       if (equal d root)
-                       return nil))))
+  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                           ("marmalade" . "http://marmalade-repo.org/packages/")
+                           ("melpa" . "http://melpa.milkbox.net/packages/")))
+  )
 
 (defun ofc/normalise-file-hook nil
   "Normalize a file"
@@ -105,6 +101,7 @@
         ido-max-prospects 10                ; don't spam my minibuffer
         ido-confirm-unique-completion t
         ido-file-extensions-order '(".org"   ".php" ".phtml"
+                                    ".twig" ".js" ".coffee"
                                     ".html"  ".xml" ".sql"
                                     ".emacs" ".ini" ".cfg")))
 
@@ -135,17 +132,14 @@
   (make-local-variable 'resize-minibuffer-window-max-height)
   (setq resize-minibuffer-window-max-height 1))
 
-(defun ofc/php-lint ()
-  (interactive)
-  (compile (format "/usr/local/bin/amaka -f %s test" (get-closest-pathname))))
-
 ;; PHP mode hook
 (defun ofc/php-mode-hook nil
   "Php-mode hook"
+  (setq php-template-compatibility nil)
+  (subword-mode t)
   ;;
-  (flymake-php-load)
-  (eldoc-mode)
-  (local-set-key [f8] 'ofc/php-lint))
+  ;; (flymake-php-load)
+  (eldoc-mode))
 
  ;;
 (defun ofc/keybindings-install nil
@@ -170,18 +164,18 @@
   ;;(org-clock-persistence-insinuate)
 
   ;; Embed stylesheet in the html file rather than linking it.
-  (setq org-export-html-style
-        (concat "<style type=\"text/css\">"
-                (with-temp-buffer
-                  (insert-file-contents "~/.org.css")
-                  (buffer-string))
-                "</style>"))
+  ;;  (setq org-export-html-style
+  ;;        (concat "<style type=\"text/css\">"
+  ;;                (with-temp-buffer
+  ;;                  (insert-file-contents "~/.org.css")
+  ;;                  (buffer-string))
+  ;;                "</style>"))
 
   ;; Link the stylesheet in the html file.
   ;; (setq org-export-html-style "<link rel=\"stylesheet\" type=\"text/css\" href=\"mystyles.css\">")
   (setq org-log-done 'time
-        org-default-notes-file "~/Personal/scratch.org"
-        org-agenda-files "~/organizers"
+;;        org-default-notes-file "~/Personal/scratch.org"
+;;        org-agenda-files "~/organizers"
         org-todo-keyword-faces '(("PROGRESS" . (:foreground "yellow" :weight bold)))
         org-todo-keyword-faces '(("CANCELED" . (:foreground "gray" :weight bold)))
         org-todo-keywords (quote ((sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "|" "DONE(d!/!)")
@@ -190,15 +184,17 @@
 
 ;; Configure autoloading
 (setq load-path
-      (append (list "~/.emacs.d"
-                    "~/.emacs.d/modes/php-mode"
-                    "~/.emacs.d/plugins/auto-complete"
-                    "~/.emacs.d/plugins/php-extras")
+      (append (list "~/.emacs.d/ac"
+                    "~/.emacs.d/popup-el"
+                    "~/.Emacs.d/cl-lib"
+                    "~/.emacs.d/php-extras"
+                    "~/.emacs.d/php-mode")
               load-path))
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
-;; autoload php mode only when php files are opened
+
+;; Autoload php mode only when php files are opened
 (autoload 'php-mode "php-mode" "Major mode for editing php code." t)
 (autoload 'feature-mode "feature-mode" "Mode that supports Cucumber syntax." t)
 
@@ -206,7 +202,7 @@
 (push '("\\.phtml" . html-mode) auto-mode-alist)
 (push '("\\.feature" . feature-mode) auto-mode-alist)
 (push '("\\.markdown" . markdown-mode) auto-mode-alist)
-(push '("\\.php\\|Amkfile" . php-mode) auto-mode-alist)
+(push '("\\.php" . php-mode) auto-mode-alist)
 (push '("\\.Rakefile\\|.rb" . ruby-mode) auto-mode-alist)
 
 ;; Customize PHP buffers settings
@@ -216,7 +212,7 @@
 (add-hook 'before-save-hook 'ofc/normalise-file-hook)
 (add-hook 'after-save-hook 'ofc/dot-emacs-autocompile)
 
-;; Customize ido minibuffer
+;; CUSTOMIZE ido minibuffer
 (add-hook 'ido-minibuffer-setup-hook 'ofc/ido-minibuffer-hook)
 
 ;; Emacs specific setup
@@ -227,22 +223,40 @@
 (ofc/ido-install)
 (ofc/keybindings-install)
 
+(require 'cl-lib)
 (require 'package)
-(require 'php-extras)
-(require 'auto-complete-config)
-
-(load-theme 'ir-black t)
-
-(ac-config-default)
-(setq ac-dwim t)
-(setq ac-auto-start 3)
-(setq ac-auto-show-menu 0.5)
-
-(add-to-list 'package-archives
-    '("marmalade" .
-      "http://marmalade-repo.org/packages/"))
-
 (package-initialize)
 
-(eval-after-load 'auto-complete-config '(add-to-list 'ac-dictionary-directories "~/.emacs.d/plugins/auto-complete/ac-dict"))
-(eval-after-load 'sql '(lambda () (sql-set-product 'mysql)))
+;;(load-theme 'zenburn)
+(load-theme 'wombat)
+
+(require 'auto-complete-config)
+(ac-config-default)
+(setq ac-dwim t)
+(setq ac-auto-start 4)
+(setq ac-auto-show-menu 0.5)
+(setq ac-menu-height 10)
+(set-face-underline 'ac-candidate-face "Gray13")
+(set-face-background 'ac-candidate-face "Gray13")
+(set-face-foreground 'ac-candidate-face "YellowGreen")
+(set-face-background 'ac-selection-face "PaleGreen")
+(set-face-foreground 'ac-selection-face "Gray13")
+
+;;(eval-after-load 'auto-complete-config '(add-to-list 'ac-dictionary-directories "~/.emacs.d/plugins/auto-complete/ac-dict"))
+;;(eval-after-load 'sql '(lambda () (sql-set-product 'mysql)))
+
+;;(eval-after-load 'php-mode (require 'php-extras))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("3c9d994e18db86ae397d077b6324bfdc445ecc7dc81bb9d528cd9bba08c1dac1" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
