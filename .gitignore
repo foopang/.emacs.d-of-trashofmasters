@@ -1,0 +1,7 @@
+elpa/
+elisp/
+eshell/
+auto-save-list/
+.cask
+ido.last
+ac-comphist.dat
