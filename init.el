@@ -82,7 +82,7 @@
   (add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-trucation)
   (setq confirm-nonexistent-file-or-buffer nil
         ido-create-new-buffer 'always
-        ido-work-directory-list '("~/Development")
+        ido-work-directory-list '("~/JustPark")
         ido-decorations '("\n ➥ "
                           ""
                           "\n   "
