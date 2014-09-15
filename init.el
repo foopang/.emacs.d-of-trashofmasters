@@ -4,11 +4,22 @@
 ;;;
 ;;; Changelog
 ;;;
-;;; - 2014-09-11
-;;;   Reorganised various setq blocks into the ofc/emacs-setup procedure.
+;;; 2014-09-11
+;;; - Reorganised various setq blocks into the ofc/emacs-setup procedure.
 ;;;
-;;; - 2014-09-14
-;;;   Broken down this file into bindings.el, defuns.el and hooks.el
+;;; 2014-09-14
+;;; - Broken down this file into bindings.el, defuns.el and hooks.el
+;;;
+;;; 2014-09-15
+;;; - Added `saveplace' which should help keep track of workflow.
+;;; - Added new themes and moved the load-theme form up top.
+;;; - Increased the size of the default frame created on startup,
+;;;   however this isn't affecting Magit buffers being created in their own frame
+;;;   See http://whattheemacsd.com/setup-magit.el-01.html on how to avoid using a
+;;;   different frame altogether. Remember that `defadvice' is a
+;;;   cleaner method for a library to customize functions defined
+;;;   within Emacs.
+;;; - Added C-c C-r to rotate buffers anti-clockwise.
 
 (setq initial-frame-alist '((width . 180) (height . 60)))
 (setq default-frame-alist '((width . 180) (height . 60)))
