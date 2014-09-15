@@ -17,6 +17,9 @@
 
 (defun ofc/setup nil
   "Configure emacs autoload paths"
+
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/elisp/themes")
+
   (setq load-path (append (list "~/.emacs.d/elisp/php-mode"
                                 "~/.emacs.d/elisp/php-extras"
                                 "~/.emacs.d/elisp/php-eldoc"
@@ -35,9 +38,16 @@
 
 (defun ofc/custom nil
   "Andrea's customisations"
+
   ;; Set username and email address
   (setq user-full-name "Andrea Turso"
         user-mail-address "trashofmasters@gmail.com")
+
+  ;; special-display-regexps has been obsoleted in Emacs 24.3
+  ;; In the meanwhile I rely on it to display Magit buffers
+  ;; in their own frame. However this doesn't seem to play well
+  ;; with the native OSX fullscreen.
+  (setq special-display-regexps '("\\*magit:.*\\*"))
 
   (setq special-display-buffer-names
         (nconc '("*Backtrace*" "*VC-log*" "*compilation*" "*grep*")
@@ -94,6 +104,7 @@
   ;; Don't ask before using narrow commands.
   (put 'narrow-to-region 'disabled nil)
   (put 'narrow-to-page 'disabled nil))
+  (put 'dired-find-alternate-file 'disabled nil)
 
 ;; Bytcompile the .emacs configuration file when it gets saved
 (defun ofc/dot-emacs-autocompile nil

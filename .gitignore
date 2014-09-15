@@ -2,6 +2,7 @@ elpa/
 elisp/
 eshell/
 auto-save-list/
+places
 .cask
 ido.last
 ac-comphist.dat

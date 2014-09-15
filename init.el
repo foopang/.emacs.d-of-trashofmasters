@@ -10,6 +10,9 @@
 ;;; - 2014-09-14
 ;;;   Broken down this file into bindings.el, defuns.el and hooks.el
 
+(setq initial-frame-alist '((width . 180) (height . 60)))
+(setq default-frame-alist '((width . 180) (height . 60)))
+
 (when (fboundp 'fringe-mode)
   (fringe-mode -1))
 
@@ -31,14 +34,18 @@
 (when (fboundp 'bling-cursor-mode)
   (blink-cursor-mode -1))
 
-(when (and (fboundp 'toggle-frame-maximized) window-system)
-  (toggle-frame-maximized))
-
+;; Load the various modules used in this configuration.
 (load "~/.emacs.d/hooks")
 (load "~/.emacs.d/bindings")
 (load "~/.emacs.d/defuns")
 
-;; Autoload php mode only when php files are opened
+;; Initiate emacs configuration.
+(ofc/setup)
+
+;; Loading emacs-color-themes works only in this form.
+(load-theme 'wilson t)
+
+;; Autoload php mode only when php files are opened.
 (autoload 'php-mode "php-mode" "Major mode for editing php code." t)
 (autoload 'feature-mode "feature-mode" "Mode that supports Cucumber syntax." t)
 
@@ -53,49 +60,40 @@
 
 ;; Remove trailing whitespaces when saving files
 (add-hook 'write-file-hooks 'delete-trailing-whitespace)
+;; Bytecompile the emacs init file to speed-up loading
 (add-hook 'after-save-hook 'ofc/dot-emacs-autocompile)
-
+;; Configure the look&feel of the ido minibuffer
 (add-hook 'ido-minibuffer-setup-hook 'ofc/ido-minibuffer-hook)
+
+;; Configure php-mode
 (add-hook 'php-mode-hook 'ofc/php-mode-hook)
-(add-to-list 'custom-theme-load-path "~/.emacs.d/elisp/themes")
 
 ;; Emacs specific setup
-(ofc/setup)
 (ofc/custom)
+
+;; Initialise Emacs package management.
+(package-initialize)
 
 ;; I think I should autoload the packages below as well.
 (require 'package)
+(require 'saveplace)
 (require 'web-mode)
 (require 'coffee-mode)
 (require 'sr-speedbar)
 (require 'php-extras)
 
-;;(load-theme 'zenburn)
-(load-theme 'wombat)
-
-;; Initialise Emacs package management.
-(package-initialize)
+;; Make dired less verbose
+;; (require 'dired-details)
+;; (setq-default dired-details-hidden-string "- ")
+;; (dired-details-install)
 
 ;; Mode specific loading and setup
 (ofc/ido)
 (ofc/keybindings)
 
+;; Highlight mysql keywords
 (eval-after-load 'sql '(lambda () (sql-set-product 'mysql)))
-;;(eval-after-load 'php-mode (require 'php-extras))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
- '(custom-safe-themes
-   (quote
-    ("3c9d994e18db86ae397d077b6324bfdc445ecc7dc81bb9d528cd9bba08c1dac1" default))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; Save point position between sessions
+(setq-default save-place t)
+(setq save-place-file (expand-file-name "places" user-emacs-directory))
