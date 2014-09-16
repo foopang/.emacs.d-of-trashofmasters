@@ -46,8 +46,8 @@
   (blink-cursor-mode -1))
 
 ;; Load the various modules used in this configuration.
-(load "~/.emacs.d/hooks")
 (load "~/.emacs.d/bindings")
+(load "~/.emacs.d/hooks")
 (load "~/.emacs.d/defuns")
 
 ;; Initiate emacs configuration.
@@ -92,6 +92,7 @@
 (require 'coffee-mode)
 (require 'sr-speedbar)
 (require 'php-extras)
+(require 'yasnippet)
 
 ;; Make dired less verbose
 ;; (require 'dired-details)
@@ -108,3 +109,8 @@
 ;; Save point position between sessions
 (setq-default save-place t)
 (setq save-place-file (expand-file-name "places" user-emacs-directory))
+
+;; Use command as meta on Mac.
+(setq mac-command-modifier 'meta)
+;; Fuck-it, make option also a meta char.
+(setq mac-option-modifier 'meta)

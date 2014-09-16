@@ -10,6 +10,7 @@
 
 ;; Custom global key bindings
 (defun ofc/keybindings nil
+  (global-unset-key (kbd "C-x C-b"))
 
   (when (fboundp 'ofc/goto-line-with-feedback)
     (global-set-key [remap goto-line] 'ofc/goto-line-with-feedback))
@@ -28,3 +29,8 @@
 
   (global-set-key (kbd "C-c C-a") 'mark-whole-buffer)
   (global-set-key (kbd "C-x a r") 'align-regexp))
+
+(setq yas-minor-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-o") 'yas-expand)
+    map))

@@ -27,8 +27,8 @@
                                 "~/.emacs.d/elisp/coffee-mode"
                                 "~/.emacs.d/elisp/web-mode"
                                 "~/.emacs.d/elisp/cl-lib"
-                                "~/.emacs.d/elisp/sr-speedbar"
-                                "~/.emacs.d/elisp/auto-complete")
+                                "~/.emacs.d/elisp/yasnippet"
+                                "~/.emacs.d/elisp/sr-speedbar")
                           load-path))
 
   ;;
@@ -97,6 +97,8 @@
         redisplay-dont-pause t
         scroll-conservatively 10
         scroll-preserve-screen-position 1)
+
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
 
   ;; Answer just y/n insted of yes or no
   (fset 'yes-or-no-p 'y-or-n-p)
