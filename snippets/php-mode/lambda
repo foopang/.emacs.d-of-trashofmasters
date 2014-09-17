@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: closure
+# key: lambda
+# --
+function () {
+    $0
+}

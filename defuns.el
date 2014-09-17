@@ -26,7 +26,6 @@
                                 "~/.emacs.d/elisp/popup-el"
                                 "~/.emacs.d/elisp/coffee-mode"
                                 "~/.emacs.d/elisp/web-mode"
-                                "~/.emacs.d/elisp/cl-lib"
                                 "~/.emacs.d/elisp/yasnippet"
                                 "~/.emacs.d/elisp/sr-speedbar")
                           load-path))

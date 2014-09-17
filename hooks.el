@@ -13,6 +13,9 @@
 ;;;
 ;;; 2014-09-16
 ;;; - Added require-final-newline to php-mode to ensure all files end with a newline char.
+;;;
+;;; 2014-09-17
+;;; - Added the sql-mode hook to set MySQL syntax highlighting.
 
 (defun ofc/ido-minibuffer-hook nil
   "Ido minibuffer hook"
@@ -23,9 +26,10 @@
 
 (defun ofc/php-mode-hook nil
   "Configure php-mode"
+  (yas-minor-mode)
   (company-mode)
-  (setq require-final-newline t)
-  (yas-minor-mode))
+  (setq require-final-newline t))
 
-;; Reload the snippets (once) after yasnippet is loaded.
-(eval-after-load 'yasnippet (lambda () (yas-reload-all)))
+(defun ofc/sql-mode-hook nil
+  "Configure sql-mode"
+  (sql-set-product 'mysql))

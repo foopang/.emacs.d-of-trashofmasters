@@ -19,10 +19,12 @@
 ;;;   different frame altogether. Remember that `defadvice' is a
 ;;;   cleaner method for a library to customize functions defined
 ;;;   within Emacs.
-;;; - Added C-c C-r to rotate buffers anti-clockwise.
+;;;
+;;; 2014-09-17
+;;; - Removed `initial-frame-alist' and  `default-frame-alist' as they were causing
+;;;   text rendering issues in the buffer until the window was resized.
+;;; - Set both Alt and Command key to behave as meta.
 
-(setq initial-frame-alist '((width . 180) (height . 60)))
-(setq default-frame-alist '((width . 180) (height . 60)))
 
 (when (fboundp 'fringe-mode)
   (fringe-mode -1))
@@ -42,7 +44,7 @@
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
 
-(when (fboundp 'bling-cursor-mode)
+(when (fboundp 'blink-cursor-mode)
   (blink-cursor-mode -1))
 
 ;; Load the various modules used in this configuration.
@@ -71,13 +73,18 @@
 
 ;; Remove trailing whitespaces when saving files
 (add-hook 'write-file-hooks 'delete-trailing-whitespace)
+
 ;; Bytecompile the emacs init file to speed-up loading
 (add-hook 'after-save-hook 'ofc/dot-emacs-autocompile)
+
 ;; Configure the look&feel of the ido minibuffer
 (add-hook 'ido-minibuffer-setup-hook 'ofc/ido-minibuffer-hook)
 
 ;; Configure php-mode
 (add-hook 'php-mode-hook 'ofc/php-mode-hook)
+
+;; Highlight mysql keywords
+(add-hook 'sql-mode 'ofc/sql-mode-hook)
 
 ;; Emacs specific setup
 (ofc/custom)
@@ -103,8 +110,8 @@
 (ofc/ido)
 (ofc/keybindings)
 
-;; Highlight mysql keywords
-(eval-after-load 'sql '(lambda () (sql-set-product 'mysql)))
+;; Reload the snippets (once) after yasnippet is loaded.
+(eval-after-load 'yasnippet (lambda () (yas-reload-all)))
 
 ;; Save point position between sessions
 (setq-default save-place t)
@@ -112,5 +119,6 @@
 
 ;; Use command as meta on Mac.
 (setq mac-command-modifier 'meta)
+
 ;; Fuck-it, make option also a meta char.
 (setq mac-option-modifier 'meta)

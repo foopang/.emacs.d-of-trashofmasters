@@ -5,8 +5,12 @@
 ;;;
 ;;; Changelog
 ;;;
-;;; - 2014-09-14
-;;;   First revision of this file.
+;;; 2014-09-14
+;;; - First revision of this file.
+;;;
+;;; 2014-09-17
+;;; - Bound C-o to yas-expand.
+
 
 ;; Custom global key bindings
 (defun ofc/keybindings nil
@@ -24,13 +28,10 @@
   (when (fboundp 'comment-or-uncomment-line-or-region)
     (global-set-key (kbd "C-/") 'comment-or-uncomment-line-or-region))
 
-  (when (fboundp 'ofc/rotate-windows)
-      (global-set-key (kbd "C-c C-r") 'ofc/rotate-windows))
-
   (global-set-key (kbd "C-c C-a") 'mark-whole-buffer)
   (global-set-key (kbd "C-x a r") 'align-regexp))
 
 (setq yas-minor-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-o") 'yas-expand)
-    map))
+      (let ((map (make-sparse-keymap)))
+        (define-key map (kbd "C-o") 'yas-expand)
+        map))
