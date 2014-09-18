@@ -25,7 +25,6 @@
 ;;;   text rendering issues in the buffer until the window was resized.
 ;;; - Set both Alt and Command key to behave as meta.
 
-
 (when (fboundp 'fringe-mode)
   (fringe-mode -1))
 
@@ -100,6 +99,7 @@
 (require 'sr-speedbar)
 (require 'php-extras)
 (require 'yasnippet)
+(require 'highlight-symbol)
 
 ;; Make dired less verbose
 ;; (require 'dired-details)
@@ -122,3 +122,17 @@
 
 ;; Fuck-it, make option also a meta char.
 (setq mac-option-modifier 'meta)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("90b5269aefee2c5f4029a6a039fb53803725af6f5c96036dee5dc029ff4dff60" "7d4d00a2c2a4bba551fcab9bfd9186abe5bfa986080947c2b99ef0b4081cb2a6" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

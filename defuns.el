@@ -27,6 +27,7 @@
                                 "~/.emacs.d/elisp/coffee-mode"
                                 "~/.emacs.d/elisp/web-mode"
                                 "~/.emacs.d/elisp/yasnippet"
+                                "~/.emacs.d/elisp/highlight-symbol"
                                 "~/.emacs.d/elisp/sr-speedbar")
                           load-path))
 

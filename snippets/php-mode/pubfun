@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: Insert a public function
-# key: pufun
+# key: pubfun
 # expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 't))
 # --
 public function $1()

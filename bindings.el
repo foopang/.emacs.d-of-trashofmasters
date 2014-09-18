@@ -11,7 +11,6 @@
 ;;; 2014-09-17
 ;;; - Bound C-o to yas-expand.
 
-
 ;; Custom global key bindings
 (defun ofc/keybindings nil
   (global-unset-key (kbd "C-x C-b"))
@@ -27,6 +26,12 @@
 
   (when (fboundp 'comment-or-uncomment-line-or-region)
     (global-set-key (kbd "C-/") 'comment-or-uncomment-line-or-region))
+
+  (global-set-key (kbd "C-<return>") 'highlight-symbol-at-point)
+  (global-set-key (kbd "M-<return>") 'highlight-symbol-query-replace)
+
+  (global-set-key (kbd "<down>") 'highlight-symbol-next)
+  (global-set-key (kbd "<up>") 'highlight-symbol-prev)
 
   (global-set-key (kbd "C-c C-a") 'mark-whole-buffer)
   (global-set-key (kbd "C-x a r") 'align-regexp))
