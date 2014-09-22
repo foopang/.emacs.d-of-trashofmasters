@@ -10,6 +10,9 @@
 ;;;
 ;;; 2014-09-17
 ;;; - Bound C-o to yas-expand.
+;;;
+;;; 2014-09-22
+;;; - Bound C-x g to magit-status
 
 ;; Custom global key bindings
 (defun ofc/keybindings nil
@@ -26,6 +29,9 @@
 
   (when (fboundp 'comment-or-uncomment-line-or-region)
     (global-set-key (kbd "C-/") 'comment-or-uncomment-line-or-region))
+
+  (when (fboundp 'magit-status)
+    (global-set-key (kbd "C-x g") 'magit-status))
 
   (global-set-key (kbd "C-<return>") 'highlight-symbol-at-point)
   (global-set-key (kbd "M-<return>") 'highlight-symbol-query-replace)

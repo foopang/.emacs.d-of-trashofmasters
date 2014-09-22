@@ -24,6 +24,10 @@
 ;;; - Removed `initial-frame-alist' and  `default-frame-alist' as they were causing
 ;;;   text rendering issues in the buffer until the window was resized.
 ;;; - Set both Alt and Command key to behave as meta.
+;;;
+;;; 2014-09-22
+;;; - Command is S(uper), Option is M(eta).
+;;; - Customise configuration are now saved to `~/.emacs-custom.el'
 
 (when (fboundp 'fringe-mode)
   (fringe-mode -1))
@@ -46,16 +50,26 @@
 (when (fboundp 'blink-cursor-mode)
   (blink-cursor-mode -1))
 
+;; Tell Emacs custom to save to a separate file.
+(setq custom-file "~/.emacs-custom.el")
+
+;; Create custom file if it doesn't exist, to avoid init errors.
+(unless (file-exists-p custom-file)
+ (write-region "" nil custom-file))
+
 ;; Load the various modules used in this configuration.
 (load "~/.emacs.d/bindings")
 (load "~/.emacs.d/hooks")
 (load "~/.emacs.d/defuns")
 
+;; Load emacs customisations
+(load custom-file)
+
 ;; Initiate emacs configuration.
 (ofc/setup)
 
 ;; Loading emacs-color-themes works only in this form.
-(load-theme 'wilson t)
+(load-theme 'odersky t)
 
 ;; Autoload php mode only when php files are opened.
 (autoload 'php-mode "php-mode" "Major mode for editing php code." t)
@@ -117,22 +131,13 @@
 (setq-default save-place t)
 (setq save-place-file (expand-file-name "places" user-emacs-directory))
 
-;; Use command as meta on Mac.
-(setq mac-command-modifier 'meta)
+(when (eq system-type 'darwin)
+  (progn
+    ;; Option is meta (M).
+    (setq mac-option-modifier 'meta)
 
-;; Fuck-it, make option also a meta char.
-(setq mac-option-modifier 'meta)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("90b5269aefee2c5f4029a6a039fb53803725af6f5c96036dee5dc029ff4dff60" "7d4d00a2c2a4bba551fcab9bfd9186abe5bfa986080947c2b99ef0b4081cb2a6" default))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+    ;; Command is super (S).
+    (setq mac-command-modifier 'super)
+
+    ;; Let the right Alt be used for special characters.
+    (setq mac-right-option-modifier 'none)))
