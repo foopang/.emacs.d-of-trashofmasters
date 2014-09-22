@@ -112,6 +112,7 @@
 (require 'sr-speedbar)
 (require 'php-extras)
 (require 'yasnippet)
+(require 'flx-ido)
 (require 'highlight-symbol)
 
 ;; Initialise projectile project management mode.
@@ -128,7 +129,3 @@
 
 ;; Reload the snippets (once) after yasnippet is loaded.
 (eval-after-load 'yasnippet (lambda () (yas-reload-all)))
-
-;; Save point position between sessions
-(setq-default save-place t)
-(setq save-place-file (expand-file-name "places" user-emacs-directory))

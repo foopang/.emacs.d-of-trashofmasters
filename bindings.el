@@ -51,7 +51,7 @@
     (global-set-key (kbd "C-x C-c") 'ofc/prompt-before-closing))
 
   (when (fboundp 'sr-speedbar-toggle)
-    (global-set-key (kbd "M-§") 'sr-speedbar-toggle))
+    (global-set-key (kbd "§") 'sr-speedbar-toggle))
 
   (when (fboundp 'comment-or-uncomment-line-or-region)
     (global-set-key (kbd "C-/") 'comment-or-uncomment-line-or-region))

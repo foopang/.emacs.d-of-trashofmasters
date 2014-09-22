@@ -105,8 +105,13 @@
 
   ;; Don't ask before using narrow commands.
   (put 'narrow-to-region 'disabled nil)
-  (put 'narrow-to-page 'disabled nil))
+  (put 'narrow-to-page 'disabled nil)
   (put 'dired-find-alternate-file 'disabled nil)
+
+  ;; Save point position between sessions
+  (setq-default save-place t)
+  (setq save-place-file (expand-file-name "places" user-emacs-directory)))
+
 
 ;; Bytcompile the .emacs configuration file when it gets saved
 (defun ofc/dot-emacs-autocompile nil
@@ -129,7 +134,14 @@
   "Override normal file-opening and buffer switching with ido"
   (defun ido-disable-line-trucation () (set (make-local-variable 'truncate-lines) nil))
 
-  (ido-mode t)
+  (ido-mode 1)
+  (ido-everywhere 1)
+  (flx-ido-mode 1)
+
+  ;; disable ido faces to see flx highlights.
+  (setq ido-enable-flex-matching t)
+  (setq ido-use-faces nil)
+
   (add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-trucation)
   (setq confirm-nonexistent-file-or-buffer nil
         ido-create-new-buffer 'always
