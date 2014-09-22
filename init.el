@@ -26,7 +26,7 @@
 ;;; - Set both Alt and Command key to behave as meta.
 ;;;
 ;;; 2014-09-22
-;;; - Command is S(uper), Option is M(eta).
+;;; - Command is nil, Option is M(eta).
 ;;; - Customise configuration are now saved to `~/.emacs-custom.el'
 
 (when (fboundp 'fringe-mode)
@@ -137,7 +137,7 @@
     (setq mac-option-modifier 'meta)
 
     ;; Command is super (S).
-    (setq mac-command-modifier 'super)
+    (setq mac-command-modifier 'none)
 
     ;; Let the right Alt be used for special characters.
     (setq mac-right-option-modifier 'none)))

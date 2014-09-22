@@ -36,6 +36,8 @@
   (global-set-key (kbd "C-<return>") 'highlight-symbol-at-point)
   (global-set-key (kbd "M-<return>") 'highlight-symbol-query-replace)
 
+  (global-set-key (kbd "C-x C-m") 'execute-extended-command)
+
   (global-set-key (kbd "<down>") 'highlight-symbol-next)
   (global-set-key (kbd "<up>") 'highlight-symbol-prev)
 
