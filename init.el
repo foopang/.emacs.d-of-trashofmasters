@@ -26,7 +26,6 @@
 ;;; - Set both Alt and Command key to behave as meta.
 ;;;
 ;;; 2014-09-22
-;;; - Command is nil, Option is M(eta).
 ;;; - Customise configuration are now saved to `~/.emacs-custom.el'
 
 (when (fboundp 'fringe-mode)
@@ -115,6 +114,9 @@
 (require 'yasnippet)
 (require 'highlight-symbol)
 
+;; Initialise projectile project management mode.
+(projectile-global-mode)
+
 ;; Make dired less verbose
 ;; (require 'dired-details)
 ;; (setq-default dired-details-hidden-string "- ")
@@ -130,14 +132,3 @@
 ;; Save point position between sessions
 (setq-default save-place t)
 (setq save-place-file (expand-file-name "places" user-emacs-directory))
-
-(when (eq system-type 'darwin)
-  (progn
-    ;; Option is meta (M).
-    (setq mac-option-modifier 'meta)
-
-    ;; Command is super (S).
-    (setq mac-command-modifier 'none)
-
-    ;; Let the right Alt be used for special characters.
-    (setq mac-right-option-modifier 'none)))
