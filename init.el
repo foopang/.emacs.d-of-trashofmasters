@@ -27,6 +27,11 @@
 ;;;
 ;;; 2014-09-22
 ;;; - Customise configuration are now saved to `~/.emacs-custom.el'
+;;;
+;;; 2014-09-30
+;;; - Moved hooks registration to the bottom of the file.
+;;; - Introduced global-company-mode
+;;; - Added helm-company to autocomplete using helm.
 
 (when (fboundp 'fringe-mode)
   (fringe-mode -1))
@@ -83,6 +88,36 @@
 (push '("\\.Rakefile\\|.rb" . ruby-mode) auto-mode-alist)
 (push '("\\.coffee" . coffee-mode) auto-mode-alist)
 
+;; Emacs specific setup
+(ofc/custom)
+
+;; Initialise Emacs package management.
+(package-initialize)
+
+;; I think I should autoload the packages below as well.
+(require 'package)
+(require 'saveplace)
+(require 'web-mode)
+(require 'coffee-mode)
+(require 'php-extras)
+(require 'sr-speedbar)
+(require 'yasnippet)
+(require 'flx-ido)
+(require 'highlight-symbol)
+(require 'helm-config)
+
+;; Initialise projectile project management mode.
+(projectile-global-mode)
+
+;; Mode specific loading and setup
+;;(ofc/ido)
+(ofc/helm)
+(ofc/yasnippet)
+(ofc/keybindings)
+
+;; Load company mode customisations.
+(eval-after-load 'company-mode 'ofc/company)
+
 ;; Remove trailing whitespaces when saving files
 (add-hook 'write-file-hooks 'delete-trailing-whitespace)
 
@@ -98,34 +133,5 @@
 ;; Highlight mysql keywords
 (add-hook 'sql-mode 'ofc/sql-mode-hook)
 
-;; Emacs specific setup
-(ofc/custom)
-
-;; Initialise Emacs package management.
-(package-initialize)
-
-;; I think I should autoload the packages below as well.
-(require 'package)
-(require 'saveplace)
-(require 'web-mode)
-(require 'coffee-mode)
-(require 'sr-speedbar)
-(require 'php-extras)
-(require 'yasnippet)
-(require 'flx-ido)
-(require 'highlight-symbol)
-
-;; Initialise projectile project management mode.
-(projectile-global-mode)
-
-;; Make dired less verbose
-;; (require 'dired-details)
-;; (setq-default dired-details-hidden-string "- ")
-;; (dired-details-install)
-
-;; Mode specific loading and setup
-(ofc/ido)
-(ofc/keybindings)
-
-;; Reload the snippets (once) after yasnippet is loaded.
-(eval-after-load 'yasnippet (lambda () (yas-reload-all)))
+;; Company all the things!
+(add-hook 'after-init-hook 'global-company-mode)

@@ -26,8 +26,6 @@
 
 (defun ofc/php-mode-hook nil
   "Configure php-mode"
-  (yas-minor-mode)
-  (company-mode)
   (setq require-final-newline t))
 
 (defun ofc/sql-mode-hook nil

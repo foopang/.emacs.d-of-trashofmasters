@@ -21,12 +21,13 @@
   (add-to-list 'custom-theme-load-path "~/.emacs.d/elisp/themes")
 
   (setq load-path (append (list "~/.emacs.d/elisp/php-mode"
-                                "~/.emacs.d/elisp/php-extras"
                                 "~/.emacs.d/elisp/php-eldoc"
-                                "~/.emacs.d/elisp/popup-el"
+                                "~/.emacs.d/elisp/php-extras"
+                                "~/.emacs.d/elisp/helm-company"
                                 "~/.emacs.d/elisp/coffee-mode"
                                 "~/.emacs.d/elisp/web-mode"
                                 "~/.emacs.d/elisp/yasnippet"
+                                "~/.emacs.d/elisp/helm"
                                 "~/.emacs.d/elisp/highlight-symbol"
                                 "~/.emacs.d/elisp/sr-speedbar")
                           load-path))
@@ -98,8 +99,6 @@
         scroll-conservatively 10
         scroll-preserve-screen-position 1)
 
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-
   ;; Answer just y/n insted of yes or no
   (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -169,3 +168,31 @@
                                     ".twig" ".js" ".coffee"
                                     ".html"  ".xml" ".sql"
                                     ".emacs" ".ini" ".cfg")))
+
+(defun ofc/yasnippet nil
+  "Install yasnippet"
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (yas-global-mode 1))
+
+(defun ofc/helm nil
+  "Customise Helm"
+  (setq helm-display-function
+      (lambda (buf)
+        (split-window-vertically)
+        (other-window 1)
+        (switch-to-buffer buf)))
+  (helm-mode 1))
+
+(defun ofc/company nil
+  "Customise Company mode"
+
+  ;; Set the list of company backends that I use.
+  (add-to-list 'company-backends 'company-dabbrev-code)
+
+  ;; Bind C-; to autocomplete with company in a helm buffer.
+  ;; @note: What is the (non-obvious) difference between define-key and global-set-key?
+  (define-key company-mode-map (kbd "C-;") 'helm-company)
+
+  ;; For some reason company-dabbrev would normally lower the case of
+  ;; the completed string.
+  (setq company-dabbrev-downcase nil))
