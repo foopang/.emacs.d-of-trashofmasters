@@ -1,8 +1,14 @@
 # -*- mode: snippet -*-
-# name: Insert a private function
+# name: Insert a private method at point
 # key: prifun
 # expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 't))
 # --
+/**
+ * $2
+ *
+ * @param
+ * @return
+ */
 private function $1()
 {
     $0

@@ -1,8 +1,14 @@
 # -*- mode: snippet -*-
-# name: Insert a public function
+# name: Insert a public method at point
 # key: pubfun
 # expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 't))
 # --
+/**
+ * $2
+ *
+ * @param
+ * @return
+ */
 public function $1()
 {
     $0

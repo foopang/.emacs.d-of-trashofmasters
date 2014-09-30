@@ -1,9 +1,6 @@
 # -*- mode: snippet -*-
-# name: Insert a class without a constructor
-# key: class
+# name: Insert an object operator at point
+# key: $>
 # expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 't))
 # --
-class $1
-{
-    $0
-}
+\$${1:this}->$0

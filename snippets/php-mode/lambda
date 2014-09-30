@@ -1,6 +1,5 @@
 # -*- mode: snippet -*-
-# name: closure
-# key: lambda
+# name: Insert an anonymous function at point
 # --
 function () {
     $0

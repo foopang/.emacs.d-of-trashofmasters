@@ -1,8 +1,14 @@
 # -*- mode: snippet -*-
-# name: Insert a public function
+# name: Insert a protected method at point
 # key: profun
 # expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 't))
 # --
+/**
+ * $2
+ *
+ * @param
+ * @return
+ */
 protected function $1()
 {
     $0
