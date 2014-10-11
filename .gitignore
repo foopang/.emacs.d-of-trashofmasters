@@ -2,6 +2,7 @@ elpa/
 elisp/
 eshell/
 auto-save-list/
+recentf
 places
 .cask
 ido.last

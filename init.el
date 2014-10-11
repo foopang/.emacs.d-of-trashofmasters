@@ -32,6 +32,19 @@
 ;;; - Moved hooks registration to the bottom of the file.
 ;;; - Introduced global-company-mode
 ;;; - Added helm-company to autocomplete using helm.
+;;;
+;;; 2014-10-08
+;;; - Finally found how to integrate Projectile with Helm.
+;;;
+;;; 2014-10-10
+;;; - Added exec-path-from-shell to have environment variable
+;;;   available when Emacs.app is used.
+;;; - Added ansi-color and a compilation filter hook to colorise
+;;;   compilation output.
+;;;
+;;; 2014-10-11
+;;; - Added `ggtags' (in conjunction with `global'/`gtags') to support
+;;; jumping to symbols definitions.
 
 (when (fboundp 'fringe-mode)
   (fringe-mode -1))
@@ -57,7 +70,7 @@
 ;; Tell Emacs custom to save to a separate file.
 (setq custom-file "~/.emacs-custom.el")
 
-;; Create custom file if it doesn't exist, to avoid init errors.
+;; Create `custom-file' if it doesn't exist, to avoid init errors.
 (unless (file-exists-p custom-file)
  (write-region "" nil custom-file))
 
@@ -73,11 +86,12 @@
 (ofc/setup)
 
 ;; Loading emacs-color-themes works only in this form.
-(load-theme 'odersky t)
+;;(load-theme 'odersky t)
 
 ;; Autoload php mode only when php files are opened.
 (autoload 'php-mode "php-mode" "Major mode for editing php code." t)
 (autoload 'feature-mode "feature-mode" "Mode that supports Cucumber syntax." t)
+(autoload 'helm-company "helm-company")
 
 ;; add file associations
 (push '("\\.p?html" . web-mode) auto-mode-alist)
@@ -94,6 +108,18 @@
 ;; Initialise Emacs package management.
 (package-initialize)
 
+;; Testing the new powerline
+(require 'powerline)
+(powerline-default-theme)
+
+;; And let's try out the moe theme.
+(require 'moe-theme)
+;; Choose the one you like, (moe-light) or (moe-dark)
+(setq moe-theme-highlight-buffer-id nil)
+(moe-dark)
+(powerline-default-theme)
+(powerline-moe-theme)
+
 ;; I think I should autoload the packages below as well.
 (require 'package)
 (require 'saveplace)
@@ -102,21 +128,35 @@
 (require 'php-extras)
 (require 'sr-speedbar)
 (require 'yasnippet)
-(require 'flx-ido)
 (require 'highlight-symbol)
 (require 'helm-config)
+(require 'helm-projectile)
+(require 'ansi-color)
+(require 'ggtags)
+
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
+
+;; Company all the things!
+(global-company-mode)
 
 ;; Initialise projectile project management mode.
 (projectile-global-mode)
 
+;; Use projectile with Helm.
+(helm-projectile-on)
+
 ;; Mode specific loading and setup
-;;(ofc/ido)
 (ofc/helm)
+(ofc/company)
 (ofc/yasnippet)
 (ofc/keybindings)
 
-;; Load company mode customisations.
-(eval-after-load 'company-mode 'ofc/company)
+;; Move to the JustPark directory
+(cd "~/JustPark")
+
+;; Colorise the compilation window.
+(add-hook 'compilation-filter-hook 'ofc/colorize-compilation-buffer)
 
 ;; Remove trailing whitespaces when saving files
 (add-hook 'write-file-hooks 'delete-trailing-whitespace)
@@ -132,6 +172,3 @@
 
 ;; Highlight mysql keywords
 (add-hook 'sql-mode 'ofc/sql-mode-hook)
-
-;; Company all the things!
-(add-hook 'after-init-hook 'global-company-mode)

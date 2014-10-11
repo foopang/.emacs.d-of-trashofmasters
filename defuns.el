@@ -1,3 +1,14 @@
+;;; .emacs --- Andrea Turso Emacs configuration file
+
+;;; Created: 2012-09-04
+;;;
+;;; Changelog
+;;;
+;;; 2014-10-10
+;;; - Added a procedure to use in conjunction with `compilation-filter-hook'
+;;; to colorise compilation output.
+;;;
+
 (defun comment-or-uncomment-line-or-region ()
   "Comments or uncomments the current line or region."
   (interactive)
@@ -23,11 +34,13 @@
   (setq load-path (append (list "~/.emacs.d/elisp/php-mode"
                                 "~/.emacs.d/elisp/php-eldoc"
                                 "~/.emacs.d/elisp/php-extras"
+                                "~/.emacs.d/elisp/projectile"
                                 "~/.emacs.d/elisp/helm-company"
                                 "~/.emacs.d/elisp/coffee-mode"
                                 "~/.emacs.d/elisp/web-mode"
                                 "~/.emacs.d/elisp/yasnippet"
                                 "~/.emacs.d/elisp/helm"
+                                "~/.emacs.d/elisp/ggtags"
                                 "~/.emacs.d/elisp/highlight-symbol"
                                 "~/.emacs.d/elisp/sr-speedbar")
                           load-path))
@@ -129,46 +142,6 @@
         (goto-line (read-number "Goto line: ")))
     (linum-mode -1)))
 
-(defun ofc/ido nil
-  "Override normal file-opening and buffer switching with ido"
-  (defun ido-disable-line-trucation () (set (make-local-variable 'truncate-lines) nil))
-
-  (ido-mode 1)
-  (ido-everywhere 1)
-  (flx-ido-mode 1)
-
-  ;; disable ido faces to see flx highlights.
-  (setq ido-enable-flex-matching t)
-  (setq ido-use-faces nil)
-
-  (add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-trucation)
-  (setq confirm-nonexistent-file-or-buffer nil
-        ido-create-new-buffer 'always
-        ido-work-directory-list '("~/Dev"
-                                  "~/JustPark/api"
-                                  "~/JustPark/admin")
-        ido-decorations '("\n ➥ "
-                          ""
-                          "\n   "
-                          "\n..."
-                          "[" "]"
-                          " [No match]"
-                          " [Matched]" " [Not readable]"
-                          " [Too big]" " [Confirm]")
-        ido-enable-last-directory-history t ; remember last used dirs
-        ido-max-work-directory-list 25      ; should be enough
-        ido-max-work-file-list 3            ; remember many
-        ido-use-filename-at-point nil       ; don't use filename at point (annoying)
-        ido-use-url-at-point nil            ; don't use url at point (annoying)
-        ido-enable-flex-matching nil        ; don't try to be too smart
-        ido-max-prospects 10                ; don't spam my minibuffer
-        ido-auto-merge-delay-time 10        ; Time (in seconds) before ido-find-file will attempt to guess the file location
-        ido-confirm-unique-completion nil   ; stop automatic selection of sole completions.
-        ido-file-extensions-order '(".php" ".html"
-                                    ".twig" ".js" ".coffee"
-                                    ".html"  ".xml" ".sql"
-                                    ".emacs" ".ini" ".cfg")))
-
 (defun ofc/yasnippet nil
   "Install yasnippet"
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
@@ -181,18 +154,34 @@
         (split-window-vertically)
         (other-window 1)
         (switch-to-buffer buf)))
+
+  (setq projectile-completion-system 'helm
+        projectile-switch-project-action 'helm-projectile)
+
   (helm-mode 1))
 
 (defun ofc/company nil
   "Customise Company mode"
+  (message "Loaded helm-company after company")
 
   ;; Set the list of company backends that I use.
-  (add-to-list 'company-backends 'company-dabbrev-code)
-
-  ;; Bind C-; to autocomplete with company in a helm buffer.
-  ;; @note: What is the (non-obvious) difference between define-key and global-set-key?
-  (define-key company-mode-map (kbd "C-;") 'helm-company)
+  (add-to-list 'company-backends 'company-dabbrev-code 'company-dabbrev)
 
   ;; For some reason company-dabbrev would normally lower the case of
   ;; the completed string.
   (setq company-dabbrev-downcase nil))
+
+(defun ofc/colorize-compilation-buffer nil
+  (toggle-read-only)
+  (ansi-color-apply-on-region (point-min) (point-max))
+  (toggle-read-only))
+
+(defun ofc/run-phpunit nil
+  "Scan the parent directories until a phpunit configuration file is found and run the phpunit command."
+  (interactive)
+  (with-temp-buffer
+    (while (and (not (file-exists-p "phpunit.xml"))
+                (not (file-exists-p "phpunit.xml.dist"))
+                (not (equal "/" default-directory)))
+      (cd ".."))
+    (call-interactively 'compile)))
