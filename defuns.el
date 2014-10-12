@@ -9,6 +9,33 @@
 ;;; to colorise compilation output.
 ;;;
 
+(defun ofc/load-path nil
+  "Configure emacs autoload paths"
+
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/elisp/themes")
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/elisp/moe-theme")
+
+  (setq load-path (append (list "~/.emacs.d/elisp/php-mode"
+                                "~/.emacs.d/elisp/php-eldoc"
+                                "~/.emacs.d/elisp/php-extras"
+                                "~/.emacs.d/elisp/web-mode"
+                                "~/.emacs.d/elisp/coffee-mode"
+                                "~/.emacs.d/elisp/projectile"
+                                "~/.emacs.d/elisp/helm"
+                                "~/.emacs.d/elisp/powerline"
+                                "~/.emacs.d/elisp/moe-theme"
+                                "~/.emacs.d/elisp/zenburn-theme"
+                                "~/.emacs.d/elisp/yasnippet"
+                                "~/.emacs.d/elisp/ggtags"
+                                "~/.emacs.d/elisp/highlight-symbol"
+                                "~/.emacs.d/elisp/sr-speedbar")
+                          load-path))
+
+  ;;
+  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                           ("marmalade" . "http://marmalade-repo.org/packages/")
+                           ("melpa" . "http://melpa.milkbox.net/packages/"))))
+
 (defun comment-or-uncomment-line-or-region ()
   "Comments or uncomments the current line or region."
   (interactive)
@@ -25,30 +52,6 @@
           (save-buffers-kill-terminal)
         (save-buffers-kill-emacs))
     (message "No exit.")))
-
-(defun ofc/setup nil
-  "Configure emacs autoload paths"
-
-  (add-to-list 'custom-theme-load-path "~/.emacs.d/elisp/themes")
-
-  (setq load-path (append (list "~/.emacs.d/elisp/php-mode"
-                                "~/.emacs.d/elisp/php-eldoc"
-                                "~/.emacs.d/elisp/php-extras"
-                                "~/.emacs.d/elisp/projectile"
-                                "~/.emacs.d/elisp/helm-company"
-                                "~/.emacs.d/elisp/coffee-mode"
-                                "~/.emacs.d/elisp/web-mode"
-                                "~/.emacs.d/elisp/yasnippet"
-                                "~/.emacs.d/elisp/helm"
-                                "~/.emacs.d/elisp/ggtags"
-                                "~/.emacs.d/elisp/highlight-symbol"
-                                "~/.emacs.d/elisp/sr-speedbar")
-                          load-path))
-
-  ;;
-  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                           ("marmalade" . "http://marmalade-repo.org/packages/")
-                           ("melpa" . "http://melpa.milkbox.net/packages/"))))
 
 (defun ofc/custom nil
   "Andrea's customisations"
@@ -155,6 +158,7 @@
         (other-window 1)
         (switch-to-buffer buf)))
 
+  ;; Enable projectile to use projectile-helm integration.
   (setq projectile-completion-system 'helm
         projectile-switch-project-action 'helm-projectile)
 
@@ -162,10 +166,6 @@
 
 (defun ofc/company nil
   "Customise Company mode"
-  (message "Loaded helm-company after company")
-
-  ;; Set the list of company backends that I use.
-  (add-to-list 'company-backends 'company-dabbrev-code 'company-dabbrev)
 
   ;; For some reason company-dabbrev would normally lower the case of
   ;; the completed string.

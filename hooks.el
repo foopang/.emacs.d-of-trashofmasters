@@ -24,10 +24,16 @@
   (make-local-variable 'resize-minibuffer-window-max-height)
   (setq resize-minibuffer-window-max-height 1))
 
-(defun ofc/php-mode-hook nil
-  "Configure php-mode"
-  (setq require-final-newline t))
-
 (defun ofc/sql-mode-hook nil
   "Configure sql-mode"
   (sql-set-product 'mysql))
+
+(defun ofc/php-mode-hook ()
+  "A hook to customise the behaviour of php-mode.
+   Alters the list of `company-backends' to use ggtags.
+   Forces all files to have a final newline.
+  "
+  (local-set-key (kbd "C-c i") 'company-complete)
+  (set (make-local-variable 'ggtags-completing-read-function) nil)
+  (set (make-local-variable 'require-final-newline) t)
+  (ggtags-mode 1))

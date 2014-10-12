@@ -82,9 +82,6 @@
 ;; Load emacs customisations
 (load custom-file)
 
-;; Initiate emacs configuration.
-(ofc/setup)
-
 ;; Loading emacs-color-themes works only in this form.
 ;;(load-theme 'odersky t)
 
@@ -103,25 +100,24 @@
 (push '("\\.coffee" . coffee-mode) auto-mode-alist)
 
 ;; Emacs specific setup
+(ofc/load-path)
 (ofc/custom)
 
 ;; Initialise Emacs package management.
+(require 'package)
 (package-initialize)
 
 ;; Testing the new powerline
 (require 'powerline)
-(powerline-default-theme)
 
-;; And let's try out the moe theme.
+;; Initialise the moe-theme.
 (require 'moe-theme)
+
 ;; Choose the one you like, (moe-light) or (moe-dark)
-(setq moe-theme-highlight-buffer-id nil)
 (moe-dark)
-(powerline-default-theme)
 (powerline-moe-theme)
 
 ;; I think I should autoload the packages below as well.
-(require 'package)
 (require 'saveplace)
 (require 'web-mode)
 (require 'coffee-mode)
