@@ -8,6 +8,9 @@
 ;;; - Added a procedure to use in conjunction with `compilation-filter-hook'
 ;;; to colorise compilation output.
 ;;;
+;;; 2014-10-14
+;;; - Set `magit-emacsclient-executable' to point to the brew installation.
+;;;
 
 (defun ofc/load-path nil
   "Configure emacs autoload paths"
@@ -22,7 +25,6 @@
                                 "~/.emacs.d/elisp/coffee-mode"
                                 "~/.emacs.d/elisp/projectile"
                                 "~/.emacs.d/elisp/helm"
-                                "~/.emacs.d/elisp/powerline"
                                 "~/.emacs.d/elisp/moe-theme"
                                 "~/.emacs.d/elisp/zenburn-theme"
                                 "~/.emacs.d/elisp/yasnippet"
@@ -65,6 +67,8 @@
   ;; in their own frame. However this doesn't seem to play well
   ;; with the native OSX fullscreen.
   (setq special-display-regexps '("\\*magit:.*\\*"))
+
+  (set-variable 'magit-emacsclient-executable "/usr/local/Cellar/emacs/HEAD/bin/emacsclient")
 
   (setq special-display-buffer-names
         (nconc '("*Backtrace*" "*VC-log*" "*compilation*" "*grep*")

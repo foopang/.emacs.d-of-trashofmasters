@@ -44,7 +44,14 @@
 ;;;
 ;;; 2014-10-11
 ;;; - Added `ggtags' (in conjunction with `global'/`gtags') to support
-;;; jumping to symbols definitions.
+;;;   jumping to symbols definitions.
+;;;
+;;; 2014-10-12
+;;; - Removed sr-speedbar since I haven't been using it much.
+;;;   Mostly due to the way it messes up with my windows.
+;;;
+;;; 2014-10-14
+;;; - Removed `powerline' since I didn't like how it rendered.
 
 (when (fboundp 'fringe-mode)
   (fringe-mode -1))
@@ -107,28 +114,32 @@
 (require 'package)
 (package-initialize)
 
-;; Testing the new powerline
-(require 'powerline)
-
 ;; Initialise the moe-theme.
 (require 'moe-theme)
 
 ;; Choose the one you like, (moe-light) or (moe-dark)
 (moe-dark)
-(powerline-moe-theme)
+(moe-theme-set-color 'green)
 
 ;; I think I should autoload the packages below as well.
 (require 'saveplace)
 (require 'web-mode)
 (require 'coffee-mode)
 (require 'php-extras)
-(require 'sr-speedbar)
 (require 'yasnippet)
 (require 'highlight-symbol)
 (require 'helm-config)
 (require 'helm-projectile)
 (require 'ansi-color)
 (require 'ggtags)
+(require 'guide-key)
+
+;; Provide a helpful guide to the bindings available after a sequence.
+(setq guide-key/guide-key-sequence '("C-c p" "C-x 4"))
+
+(setq guide-key/idle-delay 1.2)
+
+(guide-key-mode 1)
 
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))

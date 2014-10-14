@@ -28,20 +28,29 @@
 ;;; - Bound C-x C-b (and C-x C-a, to see which binding is easier to
 ;;;   hit) to helm-mini. Helm-mini is a buffer switcher.
 ;;;
+;;; 2014-10-12
+;;; - Removed sr-speedbar key binding.
+;;;
+;;; 2014-10-13
+;;; - Bound H-SPC to show project buffers with projectile.
+;;; - Bound H-` to switch between frames (consistently with Mac change window)
 
 ;; Custom global key bindings
 (defun ofc/keybindings nil
   (when (eq system-type 'darwin)
     (progn
-      ;; Bind the first character of the Mac keyboard as the speedbar
-      ;; toggle.
-      (global-set-key (kbd "§") 'sr-speedbar-toggle)
+
+      ;; Command is hyper (H)
+      (setq mac-command-modifier 'hyper)
+
+      ;; Bind H-` to switch between frames.
+      (define-key global-map (kbd "H-`") 'other-frame)
+
+      ;; Bind H-SPC (HyperSpace!) to Projectile.
+      (define-key global-map (kbd "H-SPC") 'helm-projectile-switch-to-buffer)
 
       ;; Option is meta (M).
       (setq mac-option-modifier 'meta)
-
-      ;; Command is super (S).
-      (setq mac-command-modifier 'none)
 
       ;; Let the right Alt be used for special characters.
       (setq mac-right-option-modifier 'none)))
