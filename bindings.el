@@ -34,11 +34,20 @@
 ;;; 2014-10-13
 ;;; - Bound H-SPC to show project buffers with projectile.
 ;;; - Bound H-` to switch between frames (consistently with Mac change window)
+;;;
+;;; 2014-10-21
+;;; - Unbound C-z and C-x C-z.
+;;; - Bound C-w to `ofc/kill-region' which kills only active regions.
 
 ;; Custom global key bindings
 (defun ofc/keybindings nil
   (when (eq system-type 'darwin)
     (progn
+      (global-set-key (kbd "C-w") 'ofc/kill-region)
+
+      ;; Avoid accidentally suspending Emacs.
+      (global-unset-key (kbd "C-z"))
+      (global-unset-key (kbd "C-x C-z"))
 
       ;; Command is hyper (H)
       (setq mac-command-modifier 'hyper)

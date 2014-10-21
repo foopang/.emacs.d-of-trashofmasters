@@ -11,6 +11,8 @@
 ;;; 2014-10-14
 ;;; - Set `magit-emacsclient-executable' to point to the brew installation.
 ;;;
+;;; 2014-10-21
+;;; - Added the ofc/kill-ring to kill a region only when a mark is active.
 
 (defun ofc/load-path nil
   "Configure emacs autoload paths"
@@ -131,6 +133,12 @@
   (setq-default save-place t)
   (setq save-place-file (expand-file-name "places" user-emacs-directory)))
 
+(defun ofc/kill-region ()
+  "Call kill-region only when a mark is active."
+  (interactive)
+  (if (use-region-p)
+      (kill-region (region-beginning) (region-end))
+    (message "Mark a region first.")))
 
 ;; Bytcompile the .emacs configuration file when it gets saved
 (defun ofc/dot-emacs-autocompile nil

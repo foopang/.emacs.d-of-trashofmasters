@@ -179,3 +179,7 @@
 
 ;; Highlight mysql keywords
 (add-hook 'sql-mode 'ofc/sql-mode-hook)
+
+;; Reuse already created buffers and frames
+;; see: http://stackoverflow.com/questions/3311577
+(setq-default display-buffer-reuse-frames t)
