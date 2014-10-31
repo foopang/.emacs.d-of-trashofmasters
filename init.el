@@ -95,7 +95,6 @@
 ;; Autoload php mode only when php files are opened.
 (autoload 'php-mode "php-mode" "Major mode for editing php code." t)
 (autoload 'feature-mode "feature-mode" "Mode that supports Cucumber syntax." t)
-(autoload 'helm-company "helm-company")
 
 ;; add file associations
 (push '("\\.p?html" . web-mode) auto-mode-alist)
@@ -119,9 +118,9 @@
 
 ;; Choose the one you like, (moe-light) or (moe-dark)
 (moe-dark)
-(moe-theme-set-color 'green)
+(moe-theme-set-color 'w/b)
 
-;; I think I should autoload the packages below as well.
+;; i think I should autoload the packages below as well.
 (require 'saveplace)
 (require 'web-mode)
 (require 'coffee-mode)
@@ -133,6 +132,8 @@
 (require 'ansi-color)
 (require 'ggtags)
 (require 'guide-key)
+(require 'popwin)
+(popwin-mode 1)
 
 ;; Provide a helpful guide to the bindings available after a sequence.
 (setq guide-key/guide-key-sequence '("C-c p" "C-x 4"))

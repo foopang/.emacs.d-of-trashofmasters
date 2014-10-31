@@ -13,6 +13,9 @@
 ;;;
 ;;; 2014-10-21
 ;;; - Added the ofc/kill-ring to kill a region only when a mark is active.
+;;;
+;;; 2014-10-31
+;;; - Added popwin and changed helm to show its buffer in a popup window.
 
 (defun ofc/load-path nil
   "Configure emacs autoload paths"
@@ -25,6 +28,7 @@
                                 "~/.emacs.d/elisp/php-extras"
                                 "~/.emacs.d/elisp/web-mode"
                                 "~/.emacs.d/elisp/coffee-mode"
+                                "~/.emacs.d/elisp/popwin"
                                 "~/.emacs.d/elisp/projectile"
                                 "~/.emacs.d/elisp/helm"
                                 "~/.emacs.d/elisp/moe-theme"
@@ -164,12 +168,7 @@
 
 (defun ofc/helm nil
   "Customise Helm"
-  (setq helm-display-function
-      (lambda (buf)
-        (split-window-vertically)
-        (other-window 1)
-        (switch-to-buffer buf)))
-
+  (setq helm-display-function 'popwin:popup-buffer)
   ;; Enable projectile to use projectile-helm integration.
   (setq projectile-completion-system 'helm
         projectile-switch-project-action 'helm-projectile)

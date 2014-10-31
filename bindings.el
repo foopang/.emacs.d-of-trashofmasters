@@ -104,10 +104,6 @@
   (global-set-key (kbd "C-x C-a") 'helm-mini)
   (global-set-key (kbd "C-x C-b") 'helm-mini)
 
-  ;; Bind C-; to autocomplete with company in a helm buffer.
-  ;; @note: What is the (non-obvious) difference between define-key and global-set-key?
-  (global-set-key (kbd "C-;") 'helm-company)
-
   ;; Duplicate the M-x binding to C-x C-m for easier access.
   (global-set-key (kbd "C-x C-m") 'execute-extended-command)
 
