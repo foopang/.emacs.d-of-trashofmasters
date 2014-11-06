@@ -52,6 +52,9 @@
 ;;;
 ;;; 2014-10-14
 ;;; - Removed `powerline' since I didn't like how it rendered.
+;;;
+;;; 2014-11-06
+;;; - Added `git-timemachine'.
 
 (when (fboundp 'fringe-mode)
   (fringe-mode -1))
@@ -82,6 +85,7 @@
  (write-region "" nil custom-file))
 
 ;; Load the various modules used in this configuration.
+(load "~/.emacs.d/load-path")
 (load "~/.emacs.d/bindings")
 (load "~/.emacs.d/hooks")
 (load "~/.emacs.d/defuns")
@@ -133,6 +137,7 @@
 (require 'ggtags)
 (require 'guide-key)
 (require 'popwin)
+(require 'git-timemachine)
 (popwin-mode 1)
 
 ;; Provide a helpful guide to the bindings available after a sequence.
@@ -156,6 +161,7 @@
 
 ;; Mode specific loading and setup
 (ofc/helm)
+(ofc/magit)
 (ofc/company)
 (ofc/yasnippet)
 (ofc/keybindings)

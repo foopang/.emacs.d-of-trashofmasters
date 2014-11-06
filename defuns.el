@@ -17,33 +17,6 @@
 ;;; 2014-10-31
 ;;; - Added popwin and changed helm to show its buffer in a popup window.
 
-(defun ofc/load-path nil
-  "Configure emacs autoload paths"
-
-  (add-to-list 'custom-theme-load-path "~/.emacs.d/elisp/themes")
-  (add-to-list 'custom-theme-load-path "~/.emacs.d/elisp/moe-theme")
-
-  (setq load-path (append (list "~/.emacs.d/elisp/php-mode"
-                                "~/.emacs.d/elisp/php-eldoc"
-                                "~/.emacs.d/elisp/php-extras"
-                                "~/.emacs.d/elisp/web-mode"
-                                "~/.emacs.d/elisp/coffee-mode"
-                                "~/.emacs.d/elisp/popwin"
-                                "~/.emacs.d/elisp/projectile"
-                                "~/.emacs.d/elisp/helm"
-                                "~/.emacs.d/elisp/moe-theme"
-                                "~/.emacs.d/elisp/zenburn-theme"
-                                "~/.emacs.d/elisp/yasnippet"
-                                "~/.emacs.d/elisp/ggtags"
-                                "~/.emacs.d/elisp/highlight-symbol"
-                                "~/.emacs.d/elisp/sr-speedbar")
-                          load-path))
-
-  ;;
-  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                           ("marmalade" . "http://marmalade-repo.org/packages/")
-                           ("melpa" . "http://melpa.milkbox.net/packages/"))))
-
 (defun comment-or-uncomment-line-or-region ()
   "Comments or uncomments the current line or region."
   (interactive)
@@ -67,14 +40,6 @@
   ;; Set username and email address
   (setq user-full-name "Andrea Turso"
         user-mail-address "trashofmasters@gmail.com")
-
-  ;; special-display-regexps has been obsoleted in Emacs 24.3
-  ;; In the meanwhile I rely on it to display Magit buffers
-  ;; in their own frame. However this doesn't seem to play well
-  ;; with the native OSX fullscreen.
-  (setq special-display-regexps '("\\*magit:.*\\*"))
-
-  (set-variable 'magit-emacsclient-executable "/usr/local/Cellar/emacs/HEAD/bin/emacsclient")
 
   (setq special-display-buffer-names
         (nconc '("*Backtrace*" "*VC-log*" "*compilation*" "*grep*")
@@ -196,3 +161,20 @@
                 (not (equal "/" default-directory)))
       (cd ".."))
     (call-interactively 'compile)))
+
+
+(defun ofc/magit ()
+  "Configures Magit mode."
+ '(magit-status-buffer-switch-function (quote switch-to-buffer))
+  (set-variable 'magit-emacsclient-executable "/usr/local/Cellar/emacs/HEAD/bin/emacsclient")
+  (setq popwin:special-display-config
+      '(("*Help*" :height 30 :stick t)
+        ("*Completions*" :noselect t)
+        ("*compilation*" :noselect t)
+        ("*Messages*")
+        ("*Occur*" :noselect t)
+        ("*shell*" :height 30)
+        ("*Shell Command Output*" :noselect t)
+        ("*Kill Ring*" :height 40)
+        ("*Compile-Log" :height 20 :stick t)
+        )))

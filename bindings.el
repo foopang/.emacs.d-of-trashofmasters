@@ -38,25 +38,36 @@
 ;;; 2014-10-21
 ;;; - Unbound C-z and C-x C-z.
 ;;; - Bound C-w to `ofc/kill-region' which kills only active regions.
+;;;
+;;; 2014-11-06
+;;; - Unbound key `C-c a` to select all text in the buffer.
+;;; - Unbound key to compose a message `C-x m'
+;;; - Bound `helm-projectile-switch-to-buffer' to `C-x m'
+;;; - Bound various magit commands to the prefix `C-x g':
+;;;   - `s' status
+;;;   - `b' branch manager
+;;;   - `c' checkout
+;;;   - `d' diff
+;;;   - `t' time machine
+;;; - Bound `helm-show-kill-ring' to `C-x y'.
 
 ;; Custom global key bindings
 (defun ofc/keybindings nil
+  ;; Avoid accidentally suspending Emacs.
+  (global-unset-key (kbd "C-z"))
+  (global-unset-key (kbd "C-x C-z"))
+  (global-unset-key (kbd "C-x m"))
+  (global-unset-key (kbd "<left>"))
+  (global-unset-key (kbd "<right>"))
+
   (when (eq system-type 'darwin)
     (progn
-      (global-set-key (kbd "C-w") 'ofc/kill-region)
-
-      ;; Avoid accidentally suspending Emacs.
-      (global-unset-key (kbd "C-z"))
-      (global-unset-key (kbd "C-x C-z"))
 
       ;; Command is hyper (H)
       (setq mac-command-modifier 'hyper)
 
       ;; Bind H-` to switch between frames.
       (define-key global-map (kbd "H-`") 'other-frame)
-
-      ;; Bind H-SPC (HyperSpace!) to Projectile.
-      (define-key global-map (kbd "H-SPC") 'helm-projectile-switch-to-buffer)
 
       ;; Option is meta (M).
       (setq mac-option-modifier 'meta)
@@ -79,8 +90,16 @@
   (when (fboundp 'comment-or-uncomment-line-or-region)
     (global-set-key (kbd "C-/") 'comment-or-uncomment-line-or-region))
 
-  ;; Bind magit-status to C-x g.
-  (global-set-key (kbd "C-x g") 'magit-status)
+  ;; Bind this modified version of `kill-region' which doesn't act
+  ;; unless there an active mark.
+  (global-set-key (kbd "C-w") 'ofc/kill-region)
+
+  ;; Bind magit related commands to prefix `C-x g'.
+  (global-set-key (kbd "C-x g s") 'magit-status)
+  (global-set-key (kbd "C-x g d") 'magit-diff)
+  (global-set-key (kbd "C-x g b") 'magit-branch-manager)
+  (global-set-key (kbd "C-x g c") 'magit-checkout)
+  (global-set-key (kbd "C-x g t") 'git-timemachine)
 
   ;; Treat ESC just like C-g.
   (global-set-key (kbd "<escape>") 'keyboard-quit)
@@ -100,16 +119,15 @@
 
   ;; Use helm-mini to switch between open buffer and files, or
   ;; recently closed ones.
+  ;; Bind other Helm commands.
+  (global-set-key (kbd "C-x m") 'helm-projectile-switch-to-buffer)
+  (global-set-key (kbd "C-x y") 'helm-show-kill-ring)
+  (global-set-key (kbd "C-x f") 'helm-occur)
   (global-set-key (kbd "C-x b") 'helm-mini)
-  (global-set-key (kbd "C-x C-a") 'helm-mini)
   (global-set-key (kbd "C-x C-b") 'helm-mini)
 
   ;; Duplicate the M-x binding to C-x C-m for easier access.
   (global-set-key (kbd "C-x C-m") 'execute-extended-command)
-
-  ;; Duplicate the C-x h binding to C-c a to select all the text in
-  ;; the buffer.
-  (global-set-key (kbd "C-c a") 'mark-whole-buffer)
 
   ;; Bind C-x a r to align the text in the region.
   (global-set-key (kbd "C-x a r") 'align-regexp))
