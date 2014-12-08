@@ -26,6 +26,7 @@
                                 "~/.emacs.d/elisp/moe-theme"
                                 "~/.emacs.d/elisp/zenburn-theme"
                                 "~/.emacs.d/elisp/yasnippet"
+                                "~/.emacs.d/elisp/helm-ack"
                                 "~/.emacs.d/elisp/ggtags"
                                 "~/.emacs.d/elisp/highlight-symbol"
                                 "~/.emacs.d/elisp/sr-speedbar")

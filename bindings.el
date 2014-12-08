@@ -50,6 +50,10 @@
 ;;;   - `d' diff
 ;;;   - `t' time machine
 ;;; - Bound `helm-show-kill-ring' to `C-x y'.
+;;;
+;;; 2014-12-08
+;;; - Bound join lines to `M-k'
+
 
 ;; Custom global key bindings
 (defun ofc/keybindings nil
@@ -130,4 +134,9 @@
   (global-set-key (kbd "C-x C-m") 'execute-extended-command)
 
   ;; Bind C-x a r to align the text in the region.
-  (global-set-key (kbd "C-x a r") 'align-regexp))
+  (global-set-key (kbd "C-x a r") 'align-regexp)
+
+  ;; Join two consecutive lines into one.
+  (global-set-key (kbd "M-k") (lambda ()
+                                (interactive)
+                                (join-line -1))))

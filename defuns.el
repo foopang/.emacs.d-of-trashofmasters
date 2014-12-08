@@ -37,6 +37,21 @@
 (defun ofc/custom nil
   "Andrea's customisations"
 
+  (setq popwin:special-display-config
+        '(
+          ("*Help*" :height 30 :stick t)
+          ("*Completions*" :noselect t)
+          ("*compilation*" :noselect t)
+          ("*Messages*")
+          ("*Occur*" :noselect t)
+          ("*shell*" :height 30)
+          ("*Shell Command Output*" :noselect t)
+          ("*Kill Ring*" :height 40)
+          ("*Compile-Log" :height 20 :stick t)
+          ("*Ack-and-a-half*" :height 20)))
+
+  (setq mouse-wheel-scroll-amount '(0.01))
+
   ;; Set username and email address
   (setq user-full-name "Andrea Turso"
         user-mail-address "trashofmasters@gmail.com")
@@ -162,19 +177,12 @@
       (cd ".."))
     (call-interactively 'compile)))
 
-
 (defun ofc/magit ()
   "Configures Magit mode."
- '(magit-status-buffer-switch-function (quote switch-to-buffer))
   (set-variable 'magit-emacsclient-executable "/usr/local/Cellar/emacs/HEAD/bin/emacsclient")
-  (setq popwin:special-display-config
-      '(("*Help*" :height 30 :stick t)
-        ("*Completions*" :noselect t)
-        ("*compilation*" :noselect t)
-        ("*Messages*")
-        ("*Occur*" :noselect t)
-        ("*shell*" :height 30)
-        ("*Shell Command Output*" :noselect t)
-        ("*Kill Ring*" :height 40)
-        ("*Compile-Log" :height 20 :stick t)
-        )))
+  (setq magit-status-buffer-switch-function 'switch-to-buffer))
+
+(defun ofc/ack ()
+  "Configure ack"
+  (setq ack-and-a-half-executable "/usr/local/bin/ack")
+  (defalias 'ack 'ack-and-a-half))

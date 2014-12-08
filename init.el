@@ -138,6 +138,8 @@
 (require 'guide-key)
 (require 'popwin)
 (require 'git-timemachine)
+(require 'helm-ack)
+
 (popwin-mode 1)
 
 ;; Provide a helpful guide to the bindings available after a sequence.
@@ -165,6 +167,7 @@
 (ofc/company)
 (ofc/yasnippet)
 (ofc/keybindings)
+(ofc/ack)
 
 ;; Move to the JustPark directory
 (cd "~/JustPark")
