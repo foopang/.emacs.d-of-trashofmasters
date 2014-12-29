@@ -1,4 +1,4 @@
-;; Emacs Configuration
+;; Emacs Configuration.
 ;; Based on Emacs Prelude.
 (defvar ofc-dir (file-name-directory load-file-name) "")
 (defvar ofc-vendor-dir (expand-file-name "elisp" ofc-dir) "")
@@ -45,10 +45,12 @@
 
 ;; Load the main editor components.
 (require 'ofc-projectile)
+(require 'ofc-yasnippet)
 (require 'ofc-recentf)
 (require 'ofc-company)
 (require 'ofc-editor)
 (require 'ofc-coffee)
+(require 'ofc-ggtags)
 (require 'ofc-magit)
 (require 'ofc-helm)
 (require 'ofc-web)

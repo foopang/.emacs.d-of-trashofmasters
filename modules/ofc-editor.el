@@ -1,4 +1,6 @@
 (require 'ansi-color)
+(require 'uniquify)
+(require 'whitespace)
 
 ;; The original `cleanup-buffer' from Magnars,
 ;; found on Emacs Rocks Episode 12.
@@ -94,7 +96,6 @@ number input."
 (global-set-key (kbd "C-/") 'ofc/comment-or-uncomment-line-or-region)
 (global-set-key (kbd "C-x C-c") 'ofc/prompt-before-closing)
 
-
 ;; Bind C-x a r to align the text in the region.
 (global-set-key (kbd "C-x a r") 'align-regexp)
 
@@ -109,19 +110,33 @@ number input."
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
 
+(global-hl-line-mode +1)
+
 (show-paren-mode t)
 (column-number-mode t)
 (display-battery-mode t)
 (delete-selection-mode t)
 
+(setq whitespace-line-column 80) ;; limit line length
+(setq whitespace-style '(face tabs empty trailing lines-tail))
+
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 8)
-
+(setq tab-always-indent 'complete)
 (setq tab-width 4)
 
-;; Don't ask before using narrow commands.
+;; enable narrowing commands
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
+(put 'narrow-to-defun 'disabled nil)
+
+;; enabled change region case commands
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
+;; enable erase-buffer command
+(put 'erase-buffer 'disabled nil)
+
 (put 'dired-find-alternate-file 'disabled nil)
 
 ;; Save point position between sessions
@@ -151,5 +166,12 @@ number input."
 
 ;; Answer just y/n insted of yes or no
 (fset 'yes-or-no-p 'y-or-n-p)
+
+(setq uniquify-buffer-name-style 'forward
+      uniquify-separator "/"
+      ;; rename after killing uniquified
+      uniquify-after-kill-buffer-p t
+      ;; don't muck with special buffers
+      uniquify-ignore-buffers-re "^\\*")
 
 (provide 'ofc-editor)
