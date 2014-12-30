@@ -7,7 +7,7 @@
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-x C-b") 'helm-mini)
 
-(setq helm-display-function 'popwin:popup-buffer)
+(eval-after-load "popwin" '(setq helm-display-function 'popwin:popup-buffer))
 
 (setq projectile-completion-system 'helm
       projectile-completion-system 'grizzl

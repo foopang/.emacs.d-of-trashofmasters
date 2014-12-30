@@ -2,6 +2,10 @@
 (require 'uniquify)
 (require 'whitespace)
 
+(defun ofc/after-save-hook ()
+  ""
+  (delete-trailing-whitespace))
+
 ;; The original `cleanup-buffer' from Magnars,
 ;; found on Emacs Rocks Episode 12.
 ;;
@@ -111,6 +115,7 @@ number input."
 (blink-cursor-mode -1)
 
 (global-hl-line-mode +1)
+(set-face-attribute hl-line-face nil :underline nil)
 
 (show-paren-mode t)
 (column-number-mode t)
@@ -173,5 +178,7 @@ number input."
       uniquify-after-kill-buffer-p t
       ;; don't muck with special buffers
       uniquify-ignore-buffers-re "^\\*")
+
+(add-hook 'after-save-hook 'ofc/after-save-hook)
 
 (provide 'ofc-editor)

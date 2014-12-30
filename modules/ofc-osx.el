@@ -10,4 +10,6 @@
 ;; Initialise the environment
 (exec-path-from-shell-initialize)
 
+(menu-bar-mode 1)
+
 (provide 'ofc-osx)

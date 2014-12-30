@@ -1,10 +1,13 @@
 (require 'php-mode)
 (require 'php-extras)
 
-(add-hook 'php-mode-hook (lambda ()
-  (local-set-key (kbd "C-c i") 'company-complete)
-  (set (make-local-variable 'ggtags-completing-read-function) nil)
-  (set (make-local-variable 'require-final-newline) t)))
+(defun ofc/php-mode-hook ()
+  ""
+  (setq mode-name "PHP")
+;  (ggtags-mode 1)
+  (set (make-local-variable 'require-final-newline) t))
+
+(add-hook 'php-mode-hook 'ofc/php-mode-hook)
 
 (push '("\\.php" . php-mode) auto-mode-alist)
 
