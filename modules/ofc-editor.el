@@ -43,16 +43,6 @@ current buffer. Those values change when Narrowing is active.
   (interactive)
   (join-line -1))
 
-(defun ofc/prompt-before-closing ()
-  "Prevent Emacs from suddenly closing during a keystroke frenzy
-unless 'y' was pressed."
-  (interactive)
-  (if (y-or-n-p (format "Are you sure you want to exit Emacs? "))
-      (if (< emacs-major-version 22)
-          (save-buffers-kill-terminal)
-        (save-buffers-kill-emacs))
-    (message "Continuing.")))
-
 (defun ofc/comment-or-uncomment-line-or-region ()
   "Comments or uncomments the current line or region."
   (interactive)
@@ -98,13 +88,16 @@ number input."
 ;; much what it says on the tin.
 (global-set-key (kbd "C-w") 'ofc/kill-region)
 (global-set-key (kbd "C-/") 'ofc/comment-or-uncomment-line-or-region)
-(global-set-key (kbd "C-x C-c") 'ofc/prompt-before-closing)
+
 
 ;; Bind C-x a r to align the text in the region.
 (global-set-key (kbd "C-x a r") 'align-regexp)
 
 ;; Join two consecutive lines into one.
 (global-set-key (kbd "M-^") 'ofc/join-lines)
+
+;; Don't kill Emacs without confirmation.
+(setq confirm-kill-emacs 'y-or-n-p)
 
 (fringe-mode -1)
 (tooltip-mode -1)
