@@ -144,6 +144,7 @@ number input."
 (setq inhibit-startup-message t
       initial-scratch-message nil
       truncate-lines t
+      cursor-type '(bar . 1)
       overflow-newline-into-fringe t
 
       ;; Use the X11 clipboard

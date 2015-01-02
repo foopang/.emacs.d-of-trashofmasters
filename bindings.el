@@ -11,6 +11,3 @@
 
 ;; Treat ESC just like C-g.
 (global-set-key (kbd "<escape>") 'keyboard-quit)
-
-;; Duplicate the M-x binding to C-x C-m for easier access.
-(global-set-key (kbd "C-x C-m") 'execute-extended-command)

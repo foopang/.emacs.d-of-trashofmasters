@@ -10,10 +10,11 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/elisp/moe-theme")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/elisp/warm-night-theme")
 
-(setq load-path (append (list "~/.emacs.d/elisp/php-mode"
-                              "~/.emacs.d/elisp/php-eldoc"
+(setq load-path (append (list "~/.emacs.d/elisp/web-mode"
+                              "~/.emacs.d/elisp/php-mode"
                               "~/.emacs.d/elisp/php-extras"
-                              "~/.emacs.d/elisp/web-mode"
+                              "~/.emacs.d/elisp/php-eldoc"
+                              "~/.emacs.d/elisp/company-mode"
                               "~/.emacs.d/elisp/coffee-mode"
                               "~/.emacs.d/elisp/popwin"
                               "~/.emacs.d/elisp/projectile"

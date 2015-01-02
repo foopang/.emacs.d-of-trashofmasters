@@ -13,12 +13,12 @@
   (diminish 'abbrev-mode))
 
 (eval-after-load "company-mode"
-  (diminish 'company-mode " ℂ"))
+  (diminish 'company-mode " C"))
 
 (eval-after-load "yas-minor-mode"
-  (diminish 'yas-minor-mode " 𝕐"))
+  (diminish 'yas-minor-mode " Y"))
 
 (eval-after-load "ggtags-mode"
-  (diminish 'ggtags-mode " 𝔾"))
+  (diminish 'ggtags-mode " GG"))
 
 (provide 'ofc-diminish)
