@@ -141,10 +141,11 @@ number input."
 (setq-default save-place t)
 (setq save-place-file ofc-savefile-dir)
 
+(setq-default cursor-type 'bar)
+
 (setq inhibit-startup-message t
       initial-scratch-message nil
       truncate-lines t
-      cursor-type '(bar . 1)
       overflow-newline-into-fringe t
 
       ;; Use the X11 clipboard
