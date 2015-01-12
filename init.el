@@ -1,18 +1,56 @@
-;; Emacs Configuration.
-;; Based on Emacs Prelude.
-(defvar ofc-dir (file-name-directory load-file-name) "")
-(defvar ofc-vendor-dir (expand-file-name "elisp" ofc-dir) "")
-(defvar ofc-modules-dir (expand-file-name  "modules" ofc-dir) "")
-(defvar ofc-personal-dir (expand-file-name "personal" ofc-dir) "")
-(defvar ofc-savefile-dir (expand-file-name "savefile" ofc-dir) "")
-(defvar ofc-snippets-dir (expand-file-name "snippets" ofc-dir) "")
-(defvar ofc-custom-file (expand-file-name "custom.el" ofc-savefile-dir) "")
+;;; init.el --- Personal Emacs Configuration File
+
+;; Copyright (C) 2014 Andrea Turso
+
+;; Author: Andrea Turso <trashofmasters@gmail.com>
+;; URL: https://github.com/trashofmasters/.emacs.d
+
+;; This file is not part of GNU Emacs
+
+(defvar ofc-dir (file-name-directory load-file-name)
+  "The Emacs configuration directory, generally this is `~/.emacs/d'.")
+
+(defvar ofc-vendor-dir (expand-file-name "elisp" ofc-dir)
+  "The directory where third-party packages should be installed.
+At this time packages are manually checked-out or downloaded and
+added to this directory. When using this configuration on a new
+machine remember to install all packages required in `load-path.el'.")
+
+(defvar ofc-modules-dir (expand-file-name  "modules" ofc-dir)
+  "The directory where all modules that make up this Emacs configuration
+are stored. All files in this directory will be available to load once
+the directory is added to the `load-path' variable.")
+
+(defvar ofc-personal-dir (expand-file-name "personal" ofc-dir)
+  "The directory containing all personal configuration overrides.")
+
+(defvar ofc-savefile-dir (expand-file-name "savefile" ofc-dir)
+  "The directory where all persistent Emacs configuration will be stored.")
+
+(defvar ofc-snippets-dir (expand-file-name "snippets" ofc-dir)
+  "The directory where Yasnippet will look for additional snippets to load.")
+
+(defvar ofc-custom-file (expand-file-name "custom.el" ofc-savefile-dir)
+  "The name of the configuration file where `customize' will save
+our changed Emacs paramaters.")
+
+(defvar ofc-use-cedet-dev t
+  "When non-nil the builtin version of CEDET will be replaced
+with the dev version present in `ofc-vendor-dir/cedet'.")
 
 ;; Use the old load-path definition, instead of adding all
 ;; directories under `elisp' to the load-path.
 (load (concat ofc-dir "load-path"))
 
-;; Set the theme very early to avoid flashing the unstyled frame.
+;; Set the following appearance options early to avoid
+;; flashing an unstyled frame, menu or scroll bars.
+(fringe-mode -1)
+(tooltip-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(auto-save-mode -1)
+(scroll-bar-mode -1)
+(blink-cursor-mode -1)
 (load-theme 'warm-night t)
 
 (add-to-list 'load-path ofc-modules-dir)
@@ -30,6 +68,11 @@
 ;; startup. We create create an empty file to avoid this.
 (unless (file-exists-p custom-file)
   (write-region "" nil custom-file))
+
+;; We must replace the built-in CEDET with the dev version
+;; very early in the Emacs init procedure.
+(when ofc-use-cedet-dev
+  (require 'ofc-cedet))
 
 ;; Initialize Emacs package management.
 (require 'package)
@@ -59,7 +102,3 @@
 
 ;; Load Emacs customisations.
 (load custom-file)
-
-(setq bookmark-save-flag t)
-(bookmark-bmenu-list)
-(switch-to-buffer "*Bookmark List*")

@@ -2,6 +2,19 @@
 (require 'uniquify)
 (require 'whitespace)
 
+(defun ofc/popup-buffer (buffer &optional action norecord)
+  "Create a new window at the bottom of the frame and displays
+BUFFER in it."
+  (let ((win-state (window-state-get))
+        (popup-height (floor (/ (frame-height) 1.6180))))
+
+    (delete-other-windows)
+
+    (let ((popup-window (split-window-vertically popup-height)))
+      ;; Restore the previous window configuration in the top window
+      (window-state-put win-state (frame-first-window))
+      (set-window-buffer popup-window buffer))))
+
 (defun ofc/after-save-hook ()
   ""
   (delete-trailing-whitespace))
@@ -80,6 +93,17 @@ number input."
   (ansi-color-apply-on-region (point-min) (point-max))
   (toggle-read-only))
 
+(defun ofc/startup-hook ()
+    "This hook will show the bookmark list as soon as Emacs is
+done starting up."
+    (bookmark-bmenu-list)
+    (split-window-horizontally)
+    (switch-to-buffer "*Bookmark List*"))
+
+;; Show the initial screen with my bookmarks.
+(add-hook 'after-init-hook 'ofc/startup-hook)
+(add-hook 'after-save-hook 'ofc/after-save-hook)
+
 ;; Bind M-g to temporarily display line numbers when jumping to a
 ;; line.
 (global-set-key (kbd "M-g") 'ofc/goto-line-with-feedback)
@@ -88,7 +112,6 @@ number input."
 ;; much what it says on the tin.
 (global-set-key (kbd "C-w") 'ofc/kill-region)
 (global-set-key (kbd "C-/") 'ofc/comment-or-uncomment-line-or-region)
-
 
 ;; Bind C-x a r to align the text in the region.
 (global-set-key (kbd "C-x a r") 'align-regexp)
@@ -99,28 +122,22 @@ number input."
 ;; Don't kill Emacs without confirmation.
 (setq confirm-kill-emacs 'y-or-n-p)
 
-(fringe-mode -1)
-(tooltip-mode -1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(auto-save-mode -1)
-(scroll-bar-mode -1)
-(blink-cursor-mode -1)
-
-(global-hl-line-mode +1)
-(set-face-attribute hl-line-face nil :underline nil)
-
 (show-paren-mode t)
 (column-number-mode t)
+(global-hl-line-mode t)
 (display-battery-mode t)
 (delete-selection-mode t)
+
+(set-face-attribute hl-line-face nil :underline nil)
+
+(setq bookmark-save-flag t)
 
 (setq whitespace-line-column 80) ;; limit line length
 (setq whitespace-style '(face tabs empty trailing lines-tail))
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 8)
-(setq tab-always-indent 'complete)
+(setq tab-always-indent t)
 (setq tab-width 4)
 
 ;; enable narrowing commands
@@ -173,7 +190,5 @@ number input."
       uniquify-after-kill-buffer-p t
       ;; don't muck with special buffers
       uniquify-ignore-buffers-re "^\\*")
-
-(add-hook 'after-save-hook 'ofc/after-save-hook)
 
 (provide 'ofc-editor)

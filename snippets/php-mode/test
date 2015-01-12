@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: Insert a test method at point
-# key: test
-# --
-public function test$1()
-{
-    $0
-}
