@@ -1,8 +1,5 @@
 # -*- mode: snippet -*-
 # name: Insert a namespace declaration at point
 # key: ns
-# expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 't))
 # --
-namespace $1;
-
-$0
+namespace $1;$0
