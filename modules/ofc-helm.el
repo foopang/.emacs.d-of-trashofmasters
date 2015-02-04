@@ -9,7 +9,8 @@
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-x C-b") 'helm-mini)
 
-(setq helm-display-function 'ofc/popup-buffer)
+;;(setq helm-display-function 'ofc/popup-buffer)
+(setq helm-display-function 'popwin:pop-to-buffer)
 
 (setq projectile-completion-system 'helm
       projectile-completion-system 'grizzl

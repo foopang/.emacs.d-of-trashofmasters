@@ -10,15 +10,15 @@
   '(diminish 'magit-auto-revert-mode))
 
 (eval-after-load "abbrev-mode"
-  (diminish 'abbrev-mode))
+  '(diminish 'abbrev-mode))
 
 (eval-after-load "company-mode"
-  (diminish 'company-mode " C"))
+  '(diminish 'company-mode " C"))
 
 (eval-after-load "yas-minor-mode"
-  (diminish 'yas-minor-mode " Y"))
+  '(diminish 'yas-minor-mode " Y"))
 
 (eval-after-load "ggtags-mode"
-  (diminish 'ggtags-mode " GG"))
+  '(diminish 'ggtags-mode " GG"))
 
 (provide 'ofc-diminish)

@@ -34,7 +34,7 @@ the directory is added to the `load-path' variable.")
   "The name of the configuration file where `customize' will save
 our changed Emacs paramaters.")
 
-(defvar ofc-use-cedet-dev t
+(defvar ofc-use-cedet-dev nil
   "When non-nil the builtin version of CEDET will be replaced
 with the dev version present in `ofc-vendor-dir/cedet'.")
 
@@ -87,12 +87,13 @@ with the dev version present in `ofc-vendor-dir/cedet'.")
 
 ;; Load the main editor components.
 (require 'ofc-editor)
+(require 'ofc-popwin)
 (require 'ofc-projectile)
 (require 'ofc-yasnippet)
 (require 'ofc-recentf)
 (require 'ofc-company)
 (require 'ofc-coffee)
-(require 'ofc-ggtags)
+(require 'ofc-tags)
 (require 'ofc-magit)
 (require 'ofc-helm)
 (require 'ofc-web)
