@@ -14,6 +14,7 @@
                               "~/.emacs.d/elisp/php-mode"
                               "~/.emacs.d/elisp/php-extras"
                               "~/.emacs.d/elisp/php-eldoc"
+                              "~/.emacs.d/elisp/ecb"
                               "~/.emacs.d/elisp/cedet"
                               "~/.emacs.d/elisp/contrib"
                               "~/.emacs.d/elisp/company-mode"

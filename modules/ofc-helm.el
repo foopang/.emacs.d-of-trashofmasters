@@ -9,8 +9,9 @@
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-x C-b") 'helm-mini)
 
-;;(setq helm-display-function 'ofc/popup-buffer)
-(setq helm-display-function 'popwin:pop-to-buffer)
+;; I'm currently relying on ECB Compile Window support to
+;; display Helm buffers at the bottom of the frame.
+(setq helm-display-function 'pop-to-buffer)
 
 (setq projectile-completion-system 'helm
       projectile-completion-system 'grizzl

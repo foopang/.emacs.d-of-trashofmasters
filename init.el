@@ -87,7 +87,7 @@ with the dev version present in `ofc-vendor-dir/cedet'.")
 
 ;; Load the main editor components.
 (require 'ofc-editor)
-(require 'ofc-popwin)
+(require 'ofc-ecb)
 (require 'ofc-projectile)
 (require 'ofc-yasnippet)
 (require 'ofc-recentf)
