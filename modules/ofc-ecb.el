@@ -2,6 +2,7 @@
 
 ;; Disable the Tip of the Day popup.
 (setq ecb-tip-of-the-day nil)
+(setq ecb-tree-make-parent-node-sticky nil)
 
 ;; Activate ECB as soon as Emacs is started.
 (ecb-activate)
