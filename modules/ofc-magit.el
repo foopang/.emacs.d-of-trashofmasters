@@ -8,6 +8,7 @@
 (global-set-key (kbd "C-c g s") 'magit-status)
 (global-set-key (kbd "C-c g d") 'magit-diff)
 (global-set-key (kbd "C-c g b") 'magit-branch-manager)
+(global-set-key (kbd "C-c g l") 'magit-log-long)
 (global-set-key (kbd "C-c g c") 'magit-checkout)
 (global-set-key (kbd "C-c g t") 'git-timemachine)
 

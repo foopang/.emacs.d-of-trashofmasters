@@ -4,7 +4,7 @@
 (defun ofc/php-mode-hook ()
   ""
   (setq mode-name "PHP")
-  (set (make-local-variable 'require-final-newline) t))
+  (set (make-local-variable 'require-final-newline) 'visit-save))
 
 (add-hook 'php-mode-hook 'ofc/php-mode-hook)
 
