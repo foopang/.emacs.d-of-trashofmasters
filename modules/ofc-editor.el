@@ -15,7 +15,7 @@ BUFFER in it."
       (window-state-put win-state (frame-first-window))
       (set-window-buffer popup-window buffer))))
 
-(defun ofc/after-save-hook ()
+(defun ofc/before-save-hook ()
   ""
   (delete-trailing-whitespace))
 
@@ -102,7 +102,7 @@ done starting up."
 
 ;; Show the initial screen with my bookmarks.
 (add-hook 'after-init-hook 'ofc/startup-hook)
-(add-hook 'after-save-hook 'ofc/after-save-hook)
+(add-hook 'before-save-hook 'ofc/before-save-hook)
 
 ;; Bind M-g to temporarily display line numbers when jumping to a
 ;; line.
