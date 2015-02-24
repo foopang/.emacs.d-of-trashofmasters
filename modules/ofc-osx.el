@@ -7,6 +7,8 @@
 ;; Let the right Alt be used for special characters.
 (setq mac-right-option-modifier 'none)
 
+(setq use-dialog-box nil)
+
 ;; Initialise the environment
 (exec-path-from-shell-initialize)
 
