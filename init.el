@@ -6,6 +6,10 @@
 ;; URL: https://github.com/trashofmasters/.emacs.d
 
 ;; This file is not part of GNU Emacs
+;;
+;; You'll notice that some of the structure of this
+;; project is clumsily copied from the great Emacs
+;; Prelude package.
 
 (defvar ofc-dir (file-name-directory load-file-name)
   "The Emacs configuration directory, generally this is `~/.emacs/d'.")
@@ -69,8 +73,8 @@ with the dev version present in `ofc-vendor-dir/cedet'.")
 (unless (file-exists-p custom-file)
   (write-region "" nil custom-file))
 
-;; We must replace the built-in CEDET with the dev version
-;; very early in the Emacs init procedure.
+;; CEDET needs to run very early in the bootstrap process to avoid
+;; clashes with the builtin components.
 (when ofc-use-cedet-dev
   (require 'ofc-cedet))
 
@@ -78,7 +82,8 @@ with the dev version present in `ofc-vendor-dir/cedet'.")
 (require 'package)
 (package-initialize)
 
-;; Load all Mac OS specific Emacs configuration.
+;; Load all Mac OS specific Emacs configuration
+;; when running Emacs on a Mac.
 (when (eq system-type 'darwin)
   (require 'ofc-osx))
 
