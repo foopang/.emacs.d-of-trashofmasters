@@ -51,6 +51,7 @@
                                      ("*Apropos*")
                                      ("*Occur*")
                                      ("*shell*")
+                                     ("\\*magit.*\\*" . t)
                                      ("\\*[cC]ompilation.*\\*" . t)
                                      ("\\*i?grep.*\\*" . t)
                                      ("*Completions*")
