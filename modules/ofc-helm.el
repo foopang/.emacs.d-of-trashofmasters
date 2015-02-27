@@ -13,8 +13,15 @@
 ;; display Helm buffers at the bottom of the frame.
 (setq helm-display-function 'pop-to-buffer)
 
-(setq projectile-completion-system 'helm
-      projectile-completion-system 'grizzl
+;; Helm adaptive sorting will smartly rearrange the candidates based
+;; on history and frequency.
+(setq helm-adaptive-history-file
+      (expand-file-name "helm-adaptive-history" ofc-savefile-dir))
+
+;; The benefit of using `helm-projectile-switch-project', over `helm'
+;; is that on any selected project we can fire many actions, not
+;; limited to just the "switch to project" action.
+(setq projectile-completion-system 'helm-projectile-switch-project
       projectile-switch-project-action 'helm-projectile-find-file)
 
 (helm-mode 1)
