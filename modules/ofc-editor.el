@@ -80,13 +80,6 @@ number input."
         (goto-line (read-number "Goto line: ")))
     (linum-mode -1)))
 
-(defun ofc/dot-emacs-autocompile ()
-  "Bytecompile the file if is ~/.emacs"
-  (interactive)
-  (require 'bytecomp)
-  (if (string= (buffer-file-name) (expand-file-name (concat default-directory ".emacs")))
-      (byte-compile-file (buffer-file-name))))
-
 (defun ofc/colorize-compilation-buffer ()
   "Colorise the eshell buffer with ANSI colors."
   (toggle-read-only)
@@ -128,8 +121,6 @@ done starting up."
 (display-battery-mode t)
 (delete-selection-mode t)
 
-(set-face-attribute hl-line-face nil :underline nil)
-
 (setq bookmark-save-flag t)
 
 (setq whitespace-line-column 80) ;; limit line length
@@ -158,6 +149,11 @@ done starting up."
 (setq-default save-place t)
 (setq save-place-file ofc-savefile-dir)
 
+;; Controls where autosave files are stored.
+(setq auto-save-list-file-prefix (concat ofc-savefile-dir "/")
+      backup-directory-alist `((".*" . ,temporary-file-directory))
+      auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+
 (setq-default cursor-type 'bar)
 
 (setq inhibit-startup-message t
@@ -167,11 +163,6 @@ done starting up."
 
       ;; Use the X11 clipboard
       x-select-enable-clipboard t
-
-      ;; Store all backup and autosave files in the
-      ;; temporary files directory.
-      backup-directory-alist `((".*" . ,temporary-file-directory))
-      auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
 
       ;; Smooth scrolling settings
       scroll-step 1
@@ -190,5 +181,8 @@ done starting up."
       uniquify-after-kill-buffer-p t
       ;; don't muck with special buffers
       uniquify-ignore-buffers-re "^\\*")
+
+;; Do not underline current line
+(set-face-attribute hl-line-face nil :underline nil)
 
 (provide 'ofc-editor)

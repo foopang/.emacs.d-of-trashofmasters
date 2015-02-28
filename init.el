@@ -44,7 +44,7 @@ with the dev version present in `ofc-vendor-dir/cedet'.")
 
 ;; Use the old load-path definition, instead of adding all
 ;; directories under `elisp' to the load-path.
-(load (concat ofc-dir "load-path"))
+(load (expand-file-name "load-path" ofc-dir))
 
 ;; Set the following appearance options early to avoid
 ;; flashing an unstyled frame, menu or scroll bars.
@@ -66,7 +66,7 @@ with the dev version present in `ofc-vendor-dir/cedet'.")
 (setq custom-file ofc-custom-file)
 
 ;; Save Emacs file bookmarks to a different file.
-(setq bookmark-default-file (concat ofc-savefile-dir "/" "bookmarks"))
+(setq bookmark-default-file (expand-file-name "bookmarks" ofc-savefile-dir))
 
 ;; Emacs complains if the customisation file is not present on
 ;; startup. We create create an empty file to avoid this.

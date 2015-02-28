@@ -1,9 +1,5 @@
 (require 'ecb)
 
-;; Disable the Tip of the Day popup.
-(setq ecb-tip-of-the-day nil)
-(setq ecb-tree-make-parent-node-sticky nil)
-
 ;; Create a sequence of 3 ECB layouts. The default layout is
 ;; doesn't have to be one from the sequence.
 ;;
@@ -71,6 +67,10 @@
 (setq ecb-layout-name "left3")
 (setq ecb-toggle-layout-sequence (list "left3" "left13" "left14"))
 
+;; Disable the Tip of the Day popup.
+(setq ecb-tip-of-the-day nil)
+(setq ecb-tree-make-parent-node-sticky nil)
+
 ;; Configure ECB to split the frame, instead of the edit window,
 ;; to make real estate when displaying the compilation window.
 (setq ecb-compile-window-width 'frame)
@@ -81,9 +81,6 @@
 
 ;; Activate ECB as soon as Emacs is started.
 (ecb-activate)
-
-;; In case the Method buffer gets messed up see:
-;; http://www.xemacs.org/Documentation/packages/html/ecb_4.html#SEC48
 
 ;; Hit ESC to toggle the compile window.
 (global-set-key (kbd "<escape>") 'ecb-toggle-compile-window)
@@ -105,13 +102,18 @@
                                      ("*Apropos*")
                                      ("*Occur*")
                                      ("*shell*")
-                                     ("\\*magit.*\\*" . t)
+                                     ;; ("\\*magit.*\\*" . t)
                                      ("\\*[cC]ompilation.*\\*" . t)
                                      ("\\*i?grep.*\\*" . t)
                                      ("*Completions*")
                                      ("*Backtrace*")
                                      ("*Compile-log*")
                                      ("*bsh*")
-                                     ("\\*helm[- ].*\\*" . t))))
+                                     ("*helm*")
+                                     ("\\*helm[- ].+\\*" . t))))
+
+(add-hook 'ecb-activate-hook (lambda ()
+  (cancel-function-timers 'ecb-stealthy-updates)))
+
 
 (provide 'ofc-ecb)
