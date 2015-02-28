@@ -18,4 +18,6 @@
 
 (setq ggtags-mode-line-project-name nil)
 
+(diminish 'ggtags-mode " Gt")
+
 (provide 'ofc-ggtags)

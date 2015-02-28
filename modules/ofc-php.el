@@ -4,6 +4,7 @@
 (defun ofc/php-mode-hook ()
   "A custom PHP mode initialisation hook."
   (setq mode-name "PHP")
+  (setq php-lineup-cascaded-calls t)
   (ggtags-mode 1)
   (set (make-local-variable 'require-final-newline) t))
 

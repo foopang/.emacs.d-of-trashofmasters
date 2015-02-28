@@ -4,7 +4,10 @@
 (setq ecb-tip-of-the-day nil)
 (setq ecb-tree-make-parent-node-sticky nil)
 
-;; ECB Left3 Layout
+;; Create a sequence of 3 ECB layouts. The default layout is
+;; doesn't have to be one from the sequence.
+;;
+;; Default layout: ECB Left3 Layout
 ;; -------------------------------------------------------
 ;; |              |                                      |
 ;; |  Directories |                                      |
@@ -25,21 +28,72 @@
 ;; |                                                     |
 ;; |                    Compilation                      |
 ;; |                        ESC                          |
+;; |                                                     |
 ;; -------------------------------------------------------
 ;;
+;; ECB Left13 Layout
+;; -------------------------------------------------------
+;; |              |                                      |
+;; ~              ~                                      ~
+;; | Directories  |               Edit                   |
+;; |     ⌘-d      |               ⌘-e                    |
+;; ~              ~                                      ~
+;; |              |                                      |
+;; -------------------------------------------------------
+;; |                                                     |
+;; |                    Compilation                      |
+;; |                        ESC                          |
+;; |                                                     |
+;; -------------------------------------------------------
+;;
+;; ECB Left14 Layout
+;; -------------------------------------------------------
+;; |              |                                      |
+;; ~              ~                                      ~
+;; |              |                                      |
+;; | Directories  |                                      |
+;; |     ⌘-d      |                                      |
+;; ~              ~                                      ~
+;; |              |               Edit                   |
+;; |              |               ⌘-e                    |
+;; |--------------|                                      |
+;; |              |                                      |
+;; |  History     |                                      |
+;; |    ⌘-h       |                                      |
+;; |              |                                      |
+;; -------------------------------------------------------
+;; |                                                     |
+;; |                    Compilation                      |
+;; |                        ESC                          |
+;; |                                                     |
+;; -------------------------------------------------------
+
 (setq ecb-layout-name "left3")
+(setq ecb-toggle-layout-sequence (list "left3" "left13" "left14"))
+
+;; Configure ECB to split the frame, instead of the edit window,
+;; to make real estate when displaying the compilation window.
+(setq ecb-compile-window-width 'frame)
+(setq ecb-compile-window-height 11)
+
+;; Show files in the directory tree buffer.
+(setq ecb-show-sources-in-directories-buffer 'always)
+
+;; Activate ECB as soon as Emacs is started.
+(ecb-activate)
 
 ;; In case the Method buffer gets messed up see:
 ;; http://www.xemacs.org/Documentation/packages/html/ecb_4.html#SEC48
 
 ;; Hit ESC to toggle the compile window.
-;; I'm used to this because of Quake III and Chrome consoles.
 (global-set-key (kbd "<escape>") 'ecb-toggle-compile-window)
 (global-set-key (kbd "s-m") 'ecb-goto-window-methods)
 (global-set-key (kbd "s-h") 'ecb-goto-window-history)
 (global-set-key (kbd "s-s") 'ecb-goto-window-sources)
+(global-set-key (kbd "s-c") 'ecb-goto-window-compilation)
 (global-set-key (kbd "s-d") 'ecb-goto-window-directories)
 (global-set-key (kbd "s-e") 'ecb-goto-window-edit-last)
+(global-set-key (kbd "s-<return>") 'ecb-toggle-layout)
 
 ;; Helm is configured to be shown in the compilation window.
 ;; This appears to be causing random crashes after Emacs has
@@ -58,11 +112,6 @@
                                      ("*Backtrace*")
                                      ("*Compile-log*")
                                      ("*bsh*")
-                                     ("*eshell*"
-                                     ("*Messages*")
-                                     ("\\*helm[- ].*\\*" . t)))))
-
-;; Activate ECB as soon as Emacs is started.
-(ecb-activate)
+                                     ("\\*helm[- ].*\\*" . t))))
 
 (provide 'ofc-ecb)

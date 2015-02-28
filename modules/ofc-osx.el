@@ -12,6 +12,9 @@
 ;; Initialise the environment
 (exec-path-from-shell-initialize)
 
+(global-set-key (kbd "s-<right>") 'next-buffer)
+(global-set-key (kbd "s-<left>") 'previous-buffer)
+
 (global-unset-key (kbd "s-t"))
 (global-unset-key (kbd "s-u"))
 (global-unset-key (kbd "s-l"))

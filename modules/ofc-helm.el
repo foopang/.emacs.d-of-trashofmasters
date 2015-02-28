@@ -28,4 +28,6 @@
 (helm-autoresize-mode 1)
 (helm-projectile-on)
 
+(diminish 'helm-mode)
+
 (provide 'ofc-helm)

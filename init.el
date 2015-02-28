@@ -90,21 +90,35 @@ with the dev version present in `ofc-vendor-dir/cedet'.")
 ;; Load user-specific settings.
 (require 'ofc-personal)
 
-;; Load the main editor components.
+;; Diminish all vanilla emacs minor modes.  The rest of the
+;; minor-modes can be diminished individually in their own
+;; configuration files.
+(require 'ofc-diminish)
+
+;; Load the main editor components and configuration.
 (require 'ofc-editor)
-(require 'ofc-ecb)
+
+;; Load and configure the Emacs Code Browser component.
+;;
+;; TODO Move the important bits and bobs of its configuration
+;; from the custom file into ofc-ecb.el.
 (require 'ofc-projectile)
+(require 'ofc-helm)
+(require 'ofc-ecb)
+
 (require 'ofc-yasnippet)
 (require 'ofc-recentf)
 (require 'ofc-company)
-(require 'ofc-coffee)
-(require 'ofc-ggtags)
 (require 'ofc-magit)
-(require 'ofc-helm)
-(require 'ofc-web)
-(require 'ofc-php)
+
+(require 'ofc-tags)
+
+(require 'ofc-coffee)
 (require 'ofc-sql)
-(require 'ofc-diminish)
+(require 'ofc-php)
+(require 'ofc-web)
+
+(require 'ofc-php+tags)
 
 ;; Load Emacs customisations.
 (load custom-file)
