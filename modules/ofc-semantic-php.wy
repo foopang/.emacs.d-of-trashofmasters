@@ -1,0 +1,89 @@
+;; (semantic-grammar-batch-build-one-package (buffer-file-name (current-buffer)))
+;; (setq debug-on-error nil)
+
+%languagemode  php-mode
+
+;; The default start symbol
+%start compilation_unit
+
+;; Alternate entry points - for partial re-parse
+%start class_declaration
+
+;; - Needed by EXPANDFULL clauses
+;; Commented this out for now...
+;; %start class_member_declaration
+
+;; -----------------------------
+;; Parenthesis terminals
+;; -----------------------------
+%token <open-paren>  LPAREN           "("
+%token <close-paren> RPAREN           ")"
+%token <open-paren>  LBRACE           "{"
+%token <close-paren> RBRACE           "}"
+%token <open-paren>  LBRACK           "["
+%token <close-paren> RBRACK           "]"
+
+;; -----------------------------
+;; Block terminals
+;; -----------------------------
+%token <semantic-list> PAREN_BLOCK     "^("
+%token <semantic-list> BRACE_BLOCK     "^{"
+%token <semantic-list> BRACK_BLOCK     "^\\["
+
+;; ------------------
+;; Operator terminals
+;; ------------------
+%type  <punctuation>
+%token <punctuation> SEMICOLON         ";"
+%token <punctuation> COLON             ":"
+
+;; -----------------
+;; Literal terminals
+;; -----------------
+%token <string> STRING_LITERAL
+%token <number> NUMBER_LITERAL
+%token <symbol> IDENTIFIER
+%token <symbol> NULL_LITERAL           "null"
+%token <symbol> BOOLEAN_LITERAL        "false"
+%token <symbol> BOOLEAN_LITERAL        "true"
+%token <code>   PROLOGUE
+
+;; -----------------
+;; Keyword terminals
+;; -----------------
+%token T_OFC                           "ofc"
+%put   T_OFC summary
+"A dummy token used to inspect if parsing is working."
+
+%token T_CLASS                         "class"
+%put   T_CLASS summary
+"Class declaration: class <name>"
+
+%%
+
+;;------------
+;;LALR Grammar
+;;------------
+
+;; Types and Names
+
+compilation_unit
+  : type_declaration
+  ;
+
+type_declaration
+  : SEMICOLON
+    ()
+  | class_declaration
+  ;
+
+class_declaration
+  : T_CLASS IDENTIFIER block
+    (TYPE-TAG $4 $3 $6 $5 'typemodifiers $2)
+  ;
+
+block
+  : BRACE_BLOCK
+  ;
+
+;;; ofc-semantic-php.wy ends here
