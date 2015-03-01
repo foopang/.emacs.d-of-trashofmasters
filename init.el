@@ -117,6 +117,7 @@ with the dev version present in `ofc-vendor-dir/cedet'.")
 (require 'ofc-sql)
 (require 'ofc-php)
 (require 'ofc-web)
+(require 'ofc-org)
 
 (require 'ofc-php+tags)
 

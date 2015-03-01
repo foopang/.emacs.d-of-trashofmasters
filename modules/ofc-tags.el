@@ -68,7 +68,8 @@ a definition"
 (global-set-key "\M-]" 'ofc/history-go-forward-dwim)
 
 ;; Regenerate tags manually.
-;; Use C-u to create a new TAGS file.
+;; C-u to create a new TAGS file.
+;; C-u C-u to copy the ctags command into the kill ring.
 (global-set-key "\C-cE" 'ctags-update)
 
 (provide 'ofc-tags)
