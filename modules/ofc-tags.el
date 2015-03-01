@@ -1,13 +1,13 @@
 (require 'helm-etags+)
 (require 'ctags-update)
 
-(defvar ofc-buffer-history nil
+(defvar ofc-tags-search-buffers nil
   "The history of buffers which initiated the tag search.")
 
-(defun ofc/searching-p nil
+(defun ofc/tags-searching-p nil
   "A predicate used to test the presence of buffers in the
-`ofc-buffer-history'."
-  (if ofc-buffer-history
+`ofc-tags-search-buffers'."
+  (if ofc-tags-search-buffers
       t
     nil))
 
@@ -18,7 +18,7 @@ point."
   (condition-case error-message
       (let ((initial-buffer (current-buffer)))
         (helm-etags+-select)
-        (push initial-buffer ofc-buffer-history))
+        (push initial-buffer ofc-tags-search-buffers))
     (error error-message)))
 
 (defun ofc/tags-stop-search ()
@@ -28,9 +28,9 @@ initiated it.
 CAVEATS Currently the switch won't happen unless until you press
 M-* to clear the killed buffers in the history."
   (interactive)
-  (if (ofc/searching-p)
+  (if (ofc/tags-searching-p)
       (condition-case error-message
-          (switch-to-buffer (pop ofc-buffer-history))
+          (switch-to-buffer (pop ofc-tags-search-buffers))
         (error (message "A visited definition file was killed.")))
     (message "No tag search in progress.")))
 
@@ -38,7 +38,7 @@ M-* to clear the killed buffers in the history."
   "Calls helm etags+ history back command only if we jumped to
 a definition"
   (interactive)
-  (if (ofc/searching-p)
+  (if (ofc/tags-searching-p)
       (helm-etags+-history-go-back)
     (message "No tag search in progress.")))
 
@@ -46,7 +46,7 @@ a definition"
   "Calls helm etags+ history forward command only if we jumped to
 a definition"
   (interactive)
-  (if (ofc/searching-p)
+  (if (ofc/tags-searching-p)
       (helm-etags+-history-go-forward)
     (message "No tag search in progress.")))
 

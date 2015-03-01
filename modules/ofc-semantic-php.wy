@@ -1,89 +1,189 @@
-;; (semantic-grammar-batch-build-one-package (buffer-file-name (current-buffer)))
-;; (setq debug-on-error nil)
+;;; ofc-semantic-php.wy -- LALR grammar for PHP 5.5
 
-%languagemode  php-mode
+%package ofc-semantic-php-wy
+%provide ofc-semantic-php-wy
+
+%languagemode php-mode
 
 ;; The default start symbol
-%start compilation_unit
+%start grammar
 
-;; Alternate entry points - for partial re-parse
-%start class_declaration
+;; Keyword
+%type    <keyword>
+%keyword T_NAMESPACE "namespace"
+%keyword T_CLASS     "ofc"
 
-;; - Needed by EXPANDFULL clauses
-;; Commented this out for now...
-;; %start class_member_declaration
+;; Literals
+%type  <symbol>  ;;syntax "\\(\\$?[a-zA-Z_][a-zA-Z0-9_]+\\)"
+%token <symbol>  T_STRING
 
-;; -----------------------------
-;; Parenthesis terminals
-;; -----------------------------
-%token <open-paren>  LPAREN           "("
-%token <close-paren> RPAREN           ")"
-%token <open-paren>  LBRACE           "{"
-%token <close-paren> RBRACE           "}"
-%token <open-paren>  LBRACK           "["
-%token <close-paren> RBRACK           "]"
+%type  <string>
+%token <string>  T_ENCAPSED_STRING
 
-;; -----------------------------
-;; Block terminals
-;; -----------------------------
-%token <semantic-list> PAREN_BLOCK     "^("
-%token <semantic-list> BRACE_BLOCK     "^{"
-%token <semantic-list> BRACK_BLOCK     "^\\["
+%type  <number>
+%token <number>  T_NUMBER
 
-;; ------------------
-;; Operator terminals
-;; ------------------
+;; Don't generate these analyzers which needs special handling code.
+%token <code>    PROLOGUE
+%token <code>    EPILOGUE
+
+;; Blocks & Parenthesis
+%type  <block>
+%token <block>  PAREN_BLOCK "(PAREN_OPEN PAREN_CLOSE)"
+%token <block>  BRACE_BLOCK "(BRACE_OPEN BRACE_CLOSE)"
+%token <block>  BRACK_BLOCK "(BRACK_OPEN BRACK_CLOSE)"
+
+%token <open-paren>   PAREN_OPEN  "("
+%token <close-paren>  PAREN_CLOSE ")"
+%token <open-paren>   BRACE_OPEN  "{"
+%token <close-paren>  BRACE_CLOSE "}"
+%token <open-paren>   BRACK_OPEN  "["
+%token <close-paren>  BRACK_CLOSE "]"
+
+;; Punctuations
 %type  <punctuation>
-%token <punctuation> SEMICOLON         ";"
-%token <punctuation> COLON             ":"
-
-;; -----------------
-;; Literal terminals
-;; -----------------
-%token <string> STRING_LITERAL
-%token <number> NUMBER_LITERAL
-%token <symbol> IDENTIFIER
-%token <symbol> NULL_LITERAL           "null"
-%token <symbol> BOOLEAN_LITERAL        "false"
-%token <symbol> BOOLEAN_LITERAL        "true"
-%token <code>   PROLOGUE
-
-;; -----------------
-;; Keyword terminals
-;; -----------------
-%token T_OFC                           "ofc"
-%put   T_OFC summary
-"A dummy token used to inspect if parsing is working."
-
-%token T_CLASS                         "class"
-%put   T_CLASS summary
-"Class declaration: class <name>"
+%token <punctuation>  T_OBJECT_OPERATOR "->"
+%token <punctuation>  T_SEMICOLON       ";"
 
 %%
 
-;;------------
-;;LALR Grammar
-;;------------
+grammar: ;
 
-;; Types and Names
+%%
 
-compilation_unit
-  : type_declaration
+(defconst ofc-semantic-php-number-regexp
+  (eval-when-compile
+    (concat "\\("
+            "\\<[0-9]+[.][0-9]+\\([eE][-+]?[0-9]+\\)?[fFdD]?\\>"
+            "\\|"
+            "\\<[0-9]+[.][eE][-+]?[0-9]+[fFdD]?\\>"
+            "\\|"
+            "\\<[0-9]+[.][fFdD]\\>"
+            "\\|"
+            "\\<[0-9]+[.]"
+            "\\|"
+            "[.][0-9]+\\([eE][-+]?[0-9]+\\)?[fFdD]?\\>"
+            "\\|"
+            "\\<[0-9]+[eE][-+]?[0-9]+[fFdD]?\\>"
+            "\\|"
+            "\\<0[xX][0-9a-fA-F]+[lL]?\\>"
+            "\\|"
+            "\\<[0-9]+[lLfFdD]?\\>"
+            "\\)"
+            ))
+  "Lexer regexp to match Java number terminals.
+Following is the specification of Java number literals.
+
+DECIMAL_LITERAL:
+    [1-9][0-9]*
   ;
-
-type_declaration
-  : SEMICOLON
-    ()
-  | class_declaration
+HEX_LITERAL:
+    0[xX][0-9a-fA-F]+
   ;
-
-class_declaration
-  : T_CLASS IDENTIFIER block
-    (TYPE-TAG $4 $3 $6 $5 'typemodifiers $2)
+OCTAL_LITERAL:
+    0[0-7]*
   ;
-
-block
-  : BRACE_BLOCK
+INTEGER_LITERAL:
+    <DECIMAL_LITERAL>[lL]?
+  | <HEX_LITERAL>[lL]?
+  | <OCTAL_LITERAL>[lL]?
   ;
+EXPONENT:
+    [eE][+-]?[09]+
+  ;
+FLOATING_POINT_LITERAL:
+    [0-9]+[.][0-9]*<EXPONENT>?[fFdD]?
+  | [.][0-9]+<EXPONENT>?[fFdD]?
+  | [0-9]+<EXPONENT>[fFdD]?
+  | [0-9]+<EXPONENT>?[fFdD]
+  ;")
+
+(defconst ofc-semantic-php-label-regex
+  "[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*")
+
+(defvar ofc-semantic-in-php nil
+  "State variable tracking parsing in/out of PHP code.")
+
+(defun ofc-semantic-php--move-to-php-beginning ()
+  (if (re-search-forward "<[%?]" nil t)
+      (cond
+       ((or (looking-at "\\(php\\)?$")
+	    (looking-at "\\(php\\)?[[:space:]])"))
+	(goto-char (match-end 0))
+	'T_NONPHP)
+       ((or (looking-at "=$")
+	    (looking-at "=[[:space:]]"))
+	'T_ECHO_BLOCK)
+       (t
+	(ofc-semantic-php--move-to-php-beginning)))
+    (goto-char (point-max))
+    nil))
+
+(define-lex-regex-analyzer ofc-semantic-php-lex-prologue
+  "Detect and create a prologue token."
+  "<[?%]\\(php\\)?\\([[:space:]]+\\|$\\)"
+  ;; Zing to the end of this brace block.
+  (let ((start (match-beginning 0))
+        (end   (match-end 0)))
+    (semantic-lex-push-token
+     (semantic-lex-token 'PROLOGUE start end))))
+
+(define-lex-regex-analyzer ofc-semantic-php-lex-epilogue
+  "Detect and create an epilogue or percent-percent token."
+  "[%?]>"
+  (let ((start (match-beginning 0))
+        (end   (match-end 0)))
+    (semantic-lex-push-token
+     (semantic-lex-token 'EPILOGUE start end))))
+
+
+(define-lex-regex-analyzer ofc-semantic-php-lex-heredoc
+  "Detect and create an epilogue or percent-percent token."
+  (concat "<<<[[:blank:]]*\\(" ofc-semantic-php-label-regex "\\)$")
+  (let ((start (match-beginning 0))
+        (end   (progn
+		 (re-search-forward (concat "^" (match-string 1) ";") nil t)
+		 (match-end 0))))
+    (semantic-lex-push-token
+     (semantic-lex-token 'STRING_LITERAL start end))
+    (setq semantic-lex-end-point end)))
+
+(define-lex-analyzer ofc-semantic-php-lex-out-of-php
+  "Detect and create python indentation tokens at beginning of line."
+  (progn
+    (and ofc-semantic-in-php
+	 (looking-at "[[:space:]\n]*[%?]>")
+	 (setq ofc-semantic-in-php nil))
+    (when (not ofc-semantic-in-php)
+      (let ((last-pos (point))
+	    (token (ofc-semantic-php--move-to-php-beginning)))
+	(setq semantic-lex-end-point (point))
+	(when token
+	  (setq ofc-semantic-in-php t)))
+;;	  (semantic-lex-push-token
+;;	   (semantic-lex-token token last-pos (point)))))
+      t)))
+
+;; Define the lexer for this grammar
+(define-lex ofc-semantic-php-lexer
+  "Lexical analyzer that handles php buffers.
+It ignores whitespaces, newlines and comments."
+  semantic-lex-ignore-whitespace
+  semantic-lex-ignore-newline
+  semantic-lex-ignore-comments
+  ofc-semantic-php-lex-prologue
+  ofc-semantic-php-lex-epilogue
+  ofc-semantic-php-lex-heredoc
+
+  ;;;; Auto-generated analyzers.
+  ofc-semantic-php-wy--<number>-regexp-analyzer
+  ofc-semantic-php-wy--<string>-sexp-analyzer
+
+  ;; Must detect keywords before other symbols
+  ofc-semantic-php-wy--<keyword>-keyword-analyzer
+  ofc-semantic-php-wy--<symbol>-regexp-analyzer
+  ofc-semantic-php-wy--<punctuation>-string-analyzer
+  ofc-semantic-php-wy--<block>-block-analyzer
+  semantic-lex-default-action)
 
 ;;; ofc-semantic-php.wy ends here
