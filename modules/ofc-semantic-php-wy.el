@@ -3,7 +3,7 @@
 ;; Copyright (C) 2015 Andrea Turso
 
 ;; Author: Andrea Turso <trashofmasters@gmail.com>
-;; Created: 2015-03-04 00:13:25+0000
+;; Created: 2015-03-04 05:54:37+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -113,13 +113,13 @@
      ("__METHOD__" . T_METHOD_C)
      ("__LINE__" . T_LINE)
      ("__FILE__" . T_FILE)
-     ("namespace (T_NAMESPACE)" . T_NAMESPACE)
-     ("__NAMESPACE__ (T_NS_C)" . T_NS_C)
-     ("callable (T_CALLABLE)" . T_CALLABLE)
-     ("use (T_USE)" . T_USE)
-     ("finally (T_FINALLY)" . T_FINALLY)
-     ("goto (T_GOTO)" . T_GOTO)
-     ("yield (T_YIELD)" . T_YIELD))
+     ("namespace" . T_NAMESPACE)
+     ("__NAMESPACE__" . T_NS_C)
+     ("callable" . T_CALLABLE)
+     ("use" . T_USE)
+     ("finally" . T_FINALLY)
+     ("goto" . T_GOTO)
+     ("yield" . T_YIELD))
    '(("extends" summary "SuperClass|SuperInterfaces declaration: extends <name> [, ...]")
      ("interface" summary "Interface declaration: interface <name>")
      ("class" summary "Class declaration: class <name>")
@@ -143,7 +143,7 @@
      ("final" summary "Class|Member declaration modifier: final {class|<type>} <name> ...")
      ("abstract" summary "Class|Method declaration modifier: abstract {class|<type>} <name> ...")
      ("static" summary "Declaration modifier: static {class|interface|<type>} <name> ...")
-     ("use (T_USE)" summary "Import a class to the current scope: use {class|interface} [as <name>][, ...];")))
+     ("use" summary "Import a class to the current scope: use {class|interface} [as <name>][, ...];")))
   "Table of language keywords.")
 
 (defconst ofc-semantic-php-wy--token-table
@@ -226,13 +226,13 @@
       (T_CONSTANT_ENCAPSED_STRING))
      ("symbol"
       (T_STRING)))
-   '(("punctuation" :declared t)
+   '(("keyword" :declared t)
+     ("punctuation" :declared t)
      ("block" :declared t)
      ("code" :declared t)
      ("number" :declared t)
      ("string" :declared t)
-     ("symbol" :declared t)
-     ("keyword" :declared t)))
+     ("symbol" :declared t)))
   "Table of lexical tokens.")
 
 (defconst ofc-semantic-php-wy--parse-table
@@ -240,7 +240,7 @@
     (eval-when-compile
       (require 'semantic/wisent/comp))
     (wisent-compile-grammar
-     '((T_INT_CAST T_DOUBLE_CAST T_STRING_CAST T_ARRAY_CAST T_OBJECT_CAST T_BOOL_CAST T_UNSET_CAST T_EXIT T_FUNCTION T_CONST T_RETURN T_TRY T_CATCH T_THROW T_IF T_ELSEIF T_ENDIF T_ELSE T_WHILE T_ENDWHILE T_DO T_FOR T_ENDFOR T_FOREACH T_ENDFOREACH T_DECLARE T_ENDDECLARE T_INSTANCEOF T_AS T_SWITCH T_ENDSWITCH T_CASE T_DEFAULT T_BREAK T_CONTINUE T_ECHO T_PRINT T_CLASS T_INTERFACE T_EXTENDS T_IMPLEMENTS T_NEW T_CLONE T_VAR T_EVAL T_INCLUDE T_INCLUDE_ONCE T_REQUIRE T_REQUIRE_ONCE T_GLOBAL T_ISSET T_EMPTY T_HALT_COMPILER T_STATIC T_ABSTRACT T_FINAL T_PRIVATE T_PROTECTED T_PUBLIC T_UNSET T_LIST T_ARRAY T_LOGICAL_OR T_LOGICAL_AND T_LOGICAL_XOR T_CLASS_C T_FUNC_C T_METHOD_C T_LINE T_FILE T_NAMESPACE T_NS_C T_CALLABLE T_USE T_FINALLY T_GOTO T_YIELD T_STRING T_CONSTANT_ENCAPSED_STRING T_NUMBER T_NS_SEPARATOR T_OPEN_TAG T_CLOSE_TAG PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK PAREN_OPEN PAREN_CLOSE BRACE_OPEN BRACE_CLOSE BRACK_OPEN BRACK_CLOSE T_OBJECT_OPERATOR T_SEMICOLON T_PAAMAYIM_NEKUDOTAYIM T_INC T_DEC T_IS_IDENTICAL T_IS_NOT_IDENTICAL T_IS_EQUAL T_IS_NOT_EQUAL T_IS_SMALLER_OR_EQUAL T_IS_GREATER_OR_EQUAL T_SPACESHIP T_PLUS_EQUAL T_MINUS_EQUAL T_MUL_EQUAL T_DIV_EQUAL T_CONCAT_EQUAL T_MOD_EQUAL T_SL_EQUAL T_SR_EQUAL T_AND_EQUAL T_OR_EQUAL T_XOR_EQUAL T_BOOLEAN_OR T_BOOLEAN_AND T_SL T_SR T_DOUBLE_ARROW T_HEREDOC T_NOT T_MOD T_AND T_MULT T_PLUS T_COMMA T_MINUS T_DOT T_DIV T_COLON T_LT T_EQUAL T_GT T_URSHIFT T_URSHIFTEQ T_QUESTION T_XOR T_OR T_COMP T_ASTERISK T_DOLLAR T_ELLIPSIS T_COALESCE T_POW T_POW_EQUAL)
+     '((T_STRING T_CONSTANT_ENCAPSED_STRING T_NUMBER T_NS_SEPARATOR T_OPEN_TAG T_CLOSE_TAG PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK PAREN_OPEN PAREN_CLOSE BRACE_OPEN BRACE_CLOSE BRACK_OPEN BRACK_CLOSE T_OBJECT_OPERATOR T_SEMICOLON T_PAAMAYIM_NEKUDOTAYIM T_INC T_DEC T_IS_IDENTICAL T_IS_NOT_IDENTICAL T_IS_EQUAL T_IS_NOT_EQUAL T_IS_SMALLER_OR_EQUAL T_IS_GREATER_OR_EQUAL T_SPACESHIP T_PLUS_EQUAL T_MINUS_EQUAL T_MUL_EQUAL T_DIV_EQUAL T_CONCAT_EQUAL T_MOD_EQUAL T_SL_EQUAL T_SR_EQUAL T_AND_EQUAL T_OR_EQUAL T_XOR_EQUAL T_BOOLEAN_OR T_BOOLEAN_AND T_SL T_SR T_DOUBLE_ARROW T_HEREDOC T_NOT T_MOD T_AND T_MULT T_PLUS T_COMMA T_MINUS T_DOT T_DIV T_COLON T_LT T_EQUAL T_GT T_URSHIFT T_URSHIFTEQ T_QUESTION T_XOR T_OR T_COMP T_ASTERISK T_DOLLAR T_ELLIPSIS T_COALESCE T_POW T_POW_EQUAL T_INT_CAST T_DOUBLE_CAST T_STRING_CAST T_ARRAY_CAST T_OBJECT_CAST T_BOOL_CAST T_UNSET_CAST T_EXIT T_FUNCTION T_CONST T_RETURN T_TRY T_CATCH T_THROW T_IF T_ELSEIF T_ENDIF T_ELSE T_WHILE T_ENDWHILE T_DO T_FOR T_ENDFOR T_FOREACH T_ENDFOREACH T_DECLARE T_ENDDECLARE T_INSTANCEOF T_AS T_SWITCH T_ENDSWITCH T_CASE T_DEFAULT T_BREAK T_CONTINUE T_ECHO T_PRINT T_CLASS T_INTERFACE T_EXTENDS T_IMPLEMENTS T_NEW T_CLONE T_VAR T_EVAL T_INCLUDE T_INCLUDE_ONCE T_REQUIRE T_REQUIRE_ONCE T_GLOBAL T_ISSET T_EMPTY T_HALT_COMPILER T_STATIC T_ABSTRACT T_FINAL T_PRIVATE T_PROTECTED T_PUBLIC T_UNSET T_LIST T_ARRAY T_LOGICAL_OR T_LOGICAL_AND T_LOGICAL_XOR T_CLASS_C T_FUNC_C T_METHOD_C T_LINE T_FILE T_NAMESPACE T_NS_C T_CALLABLE T_USE T_FINALLY T_GOTO T_YIELD)
        ((left T_INCLUDE T_INCLUDE_ONCE T_EVAL T_REQUIRE T_REQUIRE_ONCE)
         (left T_COMMA)
         (left T_LOGICAL_OR)
@@ -258,7 +258,7 @@
         (left T_XOR)
         (left T_AND)
         (nonassoc T_IS_EQUAL T_IS_NOT_EQUAL T_IS_IDENTICAL T_IS_NOT_IDENTICAL T_SPACESHIP)
-        (nonassoc T_LT T_IS_SMALLER_OR_EQUAL 62 T_IS_GREATER_OR_EQUAL)
+        (nonassoc T_LT T_IS_SMALLER_OR_EQUAL T_GT T_IS_GREATER_OR_EQUAL)
         (left T_SL T_SR)
         (left T_PLUS T_MINUS T_DOT)
         (left T_MULT T_DIV T_MOD)
@@ -276,27 +276,43 @@
         ((T_OPEN_TAG compilation_unit)
          (identity $2)))
        (compilation_unit
-        (nil)
         ((use_declaration))
         ((namespace_declaration))
         ((type_declaration)))
-       (type_declaration
-        ((T_SEMICOLON)
-         nil)
-        ((class_declaration)))
        (use_declaration
-        ((T_USE qualified_name T_AS T_STRING T_SEMICOLON)
-         (wisent-raw-tag
-          (semantic-tag-new-include $2 nil 'alias $4)))
-        ((T_USE qualified_name T_SEMICOLON)
+        ((T_USE T_STRING T_SEMICOLON)
          (wisent-raw-tag
           (semantic-tag-new-include $2 nil)))
-        ((T_USE qualified_name_list T_SEMICOLON)))
+        ((T_USE use_expr T_SEMICOLON)
+         (wisent-raw-tag
+          (semantic-tag-new-include $2 nil))))
+       (use_expr
+        ((qualified_name)
+         (wisent-raw-tag
+          (semantic-tag-new-include $1 nil)))
+        ((qualified_name T_AS T_STRING)
+         (wisent-raw-tag
+          (semantic-tag-new-include $1 nil 'alias $3))))
+       (use_expr_list
+        ((use_expr_list T_COMMA use_expr)
+         (cons $3 $1))
+        ((use_expr)
+         (list $1)))
+       (qualified_name
+        ((qualified_name T_NS_SEPARATOR T_STRING)
+         (concat $1 $2 $3))
+        ((T_STRING)))
+       (qualified_name_list
+        ((qualified_name_list T_COMMA qualified_name)
+         (cons $3 $1))
+        ((qualified_name)
+         (list $1)))
        (namespace_declaration
         ((T_NAMESPACE qualified_name namespace_body)
          (wisent-raw-tag
-          (semantic-tag-new-type $2 $1 $3 nil))))
+          (semantic-tag-new-package $2 nil))))
        (namespace_body
+        ((T_SEMICOLON))
         ((BRACE_BLOCK)
          (semantic-parse-region
           (car $region1)
@@ -312,12 +328,6 @@
         ((use_declaration))
         ((namespace_declaration))
         ((type_declaration)))
-       (qualified_name
-        ((qualified_name T_NS_SEPARATOR T_STRING)
-         (concat $1 "-" $3)))
-       (qualified_name_list
-        ((qualified_name))
-        ((qualified_name_list T_COMMA qualified_name)))
        (require_declaration
         ((T_REQUIRE require_expr T_SEMICOLON)
          (identity $2))
@@ -334,6 +344,9 @@
         ((PAREN_BLOCK)
          (wisent-raw-tag
           (semantic-tag-new-include $1 nil))))
+       (type_declaration
+        ((T_SEMICOLON))
+        ((class_declaration)))
        (class_declaration
         ((class_modifiers_opt T_CLASS T_STRING parent_class_opt interfaces_opt class_body)
          (wisent-raw-tag
@@ -357,7 +370,7 @@
           (cdr $region1)
           'class_member_declaration 1)))
        (class_member_declaration
-        (nil))
+        (nil nil))
        (class_modifiers_opt
         (nil)
         ((class_modifiers)
@@ -372,7 +385,7 @@
         ((T_ABSTRACT)))
        (block
            ((BRACE_BLOCK))))
-     '(grammar compilation_unit require_expr require_declaration type_declaration namespace_declaration class_declaration use_declaration class_body class_member_declaration namespace_member_declaration)))
+     '(grammar use_declaration class_declaration require_declaration namespace_declaration class_member_declaration namespace_member_declaration)))
   "Parser table.")
 
 (defun ofc-semantic-php-wy--install-parser ()

@@ -1,0 +1,6 @@
+<?php
+
+return [
+    $amaka->task(':default')->dependsOn('test'),
+    $amaka->process('test', 'emacs -batch -l ert -l ofc-semantic-php-tests.el -f ert-run-tests-batch-and-exit'),
+];

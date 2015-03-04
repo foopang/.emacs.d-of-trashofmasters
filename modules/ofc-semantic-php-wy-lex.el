@@ -104,9 +104,6 @@ It ignores whitespaces, newlines and comments."
   ;; Must detect qualified names separately.
   ofc-semantic-php-lex-ns-separator
 
-  ;; Must detect keywords before other symbols
-  ofc-semantic-php-wy--<keyword>-keyword-analyzer
-
   ;; Auto-generated analyzers.
   ofc-semantic-php-wy--<number>-regexp-analyzer
   ofc-semantic-php-wy--<string>-sexp-analyzer
@@ -114,6 +111,9 @@ It ignores whitespaces, newlines and comments."
   ;; Must detect comments after strings because `comment-start-skip'
   ;; regexp match semicolons inside strings!
   semantic-lex-ignore-comments
+
+  ;; Must detect keywords before other symbols
+  ofc-semantic-php-wy--<keyword>-keyword-analyzer
 
   ofc-semantic-php-wy--<symbol>-regexp-analyzer
   ofc-semantic-php-wy--<punctuation>-string-analyzer

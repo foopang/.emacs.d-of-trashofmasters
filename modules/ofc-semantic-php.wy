@@ -9,151 +9,12 @@
 %start grammar
 
 ;; Alternate entry points, for partial re-parse
-%start compilation_unit
-%start require_expr
-%start require_declaration
-%start type_declaration
-%start namespace_declaration
-%start class_declaration
 %start use_declaration
-%start class_body
+%start class_declaration
+%start require_declaration
+%start namespace_declaration
 %start class_member_declaration
-
-;; - Needed by EXPANDFULL clauses
 %start namespace_member_declaration
-
-;; - Needed by EXPANDFULL clauses
-
-
-;; Keywords
-%type    <keyword>
-%keyword T_INT_CAST          "(int)"
-%keyword T_DOUBLE_CAST       "(double)"
-%keyword T_STRING_CAST       "(string)"
-%keyword T_ARRAY_CAST        "(array)"
-%keyword T_OBJECT_CAST       "(object)"
-%keyword T_BOOL_CAST         "(bool)"
-%keyword T_UNSET_CAST        "(unset)"
-%keyword T_EXIT              "exit"
-%keyword T_EXIT              "die"
-%keyword T_FUNCTION          "function"
-%keyword T_CONST             "const"
-%keyword T_RETURN            "return"
-%keyword T_TRY               "try"
-%keyword T_CATCH             "catch"
-%keyword T_THROW             "throw"
-%keyword T_IF                "if"
-%keyword T_ELSEIF            "elseif"
-%keyword T_ENDIF             "endif"
-%keyword T_ELSE              "else"
-%keyword T_WHILE             "while"
-%keyword T_ENDWHILE          "endwhile"
-%keyword T_DO                "do"
-%keyword T_FOR               "for"
-%keyword T_ENDFOR            "endfor"
-%keyword T_FOREACH           "foreach"
-%keyword T_ENDFOREACH        "endforeach"
-%keyword T_DECLARE           "declare"
-%keyword T_ENDDECLARE        "enddeclare"
-%keyword T_INSTANCEOF        "instanceof"
-%keyword T_AS                "as"
-%keyword T_SWITCH            "switch"
-%keyword T_ENDSWITCH         "endswitch"
-%keyword T_CASE              "case"
-%keyword T_DEFAULT           "default"
-%keyword T_BREAK             "break"
-%keyword T_CONTINUE          "continue"
-%keyword T_ECHO              "echo"
-%keyword T_PRINT             "print"
-%keyword T_CLASS             "class"
-%keyword T_INTERFACE         "interface"
-%keyword T_EXTENDS           "extends"
-%keyword T_IMPLEMENTS        "implements"
-%keyword T_NEW               "new"
-%keyword T_CLONE             "clone"
-%keyword T_VAR               "var"
-%keyword T_EVAL              "eval"
-%keyword T_INCLUDE           "include"
-%keyword T_INCLUDE_ONCE      "include_once"
-%keyword T_REQUIRE           "require"
-%keyword T_REQUIRE_ONCE      "require_once"
-%keyword T_GLOBAL            "global"
-%keyword T_ISSET             "isset"
-%keyword T_EMPTY             "empty"
-%keyword T_HALT_COMPILER     "__halt_compiler"
-%keyword T_STATIC            "static"
-%keyword T_ABSTRACT          "abstract"
-%keyword T_FINAL             "final"
-%keyword T_PRIVATE           "private"
-%keyword T_PROTECTED         "protected"
-%keyword T_PUBLIC            "public"
-%keyword T_UNSET             "unset"
-%keyword T_LIST              "list"
-%keyword T_ARRAY             "array"
-%keyword T_LOGICAL_OR        "or"
-%keyword T_LOGICAL_AND       "and"
-%keyword T_LOGICAL_XOR       "xor"
-%keyword T_CLASS_C           "__CLASS__"
-%keyword T_FUNC_C            "__FUNCTION__"
-%keyword T_METHOD_C          "__METHOD__"
-%keyword T_LINE              "__LINE__"
-%keyword T_FILE              "__FILE__"
-%keyword T_NAMESPACE         "namespace (T_NAMESPACE)"
-%keyword T_NS_C              "__NAMESPACE__ (T_NS_C)"
-%keyword T_CALLABLE          "callable (T_CALLABLE)"
-%keyword T_USE               "use (T_USE)"
-%keyword T_FINALLY           "finally (T_FINALLY)"
-%keyword T_GOTO              "goto (T_GOTO)"
-%keyword T_YIELD             "yield (T_YIELD)"
-
-%put     T_USE summary
-"Import a class to the current scope: use {class|interface} [as <name>][, ...];"
-%put     T_STATIC summary
-"Declaration modifier: static {class|interface|<type>} <name> ..."
-%put     T_ABSTRACT summary
-"Class|Method declaration modifier: abstract {class|<type>} <name> ..."
-%put     T_FINAL summary
-"Class|Member declaration modifier: final {class|<type>} <name> ..."
-%put     T_PRIVATE summary
-"Access level modifier: private {class|interface|<type>} <name> ..."
-%put     T_PROTECTED summary
-"Access level modifier: protected {class|interface|<type>} <name> ..."
-%put     T_PUBLIC summary
-"Access level modifier: public {class|interface|<type>} <name> ..."
-%put     T_IMPLEMENTS summary
-"Class SuperInterfaces declaration: implements <name> [, ...]"
-%put     T_CONST summary
-"Unused reserved word"
-%put     T_RETURN summary
-"return [<expr>] ;"
-%put     T_TRY summary
-"try {<stmts>} [catch(<parm>) {<stmts>} ...] [finally {<stmts>}]"
-%put     T_CATCH summary
-"try {<stmts>} catch(<parm>) {<stmts>} ... "
-%put     T_IF summary
-"if (<expr>) <stmt> [else <stmt>]"
-%put     T_ELSE summary
-"if (<expr>) <stmt> else <stmt>"
-%put     T_WHILE summary
-"while (<expr>) <stmt> | do <stmt> while (<expr>);"
-%put     T_DO summary
-"do <stmt> while (<expr>);"
-%put     T_FOR summary
-"for ([<init-expr>]; [<expr>]; [<update-expr>]) <stmt>"
-%put     T_CASE summary
-"switch(<expr>) {case <const-expr>: <stmts> ... }"
-%put     T_DEFAULT summary
-"switch(<expr>) { ... default: <stmts>}"
-%put     T_BREAK summary
-"break [<label>] ;"
-%put     T_CONTINUE summary
-"continue [<label>] ;"
-%put     T_CLASS summary
-"Class declaration: class <name>"
-%put     T_INTERFACE summary
-"Interface declaration: interface <name>"
-%put     T_EXTENDS summary
-"SuperClass|SuperInterfaces declaration: extends <name> [, ...]"
 
 
 ;; Literals
@@ -246,6 +107,137 @@
 %token <punctuation> T_POW_EQUAL            "**="
 
 
+;; Keywords
+%type    <keyword>
+%keyword T_INT_CAST          "(int)"
+%keyword T_DOUBLE_CAST       "(double)"
+%keyword T_STRING_CAST       "(string)"
+%keyword T_ARRAY_CAST        "(array)"
+%keyword T_OBJECT_CAST       "(object)"
+%keyword T_BOOL_CAST         "(bool)"
+%keyword T_UNSET_CAST        "(unset)"
+%keyword T_EXIT              "exit"
+%keyword T_EXIT              "die"
+%keyword T_FUNCTION          "function"
+%keyword T_CONST             "const"
+%keyword T_RETURN            "return"
+%keyword T_TRY               "try"
+%keyword T_CATCH             "catch"
+%keyword T_THROW             "throw"
+%keyword T_IF                "if"
+%keyword T_ELSEIF            "elseif"
+%keyword T_ENDIF             "endif"
+%keyword T_ELSE              "else"
+%keyword T_WHILE             "while"
+%keyword T_ENDWHILE          "endwhile"
+%keyword T_DO                "do"
+%keyword T_FOR               "for"
+%keyword T_ENDFOR            "endfor"
+%keyword T_FOREACH           "foreach"
+%keyword T_ENDFOREACH        "endforeach"
+%keyword T_DECLARE           "declare"
+%keyword T_ENDDECLARE        "enddeclare"
+%keyword T_INSTANCEOF        "instanceof"
+%keyword T_AS                "as"
+%keyword T_SWITCH            "switch"
+%keyword T_ENDSWITCH         "endswitch"
+%keyword T_CASE              "case"
+%keyword T_DEFAULT           "default"
+%keyword T_BREAK             "break"
+%keyword T_CONTINUE          "continue"
+%keyword T_ECHO              "echo"
+%keyword T_PRINT             "print"
+%keyword T_CLASS             "class"
+%keyword T_INTERFACE         "interface"
+%keyword T_EXTENDS           "extends"
+%keyword T_IMPLEMENTS        "implements"
+%keyword T_NEW               "new"
+%keyword T_CLONE             "clone"
+%keyword T_VAR               "var"
+%keyword T_EVAL              "eval"
+%keyword T_INCLUDE           "include"
+%keyword T_INCLUDE_ONCE      "include_once"
+%keyword T_REQUIRE           "require"
+%keyword T_REQUIRE_ONCE      "require_once"
+%keyword T_GLOBAL            "global"
+%keyword T_ISSET             "isset"
+%keyword T_EMPTY             "empty"
+%keyword T_HALT_COMPILER     "__halt_compiler"
+%keyword T_STATIC            "static"
+%keyword T_ABSTRACT          "abstract"
+%keyword T_FINAL             "final"
+%keyword T_PRIVATE           "private"
+%keyword T_PROTECTED         "protected"
+%keyword T_PUBLIC            "public"
+%keyword T_UNSET             "unset"
+%keyword T_LIST              "list"
+%keyword T_ARRAY             "array"
+%keyword T_LOGICAL_OR        "or"
+%keyword T_LOGICAL_AND       "and"
+%keyword T_LOGICAL_XOR       "xor"
+%keyword T_CLASS_C           "__CLASS__"
+%keyword T_FUNC_C            "__FUNCTION__"
+%keyword T_METHOD_C          "__METHOD__"
+%keyword T_LINE              "__LINE__"
+%keyword T_FILE              "__FILE__"
+%keyword T_NAMESPACE         "namespace"
+%keyword T_NS_C              "__NAMESPACE__"
+%keyword T_CALLABLE          "callable"
+%keyword T_USE               "use"
+%keyword T_FINALLY           "finally"
+%keyword T_GOTO              "goto"
+%keyword T_YIELD             "yield"
+
+%put     T_USE summary
+"Import a class to the current scope: use {class|interface} [as <name>][, ...];"
+%put     T_STATIC summary
+"Declaration modifier: static {class|interface|<type>} <name> ..."
+%put     T_ABSTRACT summary
+"Class|Method declaration modifier: abstract {class|<type>} <name> ..."
+%put     T_FINAL summary
+"Class|Member declaration modifier: final {class|<type>} <name> ..."
+%put     T_PRIVATE summary
+"Access level modifier: private {class|interface|<type>} <name> ..."
+%put     T_PROTECTED summary
+"Access level modifier: protected {class|interface|<type>} <name> ..."
+%put     T_PUBLIC summary
+"Access level modifier: public {class|interface|<type>} <name> ..."
+%put     T_IMPLEMENTS summary
+"Class SuperInterfaces declaration: implements <name> [, ...]"
+%put     T_CONST summary
+"Unused reserved word"
+%put     T_RETURN summary
+"return [<expr>] ;"
+%put     T_TRY summary
+"try {<stmts>} [catch(<parm>) {<stmts>} ...] [finally {<stmts>}]"
+%put     T_CATCH summary
+"try {<stmts>} catch(<parm>) {<stmts>} ... "
+%put     T_IF summary
+"if (<expr>) <stmt> [else <stmt>]"
+%put     T_ELSE summary
+"if (<expr>) <stmt> else <stmt>"
+%put     T_WHILE summary
+"while (<expr>) <stmt> | do <stmt> while (<expr>);"
+%put     T_DO summary
+"do <stmt> while (<expr>);"
+%put     T_FOR summary
+"for ([<init-expr>]; [<expr>]; [<update-expr>]) <stmt>"
+%put     T_CASE summary
+"switch(<expr>) {case <const-expr>: <stmts> ... }"
+%put     T_DEFAULT summary
+"switch(<expr>) { ... default: <stmts>}"
+%put     T_BREAK summary
+"break [<label>] ;"
+%put     T_CONTINUE summary
+"continue [<label>] ;"
+%put     T_CLASS summary
+"Class declaration: class <name>"
+%put     T_INTERFACE summary
+"Interface declaration: interface <name>"
+%put     T_EXTENDS summary
+"SuperClass|SuperInterfaces declaration: extends <name> [, ...]"
+
+
 ;; Precedence definitions
 %left T_INCLUDE T_INCLUDE_ONCE T_EVAL T_REQUIRE T_REQUIRE_ONCE
 %left T_COMMA
@@ -295,6 +287,7 @@
 ;; See `cedet/semantic/grammar.el' in your Emacs sources for
 ;; a reference to the functions used in this file.
 
+
 ;; Top level rules
 grammar
   : T_OPEN_TAG compilation_unit
@@ -302,66 +295,44 @@ grammar
   ;
 
 compilation_unit
-  : ;; empty
-  | use_declaration
-  | namespace_declaration
+  : use_declaration
   | type_declaration
   ;
 
-type_declaration
-  : T_SEMICOLON
-    ()
-  | class_declaration
-  ;
 
 ;; Use directive
-;;
-;; TODO attempt aliasing for a qualified_name_list.
-;; Don't work yet because of use being analysed as a T_STRING.
-;; Also the T_NS_SEPARATOR caused Unmatched syntax during
-;; lexycal analysis of the buffer, so I had to write a lexer
-;; function to convert all backslahes to T_NS_SEPARATOR.
 use_declaration
-  : T_USE qualified_name T_AS T_STRING T_SEMICOLON
-    (INCLUDE-TAG $2 nil 'alias $4)
-  | T_USE qualified_name T_SEMICOLON
+  : T_USE T_STRING T_SEMICOLON
     (INCLUDE-TAG $2 nil)
-  | T_USE qualified_name_list T_SEMICOLON
+  | T_USE use_expr T_SEMICOLON
+    (INCLUDE-TAG $2 nil)
   ;
 
-;; Namespaces
-namespace_declaration
-  : T_NAMESPACE qualified_name namespace_body
-    (TYPE-TAG $2 $1 $3 nil)
+use_expr
+  : qualified_name
+    (INCLUDE-TAG $1 nil)
+  | qualified_name T_AS T_STRING
+    (INCLUDE-TAG $1 nil 'alias $3)
   ;
 
-namespace_body
-  : BRACE_BLOCK
-    (EXPANDFULL $1 namespace_member_declaration)
-  ;
-
-namespace_member_declaration
-  : BRACE_OPEN
-    ()
-  | BRACE_CLOSE
-    ()
-  | block
-    ()
-  | use_declaration
-  | namespace_declaration
-  | type_declaration
+use_expr_list
+  : use_expr_list T_COMMA use_expr
+    (cons $3 $1)
+  | use_expr
+    (list $1)
   ;
 
 qualified_name
   : qualified_name T_NS_SEPARATOR T_STRING
-    (concat $1 "-" $3)
- ;; | T_NS_SEPARATOR T_STRING
- ;; (identity $2)
+    (concat $1 $2 $3)
+  | T_STRING
   ;
 
 qualified_name_list
-  : qualified_name
-  | qualified_name_list T_COMMA qualified_name
+  : qualified_name_list T_COMMA qualified_name
+    (cons $3 $1)
+  | qualified_name
+    (list $1)
   ;
 
 ;; Includes
@@ -382,6 +353,14 @@ require_expr
   | PAREN_BLOCK
     (INCLUDE-TAG $1 nil)
   ;
+
+
+;;
+type_declaration
+  : T_SEMICOLON
+  | class_declaration
+  ;
+
 
 ;; Classes
 class_declaration
@@ -407,9 +386,9 @@ class_body
   ;
 
 class_member_declaration
-  :
+  : ;; temprorarily empty
+    ()
   ;
-
 
 class_modifiers_opt
   : ;; empty

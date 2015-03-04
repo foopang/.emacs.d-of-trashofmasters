@@ -38,8 +38,6 @@ Use the alternate LALR(1) parser."
    ;; Navigation inside 'type children
    senator-step-at-tag-classes '(function variable))
 
-  ;; Show parsing errors.
-  (show-unmatched-syntax-mode)
   ;; Enable semantic mode for the buffer.
   (semantic-mode 1))
 
