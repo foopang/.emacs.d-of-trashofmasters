@@ -3,7 +3,7 @@
 ;; Copyright (C) 2015 Andrea Turso
 
 ;; Author: Andrea Turso <trashofmasters@gmail.com>
-;; Created: 2015-03-02 21:34:59+0000
+;; Created: 2015-03-04 00:13:25+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -42,7 +42,14 @@
 ;;
 (defconst ofc-semantic-php-wy--keyword-table
   (semantic-lex-make-keyword-table
-   '(("exit" . T_EXIT)
+   '(("(int)" . T_INT_CAST)
+     ("(double)" . T_DOUBLE_CAST)
+     ("(string)" . T_STRING_CAST)
+     ("(array)" . T_ARRAY_CAST)
+     ("(object)" . T_OBJECT_CAST)
+     ("(bool)" . T_BOOL_CAST)
+     ("(unset)" . T_UNSET_CAST)
+     ("exit" . T_EXIT)
      ("die" . T_EXIT)
      ("function" . T_FUNCTION)
      ("const" . T_CONST)
@@ -64,7 +71,6 @@
      ("declare" . T_DECLARE)
      ("enddeclare" . T_ENDDECLARE)
      ("instanceof" . T_INSTANCEOF)
-     ("int" . INT)
      ("as" . T_AS)
      ("switch" . T_SWITCH)
      ("endswitch" . T_ENDSWITCH)
@@ -79,7 +85,6 @@
      ("extends" . T_EXTENDS)
      ("implements" . T_IMPLEMENTS)
      ("new" . T_NEW)
-     ("package" . PACKAGE)
      ("clone" . T_CLONE)
      ("var" . T_VAR)
      ("eval" . T_EVAL)
@@ -107,15 +112,15 @@
      ("__FUNCTION__" . T_FUNC_C)
      ("__METHOD__" . T_METHOD_C)
      ("__LINE__" . T_LINE)
-     ("__FILE__" . T_FILE))
-   '(("public" summary "Access level modifier: public {class|interface|<type>} <name> ...")
-     ("protected" summary "Access level modifier: protected {class|interface|<type>} <name> ...")
-     ("private" summary "Access level modifier: private {class|interface|<type>} <name> ...")
-     ("final" summary "Class|Member declaration modifier: final {class|<type>} <name> ...")
-     ("abstract" summary "Class|Method declaration modifier: abstract {class|<type>} <name> ...")
-     ("static" summary "Declaration modifier: static {class|interface|<type>} <name> ...")
-     ("implements" summary "Class SuperInterfaces declaration: implements <name> [, ...]")
-     ("extends" summary "SuperClass|SuperInterfaces declaration: extends <name> [, ...]")
+     ("__FILE__" . T_FILE)
+     ("namespace (T_NAMESPACE)" . T_NAMESPACE)
+     ("__NAMESPACE__ (T_NS_C)" . T_NS_C)
+     ("callable (T_CALLABLE)" . T_CALLABLE)
+     ("use (T_USE)" . T_USE)
+     ("finally (T_FINALLY)" . T_FINALLY)
+     ("goto (T_GOTO)" . T_GOTO)
+     ("yield (T_YIELD)" . T_YIELD))
+   '(("extends" summary "SuperClass|SuperInterfaces declaration: extends <name> [, ...]")
      ("interface" summary "Interface declaration: interface <name>")
      ("class" summary "Class declaration: class <name>")
      ("continue" summary "continue [<label>] ;")
@@ -130,16 +135,25 @@
      ("catch" summary "try {<stmts>} catch(<parm>) {<stmts>} ... ")
      ("try" summary "try {<stmts>} [catch(<parm>) {<stmts>} ...] [finally {<stmts>}]")
      ("return" summary "return [<expr>] ;")
-     ("const" summary "Unused reserved word")))
+     ("const" summary "Unused reserved word")
+     ("implements" summary "Class SuperInterfaces declaration: implements <name> [, ...]")
+     ("public" summary "Access level modifier: public {class|interface|<type>} <name> ...")
+     ("protected" summary "Access level modifier: protected {class|interface|<type>} <name> ...")
+     ("private" summary "Access level modifier: private {class|interface|<type>} <name> ...")
+     ("final" summary "Class|Member declaration modifier: final {class|<type>} <name> ...")
+     ("abstract" summary "Class|Method declaration modifier: abstract {class|<type>} <name> ...")
+     ("static" summary "Declaration modifier: static {class|interface|<type>} <name> ...")
+     ("use (T_USE)" summary "Import a class to the current scope: use {class|interface} [as <name>][, ...];")))
   "Table of language keywords.")
 
 (defconst ofc-semantic-php-wy--token-table
   (semantic-lex-make-type-table
-   '(("<no-type>"
-      (T_IF)
-      (T_EXIT))
-     ("punctuation"
-      (T_DOLLER . "$")
+   '(("punctuation"
+      (T_POW_EQUAL . "**=")
+      (T_POW . "**")
+      (T_COALESCE . "??")
+      (T_ELLIPSIS . "...")
+      (T_DOLLAR . "$")
       (T_ASTERISK . "@")
       (T_COMP . "~")
       (T_OR . "|")
@@ -148,9 +162,8 @@
       (T_URSHIFTEQ . ">>>=")
       (T_URSHIFT . ">>>")
       (T_GT . ">")
-      (T_EQ . "=")
+      (T_EQUAL . "=")
       (T_LT . "<")
-      (T_SEMI . ";")
       (T_COLON . ":")
       (T_DIV . "/")
       (T_DOT . ".")
@@ -178,6 +191,7 @@
       (T_MUL_EQUAL . "*=")
       (T_MINUS_EQUAL . "-=")
       (T_PLUS_EQUAL . "+=")
+      (T_SPACESHIP . "<=>")
       (T_IS_GREATER_OR_EQUAL . ">=")
       (T_IS_SMALLER_OR_EQUAL . "<=")
       (T_IS_NOT_EQUAL . "<>")
@@ -203,8 +217,9 @@
       (BRACE_BLOCK . "(BRACE_OPEN BRACE_CLOSE)")
       (PAREN_BLOCK . "(PAREN_OPEN PAREN_CLOSE)"))
      ("code"
-      (EPILOGUE)
-      (PROLOGUE))
+      (T_CLOSE_TAG . "?>")
+      (T_OPEN_TAG . "<?php")
+      (T_NS_SEPARATOR . "\\"))
      ("number"
       (T_NUMBER))
      ("string"
@@ -213,6 +228,7 @@
       (T_STRING)))
    '(("punctuation" :declared t)
      ("block" :declared t)
+     ("code" :declared t)
      ("number" :declared t)
      ("string" :declared t)
      ("symbol" :declared t)
@@ -224,21 +240,24 @@
     (eval-when-compile
       (require 'semantic/wisent/comp))
     (wisent-compile-grammar
-     '((T_EXIT T_FUNCTION T_CONST T_RETURN T_TRY T_CATCH T_THROW T_IF T_ELSEIF T_ENDIF T_ELSE T_WHILE T_ENDWHILE T_DO T_FOR T_ENDFOR T_FOREACH T_ENDFOREACH T_DECLARE T_ENDDECLARE T_INSTANCEOF INT T_AS T_SWITCH T_ENDSWITCH T_CASE T_DEFAULT T_BREAK T_CONTINUE T_ECHO T_PRINT T_CLASS T_INTERFACE T_EXTENDS T_IMPLEMENTS T_NEW PACKAGE T_CLONE T_VAR T_EVAL T_INCLUDE T_INCLUDE_ONCE T_REQUIRE T_REQUIRE_ONCE T_GLOBAL T_ISSET T_EMPTY T_HALT_COMPILER T_STATIC T_ABSTRACT T_FINAL T_PRIVATE T_PROTECTED T_PUBLIC T_UNSET T_LIST T_ARRAY T_LOGICAL_OR T_LOGICAL_AND T_LOGICAL_XOR T_CLASS_C T_FUNC_C T_METHOD_C T_LINE T_FILE T_STRING T_CONSTANT_ENCAPSED_STRING T_NUMBER PROLOGUE EPILOGUE PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK PAREN_OPEN PAREN_CLOSE BRACE_OPEN BRACE_CLOSE BRACK_OPEN BRACK_CLOSE T_OBJECT_OPERATOR T_SEMICOLON T_PAAMAYIM_NEKUDOTAYIM T_INC T_DEC T_IS_IDENTICAL T_IS_NOT_IDENTICAL T_IS_EQUAL T_IS_NOT_EQUAL T_IS_SMALLER_OR_EQUAL T_IS_GREATER_OR_EQUAL T_PLUS_EQUAL T_MINUS_EQUAL T_MUL_EQUAL T_DIV_EQUAL T_CONCAT_EQUAL T_MOD_EQUAL T_SL_EQUAL T_SR_EQUAL T_AND_EQUAL T_OR_EQUAL T_XOR_EQUAL T_BOOLEAN_OR T_BOOLEAN_AND T_SL T_SR T_DOUBLE_ARROW T_HEREDOC T_NOT T_MOD T_AND T_MULT T_PLUS T_COMMA T_MINUS T_DOT T_DIV T_COLON T_SEMI T_LT T_EQ T_GT T_URSHIFT T_URSHIFTEQ T_QUESTION T_XOR T_OR T_COMP T_ASTERISK T_DOLLER)
+     '((T_INT_CAST T_DOUBLE_CAST T_STRING_CAST T_ARRAY_CAST T_OBJECT_CAST T_BOOL_CAST T_UNSET_CAST T_EXIT T_FUNCTION T_CONST T_RETURN T_TRY T_CATCH T_THROW T_IF T_ELSEIF T_ENDIF T_ELSE T_WHILE T_ENDWHILE T_DO T_FOR T_ENDFOR T_FOREACH T_ENDFOREACH T_DECLARE T_ENDDECLARE T_INSTANCEOF T_AS T_SWITCH T_ENDSWITCH T_CASE T_DEFAULT T_BREAK T_CONTINUE T_ECHO T_PRINT T_CLASS T_INTERFACE T_EXTENDS T_IMPLEMENTS T_NEW T_CLONE T_VAR T_EVAL T_INCLUDE T_INCLUDE_ONCE T_REQUIRE T_REQUIRE_ONCE T_GLOBAL T_ISSET T_EMPTY T_HALT_COMPILER T_STATIC T_ABSTRACT T_FINAL T_PRIVATE T_PROTECTED T_PUBLIC T_UNSET T_LIST T_ARRAY T_LOGICAL_OR T_LOGICAL_AND T_LOGICAL_XOR T_CLASS_C T_FUNC_C T_METHOD_C T_LINE T_FILE T_NAMESPACE T_NS_C T_CALLABLE T_USE T_FINALLY T_GOTO T_YIELD T_STRING T_CONSTANT_ENCAPSED_STRING T_NUMBER T_NS_SEPARATOR T_OPEN_TAG T_CLOSE_TAG PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK PAREN_OPEN PAREN_CLOSE BRACE_OPEN BRACE_CLOSE BRACK_OPEN BRACK_CLOSE T_OBJECT_OPERATOR T_SEMICOLON T_PAAMAYIM_NEKUDOTAYIM T_INC T_DEC T_IS_IDENTICAL T_IS_NOT_IDENTICAL T_IS_EQUAL T_IS_NOT_EQUAL T_IS_SMALLER_OR_EQUAL T_IS_GREATER_OR_EQUAL T_SPACESHIP T_PLUS_EQUAL T_MINUS_EQUAL T_MUL_EQUAL T_DIV_EQUAL T_CONCAT_EQUAL T_MOD_EQUAL T_SL_EQUAL T_SR_EQUAL T_AND_EQUAL T_OR_EQUAL T_XOR_EQUAL T_BOOLEAN_OR T_BOOLEAN_AND T_SL T_SR T_DOUBLE_ARROW T_HEREDOC T_NOT T_MOD T_AND T_MULT T_PLUS T_COMMA T_MINUS T_DOT T_DIV T_COLON T_LT T_EQUAL T_GT T_URSHIFT T_URSHIFTEQ T_QUESTION T_XOR T_OR T_COMP T_ASTERISK T_DOLLAR T_ELLIPSIS T_COALESCE T_POW T_POW_EQUAL)
        ((left T_INCLUDE T_INCLUDE_ONCE T_EVAL T_REQUIRE T_REQUIRE_ONCE)
         (left T_COMMA)
         (left T_LOGICAL_OR)
         (left T_LOGICAL_XOR)
         (left T_LOGICAL_AND)
         (right T_PRINT)
-        (left T_EQ T_PLUS_EQUAL T_MINUS_EQUAL T_MUL_EQUAL T_DIV_EQUAL T_CONCAT_EQUAL T_MOD_EQUAL T_AND_EQUAL T_OR_EQUAL T_XOR_EQUAL T_SL_EQUAL T_SR_EQUAL)
+        (right T_YIELD)
+        (right T_DOUBLE_ARROW)
+        (left T_EQUAL T_PLUS_EQUAL T_MINUS_EQUAL T_MUL_EQUAL T_DIV_EQUAL T_CONCAT_EQUAL T_MOD_EQUAL T_AND_EQUAL T_OR_EQUAL T_XOR_EQUAL T_SL_EQUAL T_SR_EQUAL T_POW_EQUAL)
         (left T_QUESTION T_COLON)
+        (right T_COALESCE)
         (left T_BOOLEAN_OR)
         (left T_BOOLEAN_AND)
         (left T_OR)
         (left T_XOR)
         (left T_AND)
-        (nonassoc T_IS_EQUAL T_IS_NOT_EQUAL T_IS_IDENTICAL T_IS_NOT_IDENTICAL)
+        (nonassoc T_IS_EQUAL T_IS_NOT_EQUAL T_IS_IDENTICAL T_IS_NOT_IDENTICAL T_SPACESHIP)
         (nonassoc T_LT T_IS_SMALLER_OR_EQUAL 62 T_IS_GREATER_OR_EQUAL)
         (left T_SL T_SR)
         (left T_PLUS T_MINUS T_DOT)
@@ -246,29 +265,60 @@
         (right T_NOT)
         (nonassoc T_INSTANCEOF)
         (right T_COMP T_INC T_DEC T_INT_CAST T_DOUBLE_CAST T_STRING_CAST T_ARRAY_CAST T_OBJECT_CAST T_BOOL_CAST T_UNSET_CAST T_ASTERISK)
-        (right BRACK_CLOSE)
+        (right T_POW)
+        (right LBRACK)
         (nonassoc T_NEW T_CLONE)
         (left T_ELSEIF)
         (left T_ELSE)
-        (left T_ENDIF))
+        (left T_ENDIF)
+        (right T_STATIC T_ABSTRACT T_FINAL T_PRIVATE T_PROTECTED T_PUBLIC))
        (grammar
-        ((PROLOGUE compilation_units EPILOGUE)
-         (identity $2))
-        ((PROLOGUE compilation_units)
+        ((T_OPEN_TAG compilation_unit)
          (identity $2)))
-       (compilation_units
-        (nil)
-        ((compilation_unit compilation_units)
-         (if $2
-             (append $2
-                     (wisent-cook-tag $1))
-           (wisent-cook-tag $1))))
        (compilation_unit
-        ((include_declaration))
+        (nil)
+        ((use_declaration))
+        ((namespace_declaration))
         ((type_declaration)))
-       (include_declaration
-        ((require_expr T_SEMICOLON)
-         (identity $2))
+       (type_declaration
+        ((T_SEMICOLON)
+         nil)
+        ((class_declaration)))
+       (use_declaration
+        ((T_USE qualified_name T_AS T_STRING T_SEMICOLON)
+         (wisent-raw-tag
+          (semantic-tag-new-include $2 nil 'alias $4)))
+        ((T_USE qualified_name T_SEMICOLON)
+         (wisent-raw-tag
+          (semantic-tag-new-include $2 nil)))
+        ((T_USE qualified_name_list T_SEMICOLON)))
+       (namespace_declaration
+        ((T_NAMESPACE qualified_name namespace_body)
+         (wisent-raw-tag
+          (semantic-tag-new-type $2 $1 $3 nil))))
+       (namespace_body
+        ((BRACE_BLOCK)
+         (semantic-parse-region
+          (car $region1)
+          (cdr $region1)
+          'namespace_member_declaration 1)))
+       (namespace_member_declaration
+        ((BRACE_OPEN)
+         nil)
+        ((BRACE_CLOSE)
+         nil)
+        ((block)
+         nil)
+        ((use_declaration))
+        ((namespace_declaration))
+        ((type_declaration)))
+       (qualified_name
+        ((qualified_name T_NS_SEPARATOR T_STRING)
+         (concat $1 "-" $3)))
+       (qualified_name_list
+        ((qualified_name))
+        ((qualified_name_list T_COMMA qualified_name)))
+       (require_declaration
         ((T_REQUIRE require_expr T_SEMICOLON)
          (identity $2))
         ((T_REQUIRE_ONCE require_expr T_SEMICOLON)
@@ -284,25 +334,21 @@
         ((PAREN_BLOCK)
          (wisent-raw-tag
           (semantic-tag-new-include $1 nil))))
-       (type_declaration
-        ((function_declaration))
-        ((class_declaration))
-        ((interface_declaration)))
        (class_declaration
-        ((class_modifiers_opt T_CLASS T_STRING superc_opt interfaces_opt class_body)
+        ((class_modifiers_opt T_CLASS T_STRING parent_class_opt interfaces_opt class_body)
          (wisent-raw-tag
           (semantic-tag-new-type $3 $2 $6
                                  (if
                                      (or $4 $5)
                                      (cons $4 $5))
                                  :typemodifiers $1))))
-       (superc_opt
+       (parent_class_opt
         (nil)
-        ((T_EXTENDS T_STRING)
+        ((T_EXTENDS qualified_name)
          (identity $2)))
        (interfaces_opt
         (nil)
-        ((T_IMPLEMENTS identifier_list)
+        ((T_IMPLEMENTS qualified_name_list)
          (nreverse $2)))
        (class_body
         ((BRACE_BLOCK)
@@ -311,182 +357,7 @@
           (cdr $region1)
           'class_member_declaration 1)))
        (class_member_declaration
-        ((BRACE_OPEN)
-         nil)
-        ((BRACE_CLOSE)
-         nil)
-        ((block)
-         nil)
-        ((interface_declaration))
-        ((class_declaration))
-        ((method_declaration))
-        ((field_declaration)))
-       (interface_declaration
-        ((class_modifiers_opt T_INTERFACE T_STRING extends_interfaces_opt interface_body)
-         (wisent-raw-tag
-          (semantic-tag-new-type $3 $2 $5
-                                 (if $4
-                                     (cons nil $4))
-                                 :typemodifiers $1))))
-       (extends_interfaces_opt
-        (nil)
-        ((T_EXTENDS identifier_list)
-         (identity $2)))
-       (interface_body
-        ((BRACE_BLOCK)
-         (semantic-parse-region
-          (car $region1)
-          (cdr $region1)
-          'interface_member_declaration 1)))
-       (interface_member_declaration
-        ((BRACE_OPEN)
-         nil)
-        ((BRACE_CLOSE)
-         nil)
-        ((interface_declaration))
-        ((class_declaration))
-        ((method_declaration))
-        ((field_declaration)))
-       (function_declaration
-        ((method_declarator method_body)
-         (wisent-raw-tag
-          (semantic-tag-new-function
-           (car $1)
-           nil
-           (cdr $1)))))
-       (method_declaration
-        ((method_modifiers_opt method_declarator method_body)
-         (wisent-raw-tag
-          (semantic-tag-new-function
-           (car $2)
-           nil
-           (cdr $2)
-           :typemodifiers $1))))
-       (method_declarator
-        ((T_FUNCTION reference_opt T_STRING formal_parameter_list)
-         (cons $3 $4)))
-       (identifier_list
-        ((identifier_list T_COMMA T_STRING)
-         (cons $3 $1))
-        ((T_STRING)
-         (list $1)))
-       (method_body
-        ((T_SEMICOLON))
-        ((block)))
-       (block
-           ((BRACE_BLOCK)))
-       (formal_parameter_list
-        ((PAREN_BLOCK)
-         (semantic-parse-region
-          (car $region1)
-          (cdr $region1)
-          'formal_parameters 1)))
-       (formal_parameters
-        ((PAREN_OPEN)
-         nil)
-        ((PAREN_CLOSE)
-         nil)
-        ((formal_parameter T_COMMA))
-        ((formal_parameter PAREN_CLOSE)))
-       (formal_parameter
-        ((variable_declarator_id T_EQ expression)
-         (wisent-raw-tag
-          (semantic-tag-new-variable $1 nil $region3)))
-        ((variable_declarator_id)
-         (wisent-raw-tag
-          (semantic-tag-new-variable $1 nil nil))))
-       (field_declaration
-        ((field_modifiers_opt variable_declarators T_SEMICOLON)
-         (wisent-raw-tag
-          (semantic-tag-new-variable $2 nil nil :typemodifiers $1))))
-       (variable_declarators
-        ((variable_declarators T_COMMA variable_declarator)
-         (cons $3 $1))
-        ((variable_declarator)
-         (list $1)))
-       (variable_declarator
-        ((variable_declarator_id T_EQ variable_initializer)
-         (list $1 nil nil $3))
-        ((variable_declarator_id)
-         (list $1)))
-       (variable_declarator_id
-        ((reference_opt T_STRING dims_opt)
-         (concat $2 $3)))
-       (reference_opt
-        (nil)
-        ((T_AND)))
-       (variable_initializer
-        ((expression)))
-       (expression
-        ((expression term))
-        ((term)))
-       (term
-        ((literal))
-        ((operator))
-        ((T_STRING))
-        ((BRACK_BLOCK))
-        ((PAREN_BLOCK))
-        ((BRACE_BLOCK))
-        ((T_NEW))
-        ((T_CLONE))
-        ((T_ARRAY)))
-       (literal
-        ((T_CONSTANT_ENCAPSED_STRING))
-        ((T_NUMBER)))
-       (operator
-        ((T_OBJECT_OPERATOR))
-        ((T_PAAMAYIM_NEKUDOTAYIM))
-        ((T_INC))
-        ((T_DEC))
-        ((T_IS_IDENTICAL))
-        ((T_IS_NOT_IDENTICAL))
-        ((T_IS_EQUAL))
-        ((T_IS_NOT_EQUAL))
-        ((T_IS_NOT_EQUAL))
-        ((T_IS_SMALLER_OR_EQUAL))
-        ((T_IS_GREATER_OR_EQUAL))
-        ((T_PLUS_EQUAL))
-        ((T_MINUS_EQUAL))
-        ((T_MUL_EQUAL))
-        ((T_DIV_EQUAL))
-        ((T_CONCAT_EQUAL))
-        ((T_MOD_EQUAL))
-        ((T_SL_EQUAL))
-        ((T_SR_EQUAL))
-        ((T_AND_EQUAL))
-        ((T_OR_EQUAL))
-        ((T_XOR_EQUAL))
-        ((T_BOOLEAN_OR))
-        ((T_BOOLEAN_AND))
-        ((T_SL))
-        ((T_SR))
-        ((T_DOUBLE_ARROW))
-        ((T_HEREDOC))
-        ((T_NOT))
-        ((T_MOD))
-        ((T_AND))
-        ((T_MULT))
-        ((T_PLUS))
-        ((T_COMMA))
-        ((T_MINUS))
-        ((T_DOT))
-        ((T_DIV))
-        ((T_COLON))
-        ((T_LT))
-        ((T_EQ))
-        ((T_GT))
-        ((T_URSHIFT))
-        ((T_URSHIFTEQ))
-        ((T_QUESTION))
-        ((T_XOR))
-        ((T_OR))
-        ((T_COMP))
-        ((T_ASTERISK))
-        ((T_LIST))
-        ((T_ARRAY))
-        ((T_LOGICAL_OR))
-        ((T_LOGICAL_AND))
-        ((T_LOGICAL_XOR)))
+        (nil))
        (class_modifiers_opt
         (nil)
         ((class_modifiers)
@@ -499,44 +370,9 @@
        (class_modifier
         ((T_FINAL))
         ((T_ABSTRACT)))
-       (method_modifiers_opt
-        (nil)
-        ((method_modifiers)
-         (nreverse $1)))
-       (method_modifiers
-        ((method_modifiers method_modifier)
-         (cons $2 $1))
-        ((method_modifier)
-         (list $1)))
-       (method_modifier
-        ((T_FINAL))
-        ((T_ABSTRACT))
-        ((T_STATIC))
-        ((T_PRIVATE))
-        ((T_PROTECTED))
-        ((T_PUBLIC)))
-       (field_modifiers_opt
-        (nil)
-        ((field_modifiers)
-         (nreverse $1)))
-       (field_modifiers
-        ((field_modifiers field_modifier)
-         (cons $2 $1))
-        ((field_modifier)
-         (list $1)))
-       (field_modifier
-        ((method_modifier))
-        ((T_VAR)))
-       (dims_opt
-        (nil
-         (identity ""))
-        ((dims)))
-       (dims
-        ((dims BRACK_BLOCK)
-         (concat $1 "[]"))
-        ((BRACK_BLOCK)
-         (identity "[]"))))
-     '(grammar compilation_units compilation_unit include_declaration require_expr type_declaration class_declaration class_body class_member_declaration interface_declaration interface_body interface_member_declaration method_declaration method_declarator identifier_list method_body block formal_parameter_list formal_parameters formal_parameter field_declaration variable_declarators variable_declarator variable_declarator_id variable_initializer class_modifiers class_modifier method_modifiers method_modifier field_modifiers field_modifier)))
+       (block
+           ((BRACE_BLOCK))))
+     '(grammar compilation_unit require_expr require_declaration type_declaration namespace_declaration class_declaration use_declaration class_body class_member_declaration namespace_member_declaration)))
   "Parser table.")
 
 (defun ofc-semantic-php-wy--install-parser ()
@@ -570,7 +406,11 @@
 (define-lex-string-type-analyzer ofc-semantic-php-wy--<punctuation>-string-analyzer
   "string analyzer for <punctuation> tokens."
   "\\(\\s.\\|\\s$\\|\\s'\\)+"
-  '((T_DOLLER . "$")
+  '((T_POW_EQUAL . "**=")
+    (T_POW . "**")
+    (T_COALESCE . "??")
+    (T_ELLIPSIS . "...")
+    (T_DOLLAR . "$")
     (T_ASTERISK . "@")
     (T_COMP . "~")
     (T_OR . "|")
@@ -579,9 +419,8 @@
     (T_URSHIFTEQ . ">>>=")
     (T_URSHIFT . ">>>")
     (T_GT . ">")
-    (T_EQ . "=")
+    (T_EQUAL . "=")
     (T_LT . "<")
-    (T_SEMI . ";")
     (T_COLON . ":")
     (T_DIV . "/")
     (T_DOT . ".")
@@ -609,6 +448,7 @@
     (T_MUL_EQUAL . "*=")
     (T_MINUS_EQUAL . "-=")
     (T_PLUS_EQUAL . "+=")
+    (T_SPACESHIP . "<=>")
     (T_IS_GREATER_OR_EQUAL . ">=")
     (T_IS_SMALLER_OR_EQUAL . "<=")
     (T_IS_NOT_EQUAL . "<>")

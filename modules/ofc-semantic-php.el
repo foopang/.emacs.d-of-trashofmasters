@@ -29,15 +29,19 @@ Use the alternate LALR(1) parser."
    ;; speedbar and imenu buckets name
    semantic-symbol->name-assoc-list-for-type-parts '((type     . "Classes")
                                                      (function . "Methods")
-                                                     (variable . "Variables"))
+                                                     (variable . "Properties"))
 
    semantic-symbol->name-assoc-list
-   (append semantic-symbol->name-assoc-list-for-type-parts '((include  . "Dependencies")
+   (append semantic-symbol->name-assoc-list-for-type-parts '((include  . "Includes")
                                                              (package  . "Namespaces")))
 
-   ;; navigation inside 'type children
+   ;; Navigation inside 'type children
    senator-step-at-tag-classes '(function variable))
-  (semantic-mode))
+
+  ;; Show parsing errors.
+  (show-unmatched-syntax-mode)
+  ;; Enable semantic mode for the buffer.
+  (semantic-mode 1))
 
 (defun ofc-semantic-php-expand-tag (tag)
   "Expand TAG into a list of equivalent tags, or nil.

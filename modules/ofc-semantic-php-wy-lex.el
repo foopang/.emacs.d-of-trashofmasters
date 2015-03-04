@@ -48,9 +48,6 @@ FLOATING_POINT_LITERAL:
 (defconst ofc-semantic-php-label-regex
   "[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*")
 
-(defvar ofc-semantic-in-php nil
-  "State variable tracking parsing in/out of PHP code.")
-
 (defun ofc-semantic-php--move-to-php-beginning ()
   (if (re-search-forward "<[%?]" nil t)
       (cond
@@ -66,47 +63,31 @@ FLOATING_POINT_LITERAL:
     (goto-char (point-max))
     nil))
 
+(define-lex-regex-analyzer ofc-semantic-php-lex-ns-separator
+  "Replace backslashes with a T_NS_SEPARATOR."
+  "\\\\"
+  (let ((start (point))
+        (end   (match-end 0)))
+    (message (format "Found namespace separator from %d until %d" start end))
+    (semantic-lex-push-token
+     (semantic-lex-token 'T_NS_SEPARATOR start end))))
+
 (define-lex-regex-analyzer ofc-semantic-php-lex-prologue
-  "Detect and create a prologue token."
+  "Detects and converts a php opening tag to a T_OPEN_TAG token"
   "<[?%]\\(php\\)?\\([[:space:]]+\\|$\\)"
   ;; Zing to the end of this brace block.
   (let ((start (match-beginning 0))
         (end   (match-end 0)))
     (semantic-lex-push-token
-     (semantic-lex-token 'PROLOGUE start end))))
+     (semantic-lex-token 'T_OPEN_TAG start end))))
 
 (define-lex-regex-analyzer ofc-semantic-php-lex-epilogue
-  "Detect and create an epilogue or percent-percent token."
+  "Detects and converts a php closing tag to a T_CLOSE_TAG token"
   "[%?]>"
   (let ((start (match-beginning 0))
         (end   (match-end 0)))
     (semantic-lex-push-token
-     (semantic-lex-token 'EPILOGUE start end))))
-
-(define-lex-regex-analyzer ofc-semantic-php-lex-heredoc
-  "Detect and create an epilogue or percent-percent token."
-  (concat "<<<[[:blank:]]*\\(" ofc-semantic-php-label-regex "\\)$")
-  (let ((start (match-beginning 0))
-        (end   (progn
-		 (re-search-forward (concat "^" (match-string 1) ";") nil t)
-		 (match-end 0))))
-    (semantic-lex-push-token
-     (semantic-lex-token 'STRING_LITERAL start end))
-    (setq semantic-lex-end-point end)))
-
-(define-lex-analyzer ofc-semantic-php-lex-out-of-php
-  "Detect and create python indentation tokens at beginning of line."
-  (progn
-    (and ofc-semantic-in-php
-	 (looking-at "[[:space:]\n]*[%?]>")
-	 (setq ofc-semantic-in-php nil))
-    (when (not ofc-semantic-in-php)
-      (let ((last-pos (point))
-	    (token (ofc-semantic-php--move-to-php-beginning)))
-	(setq semantic-lex-end-point (point))
-	(when token
-	  (setq ofc-semantic-in-php t)))
-      t)))
+     (semantic-lex-token 'T_CLOSE_TAG start end))))
 
 ;; Define the lexer for this grammar
 (define-lex ofc-semantic-php-lexer
@@ -120,6 +101,12 @@ It ignores whitespaces, newlines and comments."
   ofc-semantic-php-lex-prologue
   ofc-semantic-php-lex-epilogue
 
+  ;; Must detect qualified names separately.
+  ofc-semantic-php-lex-ns-separator
+
+  ;; Must detect keywords before other symbols
+  ofc-semantic-php-wy--<keyword>-keyword-analyzer
+
   ;; Auto-generated analyzers.
   ofc-semantic-php-wy--<number>-regexp-analyzer
   ofc-semantic-php-wy--<string>-sexp-analyzer
@@ -128,8 +115,6 @@ It ignores whitespaces, newlines and comments."
   ;; regexp match semicolons inside strings!
   semantic-lex-ignore-comments
 
-  ;; Must detect keywords before other symbols
-  ofc-semantic-php-wy--<keyword>-keyword-analyzer
   ofc-semantic-php-wy--<symbol>-regexp-analyzer
   ofc-semantic-php-wy--<punctuation>-string-analyzer
   ofc-semantic-php-wy--<block>-block-analyzer
