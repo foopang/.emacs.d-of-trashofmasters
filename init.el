@@ -110,7 +110,6 @@ our changed Emacs paramaters.")
 (require 'ofc-web)
 (require 'ofc-org)
 
-(require 'ofc-php+tags)
 
 ;; Load Emacs customisations.
 (load custom-file)

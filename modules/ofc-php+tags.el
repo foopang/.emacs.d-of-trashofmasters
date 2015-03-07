@@ -1,3 +1,0 @@
-
-
-(provide 'ofc-php+tags)
