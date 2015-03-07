@@ -16,12 +16,13 @@ Use the alternate LALR(1) parser."
    semantic-lex-number-expression ofc-semantic-php-number-regexp
    semantic-lex-analyzer 'ofc-semantic-php-lexer
 
-   ;; Parsing
+   ;; Expanding compound tags
+   ;; See C-h v semantic-tag-expand-function
    semantic-tag-expand-function 'ofc-semantic-php-expand-tag
 
    ;; Environment
-   semantic-imenu-summary-function 'semantic-format-tag-prototype
    imenu-create-index-function 'semantic-create-imenu-index
+   semantic-imenu-summary-function 'semantic-format-tag-prototype
    semantic-type-relation-separator-character '(".")
    semantic-command-separation-character ";"
    semantic-lex-comment-regex "\\(/\\*\\|//\\|#\\)"
@@ -31,9 +32,10 @@ Use the alternate LALR(1) parser."
                                                      (function . "Methods")
                                                      (variable . "Properties"))
 
-   semantic-symbol->name-assoc-list
-   (append semantic-symbol->name-assoc-list-for-type-parts '((include  . "Includes")
-                                                             (package  . "Namespaces")))
+   semantic-symbol->name-assoc-list (append
+                                     semantic-symbol->name-assoc-list-for-type-parts
+                                     '((include  . "Includes")
+                                       (package  . "Namespaces")))
 
    ;; Navigation inside 'type children
    senator-step-at-tag-classes '(function variable))

@@ -9,12 +9,14 @@
 %start grammar
 
 ;; Alternate entry points, for partial re-parse
+%start compilation_unit
+%start compilation_unit_list
 %start use_declaration
 %start class_declaration
 %start require_declaration
 %start namespace_declaration
 %start class_member_declaration
-%start namespace_member_declaration
+;; %start namespace_member_declaration
 
 
 ;; Literals
@@ -289,50 +291,69 @@
 
 
 ;; Top level rules
+
+;; Matches the php opening tag <? and <?php followed by any number
+;; of compilation units.
 grammar
-  : T_OPEN_TAG compilation_unit
+  : T_OPEN_TAG compilation_unit_list
     (identity $2)
+  ;
+
+compilation_unit_list
+  : ;; empty
+  | compilation_unit compilation_unit_list
+    (if $2 (append $2 (EXPANDTAG $1)) (EXPANDTAG $1))
   ;
 
 compilation_unit
   : use_declaration
-  | type_declaration
+  | namespace_declaration
   ;
 
 
 ;; Use directive
 use_declaration
-  : T_USE T_STRING T_SEMICOLON
-    (INCLUDE-TAG $2 nil)
-  | T_USE use_expr T_SEMICOLON
-    (INCLUDE-TAG $2 nil)
+  : T_USE use_expr
+  | T_USE use_expr_list T_SEMICOLON
   ;
 
 use_expr
   : qualified_name
     (INCLUDE-TAG $1 nil)
   | qualified_name T_AS T_STRING
-    (INCLUDE-TAG $1 nil 'alias $3)
+    (INCLUDE-TAG $1 nil :alias $3)
   ;
 
 use_expr_list
-  : use_expr_list T_COMMA use_expr
-    (cons $3 $1)
-  | use_expr
+  : use_expr
     (list $1)
+  | use_expr T_COMMA use_expr_list
+    (append (list $1) $3)
   ;
 
+;; Namespace declarations
+namespace_declaration
+  : T_NAMESPACE qualified_name namespace_body
+    (TYPE-TAG $2 $1 $3 nil)
+  ;
+
+namespace_body
+  : T_SEMICOLON
+  ;
+
+;; Qualified names
 qualified_name
-  : qualified_name T_NS_SEPARATOR T_STRING
-    (concat $1 $2 $3)
-  | T_STRING
+  : T_STRING
+    (identity $1)
+  | qualified_name T_NS_SEPARATOR T_STRING
+    (concat $1 "." $3)
   ;
 
 qualified_name_list
-  : qualified_name_list T_COMMA qualified_name
-    (cons $3 $1)
-  | qualified_name
+  : qualified_name
     (list $1)
+  | qualified_name T_COMMA qualified_name_list
+    (append (list $1) $3)
   ;
 
 ;; Includes
@@ -358,7 +379,10 @@ require_expr
 ;;
 type_declaration
   : T_SEMICOLON
+    ()
+  | use_declaration
   | class_declaration
+  | namespace_declaration
   ;
 
 
