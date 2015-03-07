@@ -3,6 +3,8 @@
 
 (require 'php-mode)
 (require 'ofc-semantic-php)
+(require 'ofc-semantic-php-wy)
+(require 'ofc-semantic-php-wy-lex)
 
 (ert-deftest ofc-semantic-php-semantic-analyse-php-mode-buffers ()
   "A hook is added to php-mode to enable Semantic analysis."
@@ -49,6 +51,18 @@
                        (T_STRING 17 . 20)
                        (T_SEMICOLON 20 . 21))
                      token-stream)))))
+
+(ert-deftest ofc-semantic-parse-unqualified-names-in-namespace-declarations ()
+  "Ensure the parsing of unqualified names in namespace declarations.
+For example `namespace Foo;` or `namespace Bar {}`."
+  (with-temp-buffer
+    (erase-buffer)
+    (insert "<?php namespace Foo; namespace Bar {};")
+    (ofc/semantic-php-setup)
+    (php-mode)
+    ;; I'm trying to assert against the tags extracted from
+    ;; the parser, rather than the tokens from the lexer.
+    (should (semantic-create-imenu-index))))
 
 ;; Test Checklist:
 ;; unit test the parser

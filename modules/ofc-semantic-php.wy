@@ -12,10 +12,13 @@
 %start compilation_unit
 %start compilation_unit_list
 %start use_declaration
+%start use_expr
+%start use_expr_list
 %start class_declaration
 %start require_declaration
 %start namespace_declaration
 %start class_member_declaration
+%start qualified_name
 ;; %start namespace_member_declaration
 
 
@@ -295,7 +298,9 @@
 ;; Matches the php opening tag <? and <?php followed by any number
 ;; of compilation units.
 grammar
-  : T_OPEN_TAG compilation_unit_list
+  : T_OPEN_TAG compilation_unit_list T_CLOSE_TAG
+    (identity $2)
+  | T_OPEN_TAG compilation_unit_list
     (identity $2)
   ;
 
@@ -313,7 +318,7 @@ compilation_unit
 
 ;; Use directive
 use_declaration
-  : T_USE use_expr
+  : T_USE use_expr T_SEMICOLON
   | T_USE use_expr_list T_SEMICOLON
   ;
 
@@ -328,17 +333,19 @@ use_expr_list
   : use_expr
     (list $1)
   | use_expr T_COMMA use_expr_list
-    (append (list $1) $3)
+    (cons $3 $1)
   ;
 
 ;; Namespace declarations
 namespace_declaration
   : T_NAMESPACE qualified_name namespace_body
-    (TYPE-TAG $2 $1 $3 nil)
+    (TYPE-TAG $2 $1 (unless (equal ";" $3) $3) nil)
   ;
 
 namespace_body
-  : T_SEMICOLON
+  : ignored_block
+    ()
+  | T_SEMICOLON
   ;
 
 ;; Qualified names
@@ -347,6 +354,8 @@ qualified_name
     (identity $1)
   | qualified_name T_NS_SEPARATOR T_STRING
     (concat $1 "." $3)
+  | T_NS_SEPARATOR qualified_name T_NS_SEPARATOR T_STRING
+    (concat $2 "." $4)
   ;
 
 qualified_name_list
@@ -432,7 +441,7 @@ class_modifier
   | T_ABSTRACT
   ;
 
-block
+ignored_block
   : BRACE_BLOCK
   ;
 
