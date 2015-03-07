@@ -1,22 +1,62 @@
-#+TITLE: README, Emacs Configuration
-#+AUTHOR: Andrea Turso
-
 * 1. What is this?
 
   This is my personal collection of customisations to GNU/Emacs.
 
-* 1-1. Dependencies
-
-  The project is subdivided in different files and directories in a
-  structure similar to that of the Prelude package.
+  The project is subdivided across multiple files and directories in a
+  structure similar to that of the [[https://github.com/bbatsov/prelude][Prelude package]].
 
   The ~init.el~ startup script is evaluated immediately after opening
   Emacs, this file loads ~load-path.el~ and then bootstraps the editor
   by pulling in all the individual modules declared in the ~modules/~
   directory.
 
+* 2. Modules
+
+  The Emacs Code Browser package provides Emacs with the facilities
+  to split a frame in different regions. The main editing window and
+  the secondary windows can be laid in various configurations by
+  customising the ~ecb-layout-name~. The Ecb secondary windows include:
+
+  - *The Compilation Window*
+    Groups special buffers making them quick to access or hide away.
+    This is window normally displayed at the bottom of the frame.  The
+    ~ecb-compilation-buffer-names~ variable can be customised to control
+    what buffers should be displayed in the compilation window.
+
+  - *The Methods Window*
+    Lists all metadata extrapolated from the current buffer.
+
+  - *The Sources Window*
+    Lists all files in the current working directory.
+
+  - *The Directories Window*
+    Renders a tree of the filesystem and can be configured to bookmark
+    and shorten the names of frequently used directories via the
+    ~ecb-source-path~ variable.
+
+  Another useful feature of Ecb is the ability to rotate a sequence of
+  layouts defined in the ~ecb-toggle-layout-sequence~ variable.
+
+  The ecb configuration is defined in the file ~ofc-ecb.el~.
+
+  I use Helm extensively to switch between buffers and to search
+  incrementally for the definition of a symbol in a tag table or
+  its occurrences in a buffer.
+
+  Helm buffers are added to Ecb's ~ecb-compilation-buffer-names~ list
+  so that they always pop up from the bottom of the frame.
+
+* 3. Variables
+
+  TBC
+
+* 4. Dependencies
+
   Below is a list of some of the packages required to run this this
   particular configuration of Emacs.
+
+  Because all those packages are imported at once in startup stage, a
+  fresh Emacs instance can take up to 8 seconds before it's ready.
 
   - [[http://ecb.sourceforge.net/][ecb]]
   - [[https://github.com/emacs-helm/helm][helm]]
@@ -30,9 +70,6 @@
   - [[https://github.com/magit/magit][magit]]
   - [[https://github.com/pidu/git-timemachine][git-timemachine]]
 
-  Because all those packages are imported at once in startup stage, a
-  fresh Emacs instance can take up to 8 seconds before it's ready.
-
   While I understand it would be desirable to use the autoloading
   mechanism to defer loading the components until they are eventually
   needed, I do not plan on focusing on this in the immediate future.
@@ -41,24 +78,52 @@
   the latest version of all third-party libraries is always present
   in the elisp folder.
 
-* 2. PHP Development
-TBC
+** Other requirements for PHP 5+ development
+
+   At the moment I am actively working on adding [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Semantic.html#Semantic][Semantic]] support to
+   my Emacs PHP configuration as a proof of concept. Should everything
+   go well it won't be long before I can open a PR against [[https://github.com/ejmr/php-mode][php-mode]] to
+   build semantic support directly into it.
+
+   As a fallback alternative, to keep my sanity when working on larger
+   code bases, I currently rely on a [[https://github.com/shawncplus/phpcomplete.vim/wiki/Patched-ctags][patched version of exuberant ctags]]
+   5.8 which decently supports recent PHP language additions such as
+   namespace, traits, finally, etc.
+
+   I have spent quite some to get ctags to work as a plugin parser
+   to GNU/Global so that I could use the [[https://github.com/leoliu/ggtags][ggtags]] frontend to global.
+
+   In spite of ggtags itself being a fantastic package, with great tag
+   search and navigation interfaces, I wasn't completely satisfied
+   with how ctags and global played together with PHP source code.
+
+   So I have eventually gave up on global in favour of using Emacs
+   builtin etags functionality but feeding it the tag files generated
+   by ~ctags -e~, rather than Emacs' original parser.
+
 * 3. Keymap
 
 | Key          | Function                                  | Group              |
-| ~ESC~        | ~ecb-toggle-compile-window~               | code navigation    |
-| ~⌘-m~        | ~ecb-goto-window-methods~                 | code navigation    |
-| ~⌘-h~        | ~ecb-goto-window-history~                 | code navigation    |
-| ~⌘-s~        | ~ecb-goto-window-sources~                 | code navigation    |
-| ~⌘-c~        | ~ecb-goto-window-compilation~             | code navigation    |
-| ~⌘-d~        | ~ecb-goto-window-directories~             | code navigation    |
-| ~⌘-e~        | ~ecb-goto-window-edit-last~               | code navigation    |
-| ~⌘-<return>~ | ~ecb-toggle-layout~                       | code navigation    |
+| ~ESC~        | ~ecb-toggle-compile-window~               | window management  |
+| ~⌘-m~        | ~ecb-goto-window-methods~                 | window management  |
+| ~⌘-h~        | ~ecb-goto-window-history~                 | window management  |
+| ~⌘-s~        | ~ecb-goto-window-sources~                 | window management  |
+| ~⌘-c~        | ~ecb-goto-window-compilation~             | window management  |
+| ~⌘-d~        | ~ecb-goto-window-directories~             | window management  |
+| ~⌘-e~        | ~ecb-goto-window-edit-last~               | window management  |
+| ~⌘-<return>~ | ~ecb-toggle-layout~                       | window management  |
 | ~M-.~        | ~ofc/tags-find-at-point~                  | code navigation    |
 | ~M-*~        | ~ofc/tags-stop-search~                    | code navigation    |
 | ~M-[~        | ~ofc/history-go-back-dwim~                | code navigation    |
 | ~M-]~        | ~ofc/history-go-forward-dwim~             | code navigation    |
+| ~C-x c e~    | ~helm-etags-select~                       | code navigation    |
 | ~C-c E~      | ~ctags-update~                            | code navigation    |
+| ~C-x C-c~    | ~save-buffers-kill-terminal~              | general            |
+| ~C-x f~      | ~helm-recentf~                            | project navigation |
+| ~C-x b~      | ~helm-mini~                               | project navigation |
+| ~C-x C-b~    | ~helm-mini~                               | project navigation |
+| ~C-c p f~    | ~helm-projectile-find-file~               | project navigation |
+| ~C-c p p~    | ~helm-projectile-switch-project~          | project navigation |
 | ~M-m~        | ~back-to-indentation~                     | editing            |
 | ~C-w~        | ~ofc/kill-region~                         | editing            |
 | ~C-x a r~    | ~align-regexp~                            | editing            |
@@ -66,11 +131,7 @@ TBC
 | ~M-^~        | ~ofc/join-lines~                          | editing            |
 | ~M-g~        | ~ofc/goto-line-with-feedback~             | editing            |
 | ~C-/~        | ~ofc/comment-or-uncomment-line-or-region~ | editing            |
-| ~C-x f~      | ~helm-recentf~                            | project navigation |
-| ~C-x b~      | ~helm-mini~                               | project navigation |
-| ~C-x C-b~    | ~helm-mini~                               | project navigation |
-| ~C-c p f~    | ~helm-projectile-find-file~               | project navigation |
-| ~C-c p p~    | ~helm-projectile-switch-project~          | project navigation |
+| ~M-$~        | ~ispell-word~                             | spell checking     |
 | ~C-x g s~    | ~magit-status~                            | version control    |
 | ~C-x g d~    | ~magit-diff~                              | version control    |
 | ~C-x g b~    | ~magit-branch-manager~                    | version control    |
@@ -79,25 +140,29 @@ TBC
 | ~C-x g t~    | ~git-timemachine~                         | version control    |
 | ~⌘-<right>~  | ~next-buffer~                             | osx                |
 | ~⌘-<left>~   | ~previou⌘-buffer~                         | osx                |
-| ~⌘-t~        | deallocated                               | osx                |
-| ~⌘-u~        | deallocated                               | osx                |
-| ~⌘-l~        | deallocated                               | osx                |
-| ~⌘-j~        | deallocated                               | osx                |
-| ~⌘-x~        | deallocated                               | osx                |
-| ~⌘-c~        | deallocated                               | osx                |
-| ~⌘-v~        | deallocated                               | osx                |
-| ~⌘-p~        | deallocated                               | osx                |
-| ~⌘-g~        | deallocated                               | osx                |
-| ~⌘-q~        | deallocated                               | osx                |
-| ~⌘-f~        | deallocated                               | osx                |
-| ~⌘-n~        | deallocated                               | osx                |
-| ~⌘-m~        | deallocated                               | osx                |
-| ~⌘-w~        | deallocated                               | osx                |
-| ~⌘-s~        | deallocated                               | osx                |
-| ~⌘-S~        | deallocated                               | osx                |
-| ~⌘-D~        | deallocated                               | osx                |
-| ~⌘-z~        | deallocated                               | osx                |
-| ~⌘-y~        | deallocated                               | osx                |
-| ~⌘-o~        | deallocated                               | osx                |
-| ~⌘-d~        | deallocated                               | osx                |
-| ~⌘-a~        | deallocated                               | osx                |
+
+** Unbound Keys
+| Key   | Function | Group   |
+| ~C-z~ | -        | general |
+| ~⌘-t~ | -        | osx     |
+| ~⌘-u~ | -        | osx     |
+| ~⌘-l~ | -        | osx     |
+| ~⌘-j~ | -        | osx     |
+| ~⌘-x~ | -        | osx     |
+| ~⌘-c~ | -        | osx     |
+| ~⌘-v~ | -        | osx     |
+| ~⌘-p~ | -        | osx     |
+| ~⌘-g~ | -        | osx     |
+| ~⌘-q~ | -        | osx     |
+| ~⌘-f~ | -        | osx     |
+| ~⌘-n~ | -        | osx     |
+| ~⌘-m~ | -        | osx     |
+| ~⌘-w~ | -        | osx     |
+| ~⌘-s~ | -        | osx     |
+| ~⌘-S~ | -        | osx     |
+| ~⌘-D~ | -        | osx     |
+| ~⌘-z~ | -        | osx     |
+| ~⌘-y~ | -        | osx     |
+| ~⌘-o~ | -        | osx     |
+| ~⌘-d~ | -        | osx     |
+| ~⌘-a~ | -        | osx     |
