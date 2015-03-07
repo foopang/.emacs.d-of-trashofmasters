@@ -14,7 +14,7 @@
 (defvar ofc-dir (file-name-directory load-file-name)
   "The Emacs configuration directory, generally this is `~/.emacs/d'.")
 
-(defvar ofc-vendor-dir (expand-file-name "elisp" ofc-dir)
+(defvar ofc-elisp-dir (expand-file-name "elisp" ofc-dir)
   "The directory where third-party packages should be installed.
 At this time packages are manually checked-out or downloaded and
 added to this directory. When using this configuration on a new
@@ -37,10 +37,6 @@ the directory is added to the `load-path' variable.")
 (defvar ofc-custom-file (expand-file-name "custom.el" ofc-savefile-dir)
   "The name of the configuration file where `customize' will save
 our changed Emacs paramaters.")
-
-(defvar ofc-use-cedet-dev nil
-  "When non-nil the builtin version of CEDET will be replaced
-with the dev version present in `ofc-vendor-dir/cedet'.")
 
 ;; Use the old load-path definition, instead of adding all
 ;; directories under `elisp' to the load-path.
@@ -72,11 +68,6 @@ with the dev version present in `ofc-vendor-dir/cedet'.")
 ;; startup. We create create an empty file to avoid this.
 (unless (file-exists-p custom-file)
   (write-region "" nil custom-file))
-
-;; CEDET needs to run very early in the bootstrap process to avoid
-;; clashes with the builtin components.
-(when ofc-use-cedet-dev
-  (require 'ofc-cedet))
 
 ;; Initialize Emacs package management.
 (require 'package)
