@@ -17,7 +17,6 @@
                               "~/.emacs.d/elisp/ecb"
                               "~/.emacs.d/elisp/helm-etags-plus"
                               "~/.emacs.d/elisp/cedet"
-                              "~/.emacs.d/elisp/contrib"
                               "~/.emacs.d/elisp/company-mode"
                               "~/.emacs.d/elisp/coffee-mode"
                               "~/.emacs.d/elisp/popwin"

@@ -1,0 +1,103 @@
+#+TITLE: README, Emacs Configuration
+#+AUTHOR: Andrea Turso
+
+* 1. What is this?
+
+  This is my personal collection of customisations to GNU/Emacs.
+
+* 1-1. Dependencies
+
+  The project is subdivided in different files and directories in a
+  structure similar to that of the Prelude package.
+
+  The ~init.el~ startup script is evaluated immediately after opening
+  Emacs, this file loads ~load-path.el~ and then bootstraps the editor
+  by pulling in all the individual modules declared in the ~modules/~
+  directory.
+
+  Below is a list of some of the packages required to run this this
+  particular configuration of Emacs.
+
+  - [[http://ecb.sourceforge.net/][ecb]]
+  - [[https://github.com/emacs-helm/helm][helm]]
+  - [[https://github.com/bbatsov/projectile][projectile]]
+  - [[http://company-mode.github.io/][company-mode]]
+
+  - [[https://github.com/ejmr/php-mode][php-mode]]
+  - [[http://web-mode.org/][web-mode]]
+  - [[https://github.com/defunkt/coffee-mode][coffee-mode]]
+  - [[https://github.com/capitaomorte/yasnippet][yasnippet]]
+  - [[https://github.com/magit/magit][magit]]
+  - [[https://github.com/pidu/git-timemachine][git-timemachine]]
+
+  Because all those packages are imported at once in startup stage, a
+  fresh Emacs instance can take up to 8 seconds before it's ready.
+
+  While I understand it would be desirable to use the autoloading
+  mechanism to defer loading the components until they are eventually
+  needed, I do not plan on focusing on this in the immediate future.
+
+  Eventually I'll find the time to introduce *el-get* to ensure
+  the latest version of all third-party libraries is always present
+  in the elisp folder.
+
+* 2. PHP Development
+TBC
+* 3. Keymap
+
+| Key          | Function                                  | Group              |
+| ~ESC~        | ~ecb-toggle-compile-window~               | code navigation    |
+| ~⌘-m~        | ~ecb-goto-window-methods~                 | code navigation    |
+| ~⌘-h~        | ~ecb-goto-window-history~                 | code navigation    |
+| ~⌘-s~        | ~ecb-goto-window-sources~                 | code navigation    |
+| ~⌘-c~        | ~ecb-goto-window-compilation~             | code navigation    |
+| ~⌘-d~        | ~ecb-goto-window-directories~             | code navigation    |
+| ~⌘-e~        | ~ecb-goto-window-edit-last~               | code navigation    |
+| ~⌘-<return>~ | ~ecb-toggle-layout~                       | code navigation    |
+| ~M-.~        | ~ofc/tags-find-at-point~                  | code navigation    |
+| ~M-*~        | ~ofc/tags-stop-search~                    | code navigation    |
+| ~M-[~        | ~ofc/history-go-back-dwim~                | code navigation    |
+| ~M-]~        | ~ofc/history-go-forward-dwim~             | code navigation    |
+| ~C-c E~      | ~ctags-update~                            | code navigation    |
+| ~M-m~        | ~back-to-indentation~                     | editing            |
+| ~C-w~        | ~ofc/kill-region~                         | editing            |
+| ~C-x a r~    | ~align-regexp~                            | editing            |
+| ~C-M-y~      | ~helm-show-kill-ring~                     | editing            |
+| ~M-^~        | ~ofc/join-lines~                          | editing            |
+| ~M-g~        | ~ofc/goto-line-with-feedback~             | editing            |
+| ~C-/~        | ~ofc/comment-or-uncomment-line-or-region~ | editing            |
+| ~C-x f~      | ~helm-recentf~                            | project navigation |
+| ~C-x b~      | ~helm-mini~                               | project navigation |
+| ~C-x C-b~    | ~helm-mini~                               | project navigation |
+| ~C-c p f~    | ~helm-projectile-find-file~               | project navigation |
+| ~C-c p p~    | ~helm-projectile-switch-project~          | project navigation |
+| ~C-x g s~    | ~magit-status~                            | version control    |
+| ~C-x g d~    | ~magit-diff~                              | version control    |
+| ~C-x g b~    | ~magit-branch-manager~                    | version control    |
+| ~C-x g l~    | ~magit-log-long~                          | version control    |
+| ~C-x g c~    | ~magit-checkout~                          | version control    |
+| ~C-x g t~    | ~git-timemachine~                         | version control    |
+| ~⌘-<right>~  | ~next-buffer~                             | osx                |
+| ~⌘-<left>~   | ~previou⌘-buffer~                         | osx                |
+| ~⌘-t~        | deallocated                               | osx                |
+| ~⌘-u~        | deallocated                               | osx                |
+| ~⌘-l~        | deallocated                               | osx                |
+| ~⌘-j~        | deallocated                               | osx                |
+| ~⌘-x~        | deallocated                               | osx                |
+| ~⌘-c~        | deallocated                               | osx                |
+| ~⌘-v~        | deallocated                               | osx                |
+| ~⌘-p~        | deallocated                               | osx                |
+| ~⌘-g~        | deallocated                               | osx                |
+| ~⌘-q~        | deallocated                               | osx                |
+| ~⌘-f~        | deallocated                               | osx                |
+| ~⌘-n~        | deallocated                               | osx                |
+| ~⌘-m~        | deallocated                               | osx                |
+| ~⌘-w~        | deallocated                               | osx                |
+| ~⌘-s~        | deallocated                               | osx                |
+| ~⌘-S~        | deallocated                               | osx                |
+| ~⌘-D~        | deallocated                               | osx                |
+| ~⌘-z~        | deallocated                               | osx                |
+| ~⌘-y~        | deallocated                               | osx                |
+| ~⌘-o~        | deallocated                               | osx                |
+| ~⌘-d~        | deallocated                               | osx                |
+| ~⌘-a~        | deallocated                               | osx                |
