@@ -12,13 +12,10 @@
 %start compilation_unit
 %start compilation_unit_list
 %start use_declaration
-%start use_expr
-%start use_expr_list
 %start class_declaration
 %start require_declaration
 %start namespace_declaration
 %start class_member_declaration
-%start qualified_name
 ;; %start namespace_member_declaration
 
 
@@ -318,28 +315,29 @@ compilation_unit
 
 ;; Use directive
 use_declaration
-  : T_USE use_expr T_SEMICOLON
-  | T_USE use_expr_list T_SEMICOLON
+  : T_USE aliased_name T_SEMICOLON
+    (INCLUDE-TAG $2 nil)
   ;
 
-use_expr
+use_declaration_list
+  : aliased_name
+    (identity $1)
+  | aliased_name T_COMMA use_declaration_list
+    (identity $1)
+  ;
+
+aliased_name
   : qualified_name
-    (INCLUDE-TAG $1 nil)
+    (identity $1)
   | qualified_name T_AS T_STRING
-    (INCLUDE-TAG $1 nil :alias $3)
+    (identity $3)
   ;
 
-use_expr_list
-  : use_expr
-    (list $1)
-  | use_expr T_COMMA use_expr_list
-    (cons $3 $1)
-  ;
 
 ;; Namespace declarations
 namespace_declaration
   : T_NAMESPACE qualified_name namespace_body
-    (TYPE-TAG $2 $1 (unless (equal ";" $3) $3) nil)
+    (TYPE-TAG $2 "namespace" (unless (equal ";" $3) $3) nil)
   ;
 
 namespace_body
@@ -353,9 +351,9 @@ qualified_name
   : T_STRING
     (identity $1)
   | qualified_name T_NS_SEPARATOR T_STRING
-    (concat $1 "." $3)
+    (concat $1 $2 $3)
   | T_NS_SEPARATOR qualified_name T_NS_SEPARATOR T_STRING
-    (concat $2 "." $4)
+    (concat $2 $3 $4)
   ;
 
 qualified_name_list
@@ -398,7 +396,7 @@ type_declaration
 ;; Classes
 class_declaration
   : class_modifiers_opt T_CLASS T_STRING parent_class_opt interfaces_opt class_body
-    (TYPE-TAG $3 $2 $6 (if (or $4 $5) (cons $4 $5)) :typemodifiers $1)
+    (TYPE-TAG $3 "class" $6 (if (or $4 $5) (cons $4 $5)) :typemodifiers $1)
   ;
 
 parent_class_opt

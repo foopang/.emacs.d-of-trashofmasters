@@ -43,29 +43,18 @@ Use the alternate LALR(1) parser."
   ;; Enable semantic mode for the buffer.
   (semantic-mode 1))
 
+(defun ofc-semantic-php-system-include-p (tag)
+  "Determines if a semantic tag of class `include' is part of
+the vendor, or possibly another, system include folder."
+  nil)
+
 (defun ofc-semantic-php-expand-tag (tag)
   "Expand TAG into a list of equivalent tags, or nil.
 Expand multiple variable declarations in the same statement, that is
 tags of class `variable' whose name is equal to a list of elements of
 the form (NAME START . END).  NAME is a variable name.  START and END
 are the bounds in the declaration, related to this variable NAME."
-  (let (elts elt clone start end xpand)
-    (when (and (eq 'variable (semantic-tag-class tag))
-               (consp (setq elts (semantic-tag-name tag))))
-      ;; There are multiple names in the same variable declaration.
-      (while elts
-        ;; For each name element, clone the initial tag and give it
-        ;; the name of the element.
-        (setq elt   (car elts)
-              elts  (cdr elts)
-              clone (semantic-tag-clone tag (car elt))
-              start (if elts  (cadr elt) (semantic-tag-start tag))
-              end   (if xpand (cddr elt) (semantic-tag-end   tag))
-              xpand (cons clone xpand))
-        ;; Set the bounds of the cloned tag with those of the name
-        ;; element.
-        (semantic-tag-set-bounds clone start end))
-      xpand)))
+  nil)
 
 (add-hook 'php-mode-hook 'ofc/semantic-php-setup)
 

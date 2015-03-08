@@ -68,7 +68,6 @@ FLOATING_POINT_LITERAL:
   "\\\\"
   (let ((start (point))
         (end   (match-end 0)))
-    (message (format "Found namespace separator from %d until %d" start end))
     (semantic-lex-push-token
      (semantic-lex-token 'T_NS_SEPARATOR start end))))
 
@@ -118,6 +117,9 @@ It ignores whitespaces, newlines and comments."
   ofc-semantic-php-wy--<symbol>-regexp-analyzer
   ofc-semantic-php-wy--<punctuation>-string-analyzer
   ofc-semantic-php-wy--<block>-block-analyzer
+
+  ;; Throw a 'Unmatched Text during Lexical Analysis' error when
+  ;; no lexical actions match the text.
   semantic-lex-default-action)
 
 ;; Taken from Emacs Cedet sources (semantic-grammar.el)
