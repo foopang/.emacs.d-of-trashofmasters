@@ -1,7 +1,11 @@
 (require 'helm-etags+)
 (require 'ctags-update)
 
-(defvar ofc-buffer-history nil
+;; Don't pester me with confirmation dialogs in the minibuffer
+;; before regenerating the bloody tags.
+(setq tags-revert-without-query t)
+
+(defvar ofc-tags-search-buffers nil
   "The history of buffers which initiated the tag search.")
 
 (defun ofc/searching-p nil
