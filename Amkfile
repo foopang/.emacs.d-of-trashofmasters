@@ -1,7 +1,21 @@
 <?php
 
 return [
-    $amaka->task(':default')->dependsOn('test'),
+    $amaka->task(':default')->dependsOn('clean', 'build', 'test'),
+    $amaka->process(
+        'build',
+        implode(' ', [
+            'emacs',
+            '-batch',
+            'modules/ofc-semantic-php.wy',
+            '-f semantic-mode',
+            '-f semantic-grammar-create-package',
+        ])
+    ),
+    $amaka->process(
+        'clean',
+        'rm -f modules/ofc-semantic-php-wy.el'
+    ),
     $amaka->process(
         'test',
         implode(' ', [
