@@ -12,20 +12,21 @@
 %start compilation_units
 %start compilation_unit
 %start namespace_declaration
+%start use_declaration
 
 
 ;; Literals
 %type  <symbol>
-%token <symbol>  T_STRING
+%token <symbol> T_STRING
 
-%type  <php-variable> syntax "\\(\\$[a-zA-Z_][a-zA-Z0-9_]+\\)" matchdatatype regexp
+%type  <php-variable> syntax "\\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*" matchdatatype regexp
 %token <php-variable> T_VARIABLE
 
 %type  <php-string> syntax "\\(\\s\"\\|'\\)" matchdatatype sexp
 %token <php-string> T_CONSTANT_ENCAPSED_STRING
 
 %type  <number>
-%token <number>  T_NUMBER
+%token <number> T_NUMBER
 
 ;; NOTE Open and closing tags are handled with ad-hoc analysers.
 ;; While this won't make much difference now, it will enable us to
@@ -314,6 +315,7 @@ compilation_units
 compilation_unit
   : include_declaration
   | namespace_declaration
+  | use_declaration
   ;
 
 include_declaration
@@ -347,6 +349,7 @@ namespace_body
   ;
 
 ;; Qualified names
+;; TODO Detect qualified names that have used but not been imported.
 qualified_name
   : T_STRING
     (identity $1)
@@ -362,6 +365,28 @@ qualified_name_list
   | qualified_name_list T_COMMA qualified_name
     ;; (append $1 (list $3))
   ;
+
+;; Use declaration
+use_declaration
+  : T_USE aliased_name T_SEMICOLON
+    (INCLUDE-TAG $2 nil)
+  ;
+
+use_declaration_list
+  : aliased_name
+    (identity $1)
+  | aliased_name T_COMMA use_declaration_list
+    (identity $1)
+  ;
+
+aliased_name
+  : qualified_name
+    (identity $1)
+  | qualified_name T_AS T_STRING
+    (identity $3)
+  ;
+
+;;
 
 block
   : BRACE_BLOCK
