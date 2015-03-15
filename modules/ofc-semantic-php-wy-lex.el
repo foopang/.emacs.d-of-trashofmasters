@@ -105,13 +105,13 @@ It ignores whitespaces, newlines and comments."
   ofc-semantic-php-lex-prologue
   ofc-semantic-php-lex-epilogue
   ofc-semantic-php-wy--<number>-regexp-analyzer
-  ofc-semantic-php-wy--<php-string>-sexp-analyzer
+
   ofc-semantic-php-wy--<keyword>-keyword-analyzer
   ofc-semantic-php-wy--<symbol>-regexp-analyzer
+  ofc-semantic-php-wy--<php-string>-sexp-analyzer
   ofc-semantic-php-wy--<ns-separator>-regexp-analyzer
   ofc-semantic-php-wy--<punctuation>-string-analyzer
   ofc-semantic-php-wy--<block>-block-analyzer
-
   ;; Throw a 'Unmatched Text during Lexical Analysis' error when no
   ;; lexical actions match the text.
   ;;
