@@ -9,10 +9,9 @@
 %start grammar
 
 ;; Alternate entry points, for partial re-parse
-%start compilation_units
-%start compilation_unit
-%start namespace_declaration
-%start use_declaration
+%start compilation_unit compilation_unit_list
+%start top_level_namespace_declaration
+%start top_level_use_declaration
 
 
 ;; Literals
@@ -300,22 +299,23 @@
 ;; Matches the php opening tag <? and <?php followed by any number
 ;; of compilation units.
 grammar
-  : T_OPEN_TAG compilation_units T_CLOSE_TAG
+  : T_OPEN_TAG compilation_unit_list T_CLOSE_TAG
     (identity $2)
-  | T_OPEN_TAG compilation_units
+  | T_OPEN_TAG compilation_unit_list
     (identity $2)
   ;
 
-compilation_units
-  : ;;EMPTY
-  | compilation_unit compilation_units
+compilation_unit_list
+  : ;; empty
+  | compilation_unit compilation_unit_list
     (if $2 (append $2 (EXPANDTAG $1)) (EXPANDTAG $1))
   ;
 
+
 compilation_unit
   : include_declaration
-  | namespace_declaration
-  | use_declaration
+  | top_level_namespace_declaration
+  | top_level_use_declaration
   ;
 
 include_declaration
@@ -337,15 +337,15 @@ require_expr
   ;
 
 ;; Namespace declarations
-namespace_declaration
-  : T_NAMESPACE qualified_name namespace_body
-    (TYPE-TAG $2 "namespace" (unless (equal ";" $3) $3) nil)
+top_level_namespace_declaration
+  : T_NAMESPACE qualified_name T_SEMICOLON
+    (TYPE-TAG $2 "namespace" nil nil)
   ;
 
-namespace_body
-  : block
-    ()
-  | T_SEMICOLON
+;; Use declarations
+top_level_use_declaration
+  : T_USE qualified_name T_SEMICOLON
+    (INCLUDE-TAG $2 nil)
   ;
 
 ;; Qualified names
@@ -366,28 +366,18 @@ qualified_name_list
     ;; (append $1 (list $3))
   ;
 
-;; Use declaration
-use_declaration
-  : T_USE aliased_name T_SEMICOLON
-    (INCLUDE-TAG $2 nil)
-  ;
-
-use_declaration_list
-  : aliased_name
-    (identity $1)
-  | aliased_name T_COMMA use_declaration_list
-    (identity $1)
-  ;
-
-aliased_name
-  : qualified_name
-    (identity $1)
-  | qualified_name T_AS T_STRING
-    (identity $3)
-  ;
-
 ;;
 
 block
   : BRACE_BLOCK
+  ;
+
+;; Squelch unnecessary or otherwise unwanted expressions.
+expr_list
+  : expr_list ignored_expr
+  | ignored_expr
+  ;
+
+ignored_expr
+  : qualified_name
   ;

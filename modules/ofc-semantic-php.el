@@ -11,7 +11,6 @@
 Use the alternate LALR(1) parser."
   (ofc-semantic-php-wy--install-parser)
   (setq
-
    ;; Lexical analysis
    semantic-lex-number-expression ofc-semantic-php-number-regexp
    semantic-lex-analyzer 'ofc-semantic-php-lexer
@@ -23,7 +22,8 @@ Use the alternate LALR(1) parser."
    ;; Environment
    imenu-create-index-function 'semantic-create-imenu-index
    semantic-imenu-summary-function 'semantic-format-tag-prototype
-   semantic-type-relation-separator-character '(".")
+   semantic-lex-syntax-modifications '((?\\ "."))
+   semantic-type-relation-separator-character '("->" "::" "\\")
    semantic-command-separation-character ";"
    semantic-lex-comment-regex "\\(/\\*\\|//\\|#\\)"
 

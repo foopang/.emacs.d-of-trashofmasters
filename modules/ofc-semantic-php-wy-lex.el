@@ -120,6 +120,25 @@ It ignores whitespaces, newlines and comments."
   ;; semantic-lex-default-action)
   )
 
+;; NOTE This override functions was originally taken
+;; from @stevenremot's updates to wisent-php.wy
+;; SEE http://sourceforge.net/p/cedet/mailman/message/32752675
+(define-mode-local-override semantic-analyze-split-name
+  php-mode (name)
+  "Disassemble a qualified name into its parts."
+  (let ((ans (split-string name (regexp-quote "\\"))))
+    (if (= (length ans) 1)
+        name
+    (delete "" ans))))
+
+;; NOTE This override functions was originally taken
+;; from @stevenremot's updates to wisent-php.wy
+;; SEE http://sourceforge.net/p/cedet/mailman/message/32752675
+(define-mode-local-override semantic-analyze-unsplit-name
+  php-mode (namelist)
+  "Assemble a qualified name into its parts."
+  (mapconcat 'identity namelist "\\"))
+
 ;; Taken from Emacs Cedet sources (semantic-grammar.el)
 (defun ofc/semantic-php-lex-buffer ()
   "Run `ofc-semantic-lex' on current buffer."
