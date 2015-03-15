@@ -18,8 +18,8 @@
 %type  <symbol>
 %token <symbol>  T_STRING
 
-%type  <variable> syntax "\\(\\$?[a-zA-Z_][a-zA-Z0-9_]+\\)" matchdatatype regexp
-%token <variable> T_VARIABLE
+%type  <php-variable> syntax "\\(\\$[a-zA-Z_][a-zA-Z0-9_]+\\)" matchdatatype regexp
+%token <php-variable> T_VARIABLE
 
 %type  <php-string> syntax "\\(\\s\"\\|'\\)" matchdatatype sexp
 %token <php-string> T_CONSTANT_ENCAPSED_STRING

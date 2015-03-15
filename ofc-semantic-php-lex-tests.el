@@ -72,27 +72,38 @@ more then one, the rest will be discarded."
   "Lexes a backslash keyword to T_NS_SEPARATOR"
   (should (equal 'T_NS_SEPARATOR (ofc/lex-php-token "\\"))))
 
+(ert-deftest ofc-semantic-php-lex-variable-name ()
+  (should (equal 'T_VARIABLE (ofc/lex-php-token "$foo"))))
+
+(ert-deftest ofc-semantic-php-lex-variable-name-array ()
+  (should (equal 'T_VARIABLE (ofc/lex-php-token "$foo[]"))))
+
+(ert-deftest ofc-semantic-php-lex-variable-name-array2 ()
+  (should (equal 'T_VARIABLE (ofc/lex-php-token "$foo[0]"))))
+
+(ert-deftest ofc-semantic-php-lex-variable-name-array3 ()
+  (should (equal 'T_VARIABLE (ofc/lex-php-token "$foo['foo']"))))
+
+(ert-deftest ofc-semantic-php-lex-variable-name-array4 ()
+  (should (equal 'T_VARIABLE (ofc/lex-php-token "$foo[\"foo\"]"))))
+
 ;; Top level declarations lexing.
 (ert-deftest ofc-semantic-php-lex-top-level-use-declaration ()
-  "Lexes a use declaration correctly"
   (should (equal
            '(T_OPEN_TAG T_USE T_STRING T_SEMICOLON)
            (ofc/lex-php-tokens "<?php use Foo;"))))
 
 (ert-deftest ofc-semantic-php-lex-top-level-use-declaration-with-alias ()
-  "Lexes a use declaration correctly"
   (should (equal
            '(T_OPEN_TAG T_USE T_STRING T_AS T_STRING T_SEMICOLON)
            (ofc/lex-php-tokens "<?php use Foo as Bar;"))))
 
 (ert-deftest ofc-semantic-php-lex-top-level-namespace-declaration ()
-  "Lexes a use declaration correctly"
   (should (equal
            '(T_OPEN_TAG T_NAMESPACE T_STRING T_SEMICOLON)
            (ofc/lex-php-tokens "<?php namespace Foo;"))))
 
 (ert-deftest ofc-semantic-php-lex-top-level-subnamespace-declaration ()
-  "Lexes a use declaration correctly"
   (should (equal
            '(T_OPEN_TAG T_NAMESPACE T_STRING T_SEMICOLON)
            (ofc/lex-php-tokens "<?php namespace Foo\Bar;"))))
