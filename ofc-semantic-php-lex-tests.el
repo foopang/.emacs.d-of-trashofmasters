@@ -13,6 +13,7 @@ more then one, the rest will be discarded."
   (with-temp-buffer
     (setq semantic-lex-analyzer 'ofc-semantic-php-lexer)
     (semantic-lex-init)
+    (erase-buffer)
     (insert text)
     (car (ofc/lex-php-tokens text))))
 
@@ -21,9 +22,12 @@ more then one, the rest will be discarded."
   (with-temp-buffer
     (setq semantic-lex-analyzer 'ofc-semantic-php-lexer)
     (semantic-lex-init)
+    (erase-buffer)
     (insert text)
-    ;; strip out the position of the token so that
-    ;; (T_STRING 1 . 3) becomes T_STRING
+    ;; strips out the position of the token so that
+    ;; (T_STRING 1 . 3) becomes T_STRING so that
+    ;; we can return a list of tokens like
+    ;; (T_ECHO T_STRING T_SEMICOLON)
     (mapcar (lambda (elm) (car elm)) (semantic-lex-buffer))))
 
 (ert-deftest ofc-semantic-php-lex-php-short-open-tag ()
@@ -38,6 +42,14 @@ more then one, the rest will be discarded."
   "Lexes a closing tag to T_CLOSE_TAG"
   (should (equal 'T_CLOSE_TAG (ofc/lex-one-php-token "?>"))))
 
+(ert-deftest ofc-semantic-php-lex-integer ()
+  "Lexes a integer keyword to T_NUMBER"
+  (should (equal 'T_NUMBER (ofc/lex-one-php-token "1"))))
+
+(ert-deftest ofc-semantic-php-lex-float ()
+  "Lexes a float keyword to T_NUMBER"
+  (should (equal 'T_NUMBER (ofc/lex-one-php-token "1.0"))))
+
 (ert-deftest ofc-semantic-php-lex-string-in-single-quotes ()
   "Lexes a string in single quotes to T_CONSTANT_ENCAPSED_STRING"
   (should (equal 'T_CONSTANT_ENCAPSED_STRING (ofc/lex-one-php-token "'hello'"))))
@@ -49,3 +61,19 @@ more then one, the rest will be discarded."
 (ert-deftest ofc-semantic-php-lex-use ()
   "Lexes a use keyword to T_USE"
   (should (equal 'T_USE (ofc/lex-one-php-token "use"))))
+
+(ert-deftest ofc-semantic-php-lex-namespace ()
+  "Lexes a namespace keyword to T_NAMESPACE"
+  (should (equal 'T_NAMESPACE (ofc/lex-one-php-token "namespace"))))
+
+(ert-deftest ofc-semantic-php-lex-ns-separator ()
+  "Lexes a backslash keyword to T_NS_SEPARATOR"
+  (should (equal 'T_NS_SEPARATOR (ofc/lex-one-php-token "\\"))))
+
+(ert-deftest ofc-semantic-php-lex-use-declaration ()
+  "Lexes a use declaration correctly"
+  (should (equal '(T_OPEN_TAG T_USE T_STRING T_SEMICOLON) (ofc/lex-php-tokens "<?php use Foo;"))))
+
+(ert-deftest ofc-semantic-php-lex-use-declaration-with-alias ()
+  "Lexes a use declaration correctly"
+  (should (equal '(T_OPEN_TAG T_USE T_STRING T_AS T_STRING T_SEMICOLON) (ofc/lex-php-tokens "<?php use Foo as Bar;"))))

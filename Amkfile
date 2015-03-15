@@ -9,7 +9,7 @@ return [
             '-batch',
             'modules/ofc-semantic-php.wy',
             '-f semantic-mode',
-            '-f semantic-grammar-create-package',
+            '-f semantic-grammar-recreate-package',
         ])
     ),
     $amaka->process(
