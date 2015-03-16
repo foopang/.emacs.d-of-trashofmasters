@@ -1,5 +1,4 @@
 (require 'php-mode)
-(require 'php-extras)
 
 (defun ofc/php-mode-hook ()
   "A custom PHP mode initialisation hook."

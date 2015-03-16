@@ -7,7 +7,6 @@
 ;;; 2014-11-06
 ;;; - Created the load-path file to hold all paths configuration.
 ;;; - Added git-timemachine.
-(add-to-list 'custom-theme-load-path "~/.emacs.d/elisp/moe-theme")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/elisp/warm-night-theme")
 
 (setq load-path (append (list "~/.emacs.d/elisp/web-mode"
