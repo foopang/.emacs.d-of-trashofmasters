@@ -351,12 +351,12 @@ top_level_use_declaration
 ;; Qualified names
 ;; TODO Detect qualified names that have used but not been imported.
 qualified_name
-  : T_STRING
-    (identity $1)
-  | qualified_name T_NS_SEPARATOR T_STRING
+  : qualified_name T_NS_SEPARATOR T_STRING
     (concat $1 $2 $3)
-  | T_NS_SEPARATOR qualified_name T_NS_SEPARATOR T_STRING
-    (concat $2 $3 $4)
+  | T_NS_SEPARATOR T_STRING
+    (identity $2)
+  | T_STRING
+    (identity $1)
   ;
 
 qualified_name_list
