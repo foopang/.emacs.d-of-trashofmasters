@@ -71,6 +71,8 @@ our changed Emacs paramaters.")
 
 ;; Initialize Emacs package management.
 (require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 
 ;; Load all Mac OS specific Emacs configuration
@@ -93,7 +95,7 @@ our changed Emacs paramaters.")
 ;;
 ;; TODO Move the important bits and bobs of its configuration
 ;; from the custom file into ofc-ecb.el.
-(require 'ofc-projectile)
+;;(require 'ofc-projectile)
 (require 'ofc-helm)
 (require 'ofc-ecb)
 

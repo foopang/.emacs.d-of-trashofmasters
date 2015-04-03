@@ -21,12 +21,12 @@
 ;; The benefit of using `helm-projectile-switch-project', over `helm'
 ;; is that on any selected project we can fire many actions, not
 ;; limited to just the "switch to project" action.
-(setq projectile-completion-system 'helm-projectile-switch-project
-      projectile-switch-project-action 'helm-projectile-find-file)
+;;(setq projectile-completion-system 'helm-projectile-switch-project
+;;      projectile-switch-project-action 'helm-projectile-find-file)
 
 (helm-mode 1)
 (helm-autoresize-mode 1)
-(helm-projectile-on)
+;;(helm-projectile-on)
 
 (diminish 'helm-mode)
 

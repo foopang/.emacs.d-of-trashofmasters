@@ -175,6 +175,19 @@ done starting up."
 ;; Answer just y/n insted of yes or no
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; Tell Emacs to save frame and buffer configuration on exit and
+;; restore it when it is reopened.
+;;
+;; You can save the desktop manually with the command
+;; M-x desktop-save.
+;;
+;; By default, the desktop also tries to save the frame and window
+;; configuration. To disable this, set `desktop-restore-frames` to nil.
+;;
+;; SEE M-x customize-group desktop-save
+;; SEE www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Emacs-Sessions.html
+(desktop-save-mode 1)
+
 (setq uniquify-buffer-name-style 'forward
       uniquify-separator "/"
       ;; rename after killing uniquified

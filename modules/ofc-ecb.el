@@ -80,7 +80,7 @@
 (setq ecb-show-sources-in-directories-buffer 'always)
 
 ;; Activate ECB as soon as Emacs is started.
-(ecb-activate)
+(add-hook 'after-init-hook 'ecb-activate)
 
 ;; Hit ESC to toggle the compile window.
 (global-set-key (kbd "<escape>") 'ecb-toggle-compile-window)
