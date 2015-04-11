@@ -51,7 +51,7 @@ our changed Emacs paramaters.")
 (auto-save-mode -1)
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
-(load-theme 'warm-night t)
+;;(load-theme 'warm-night t)
 
 (add-to-list 'load-path ofc-modules-dir)
 (add-to-list 'load-path ofc-personal-dir)
@@ -74,6 +74,7 @@ our changed Emacs paramaters.")
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
+(load-theme 'solarized-dark t)
 
 ;; Load all Mac OS specific Emacs configuration
 ;; when running Emacs on a Mac.
@@ -111,7 +112,6 @@ our changed Emacs paramaters.")
 (require 'ofc-php)
 (require 'ofc-web)
 (require 'ofc-org)
-
 
 ;; Load Emacs customisations.
 (load custom-file)

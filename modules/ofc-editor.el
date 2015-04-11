@@ -186,7 +186,7 @@ done starting up."
 ;;
 ;; SEE M-x customize-group desktop-save
 ;; SEE www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Emacs-Sessions.html
-(desktop-save-mode 1)
+(desktop-save-mode 0)
 
 (setq uniquify-buffer-name-style 'forward
       uniquify-separator "/"
