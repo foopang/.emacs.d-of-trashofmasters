@@ -1,0 +1,30 @@
+<?php
+
+return [
+    $amaka->task(':default')->dependsOn('clean', 'build', 'test'),
+    $amaka->process(
+        'build',
+        implode(' ', [
+            'emacs',
+            '-batch',
+            'modules/ofc-semantic-php.wy',
+            '-f semantic-mode',
+            '-f semantic-grammar-recreate-package',
+        ])
+    ),
+    $amaka->process(
+        'clean',
+        'rm -f modules/ofc-semantic-php-wy.el'
+    ),
+    $amaka->process(
+        'test',
+        implode(' ', [
+            'emacs',
+            '-batch',
+            '-l ert',
+            '-l ofc-semantic-php-tests.el',
+            '-l ofc-semantic-php-lex-tests.el',
+            '-f ert-run-tests-batch-and-exit',
+        ])
+    ),
+];
