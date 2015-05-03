@@ -2,70 +2,9 @@
 
 ;; Create a sequence of 3 ECB layouts. The default layout is
 ;; doesn't have to be one from the sequence.
-;;
-;; Default layout: ECB Left3 Layout
-;; -------------------------------------------------------
-;; |              |                                      |
-;; |  Directories |                                      |
-;; |    ⌘-d       |                                      |
-;; |              |                                      |
-;; |              |                                      |
-;; |--------------|                                      |
-;; |              |                                      |
-;; |  Sources     |               Edit                   |
-;; |    ⌘-s       |               ⌘-e                    |
-;; |              |                                      |
-;; |--------------|                                      |
-;; |              |                                      |
-;; |  Methods     |                                      |
-;; |    ⌘-m       |                                      |
-;; |              |                                      |
-;; -------------------------------------------------------
-;; |                                                     |
-;; |                    Compilation                      |
-;; |                        ESC                          |
-;; |                                                     |
-;; -------------------------------------------------------
-;;
-;; ECB Left13 Layout
-;; -------------------------------------------------------
-;; |              |                                      |
-;; ~              ~                                      ~
-;; | Directories  |               Edit                   |
-;; |     ⌘-d      |               ⌘-e                    |
-;; ~              ~                                      ~
-;; |              |                                      |
-;; -------------------------------------------------------
-;; |                                                     |
-;; |                    Compilation                      |
-;; |                        ESC                          |
-;; |                                                     |
-;; -------------------------------------------------------
-;;
-;; ECB Left14 Layout
-;; -------------------------------------------------------
-;; |              |                                      |
-;; ~              ~                                      ~
-;; |              |                                      |
-;; | Directories  |                                      |
-;; |     ⌘-d      |                                      |
-;; ~              ~                                      ~
-;; |              |               Edit                   |
-;; |              |               ⌘-e                    |
-;; |--------------|                                      |
-;; |              |                                      |
-;; |  History     |                                      |
-;; |    ⌘-h       |                                      |
-;; |              |                                      |
-;; -------------------------------------------------------
-;; |                                                     |
-;; |                    Compilation                      |
-;; |                        ESC                          |
-;; |                                                     |
-;; -------------------------------------------------------
 
-(setq ecb-layout-name "left3")
-(setq ecb-toggle-layout-sequence (list "left3" "left13" "left14"))
+(setq ecb-layout-name "left15")
+(setq ecb-toggle-layout-sequence (list "left13" "left15"))
 
 ;; Disable the Tip of the Day popup.
 (setq ecb-tip-of-the-day nil)
@@ -102,12 +41,13 @@
                                      ("*Apropos*")
                                      ("*Occur*")
                                      ("*shell*")
-                                     ;; ("\\*magit.*\\*" . t)
                                      ("\\*[cC]ompilation.*\\*" . t)
                                      ("\\*i?grep.*\\*" . t)
                                      ("*Completions*")
                                      ("*Backtrace*")
                                      ("*Compile-log*")
+                                     ("*Help*")
+                                     ("*php-repl*")
                                      ("*bsh*")
                                      ("*helm*")
                                      ("\\*helm[- ].+\\*" . t))))
@@ -115,5 +55,11 @@
 (add-hook 'ecb-activate-hook (lambda ()
   (cancel-function-timers 'ecb-stealthy-updates)))
 
+(add-hook 'ecb-activate-hook
+                  (lambda ()
+                    (let ((compwin-buffer (ecb-get-compile-window-buffer)))
+                    (if (not (and compwin-buffer
+                                  (ecb-compilation-buffer-p compwin-buffer)))
+                        (ecb-toggle-compile-window -1)))))
 
 (provide 'ofc-ecb)

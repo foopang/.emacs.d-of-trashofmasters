@@ -90,7 +90,6 @@ number input."
     "This hook will show the bookmark list as soon as Emacs is
 done starting up."
     (bookmark-bmenu-list)
-    (split-window-vertically)
     (switch-to-buffer "*Bookmark List*"))
 
 ;; Show the initial screen with my bookmarks.

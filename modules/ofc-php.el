@@ -1,9 +1,12 @@
 (require 'php-mode)
 (require 'php-extras)
+(require 'ofc-comint-php)
+(require 'ofc-edep)
 
 (defun ofc/php-mode-hook ()
   "A custom PHP mode initialisation hook."
   (setq mode-name "PHP")
+  (local-set-key (kbd "M-n") 'company-complete)
   (setq php-lineup-cascaded-calls t)
   (set (make-local-variable 'require-final-newline) t))
 
