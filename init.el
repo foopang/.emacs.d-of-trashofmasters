@@ -11,6 +11,9 @@
 ;; project is clumsily copied from the great Emacs
 ;; Prelude package.
 
+(load-file "~/.emacs.d/elisp/cedet/cedet-devel-load.el")
+;;(load-file "~/Dev/steve-cedet/cedet-devel-load.el")
+
 (defvar ofc-dir (file-name-directory load-file-name)
   "The Emacs configuration directory, generally this is `~/.emacs/d'.")
 

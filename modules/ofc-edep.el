@@ -1,6 +1,4 @@
 ;; For the time being I'm using a local fork of EDEP
-(add-to-list 'load-path "~/Dev/edep")
-
 (require 'edep)
 
 (defun ofc/semantic-php-hook ()

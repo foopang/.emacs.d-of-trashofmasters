@@ -153,7 +153,7 @@ done starting up."
       backup-directory-alist `((".*" . ,temporary-file-directory))
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
-(setq-default cursor-type 'bar)
+(setq-default cursor-type 'box)
 
 (setq inhibit-startup-message t
       initial-scratch-message nil
