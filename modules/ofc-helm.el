@@ -1,5 +1,5 @@
 (require 'helm-config)
-(require 'helm-projectile)
+;; (require 'helm-projectile)
 
 ;; Apparently `helm-M-x' hangs...
 ;;(global-set-key (kbd "M-x") 'helm-M-x)
@@ -28,6 +28,6 @@
 (helm-autoresize-mode 1)
 ;;(helm-projectile-on)
 
-(diminish 'helm-mode)
+;; (diminish 'helm-mode)
 
 (provide 'ofc-helm)

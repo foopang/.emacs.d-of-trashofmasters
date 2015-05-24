@@ -54,7 +54,7 @@ our changed Emacs paramaters.")
 ;;(load-theme 'warm-night t)
 
 (add-to-list 'load-path ofc-modules-dir)
-(add-to-list 'load-path ofc-personal-dir)
+;; (add-to-list 'load-path ofc-personal-dir)
 
 ;; Prevent customisations from changing this file.  All changes made
 ;; with Emacs `customize' will be written to the specified.
@@ -74,7 +74,7 @@ our changed Emacs paramaters.")
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
-(load-theme 'solarized-dark t)
+;; (load-theme 'solarized-dark t)
 
 ;; Load all Mac OS specific Emacs configuration
 ;; when running Emacs on a Mac.
@@ -82,12 +82,12 @@ our changed Emacs paramaters.")
   (require 'ofc-osx))
 
 ;; Load user-specific settings.
-(require 'ofc-personal)
+;; (require 'ofc-personal)
 
 ;; Diminish all vanilla emacs minor modes.  The rest of the
 ;; minor-modes can be diminished individually in their own
 ;; configuration files.
-(require 'ofc-diminish)
+;; (require 'ofc-diminish)
 
 ;; Load the main editor components and configuration.
 (require 'ofc-editor)
@@ -103,7 +103,7 @@ our changed Emacs paramaters.")
 (require 'ofc-yasnippet)
 (require 'ofc-recentf)
 (require 'ofc-company)
-(require 'ofc-magit)
+;; (require 'ofc-magit)
 
 (require 'ofc-tags)
 
@@ -115,3 +115,38 @@ our changed Emacs paramaters.")
 
 ;; Load Emacs customisations.
 (load custom-file)
+
+
+;; el-get
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+
+;; (setq el-get-user-package-directory "~/.emacs.d/elisp/")
+;; (setq el-get-packages
+;;       '(web-mode
+;;                               php-mode
+;; ;;                              php-extras
+;;                               php-eldoc
+;;                               ecb
+;;                               helm-etags-plus
+;;                               cedet
+;;                               company-mode
+;;                               coffee-mode
+;;                               popwin
+;;                               projectile
+;;                               helm
+;;                               git-timemachine
+;; ;;                              zenburn-theme
+;;                               yasnippet
+;; ;;                              helm-ack
+;;                               ggtags
+;;                               grizzl
+;;                               highlight-symbol
+;; ))
+;; (el-get 'sync el-get-packages)

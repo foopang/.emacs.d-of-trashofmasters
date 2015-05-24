@@ -10,7 +10,7 @@
 (setq use-dialog-box nil)
 
 ;; Initialise the environment
-(exec-path-from-shell-initialize)
+;; (exec-path-from-shell-initialize)
 
 (global-set-key (kbd "s-<right>") 'next-buffer)
 (global-set-key (kbd "s-<left>") 'previous-buffer)
